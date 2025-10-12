@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@theme {
+  --color-raisinBlack: rgb(38, 38, 38);
+  --color-arylideYellow: rgb(239, 213, 111);
+  --color-philippineSilver: rgb(178, 178, 178);
+  --color-oxfordBlue: rgb(0, 28, 72);
+
+  --font-montserrat: var(--font-montserrat);
+  --font-youngest: var(--font-youngest);
+}
+
+@layer base {
+  body {
+    @apply bg-raisinBlack text-white font-montserrat;
+  }
+}
