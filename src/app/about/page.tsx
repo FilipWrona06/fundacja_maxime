@@ -21,14 +21,14 @@ const timelineData: TimelineItem[] = [
     year: '2023',
     title: 'Rozwój społeczności',
     description: 'Nasza siła tkwi w społeczności. Budujemy mosty między ludźmi, tworząc przestrzeń do wzajemnej pomocy i integracji. Działamy lokalnie, myśląc globalnie.',
-    imageUrl: '/about/2023.png',
+    imageUrl: '/about/2023.jpg',
     imageAlt: 'Wydarzenia fundacji z roku 2023',
   },
   {
     year: '2024',
     title: 'Nowe horyzonty',
     description: 'Każdy projekt tworzymy z pasją i zaangażowaniem, dążąc do realnej zmiany i wspierania talentów w naszej społeczności.',
-    imageUrl: '/about/2024.jpeg',
+    imageUrl: '/about/2024.jpg',
     imageAlt: 'Wydarzenia fundacji z roku 2024',
   },
   {
