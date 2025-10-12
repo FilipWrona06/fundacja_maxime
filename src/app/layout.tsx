@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
-import { Analytics } from "@vercel/analytics/next"
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Montserrat } from 'next/font/google';
 import localFont from 'next/font/local';
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 const montserrat = Montserrat({
   subsets: ['latin-ext'],
@@ -22,7 +20,6 @@ const fontYoungest = localFont({
 export const metadata: Metadata = {
   title: 'Fundacja Maxime',
   description: 'Strona stworzona z pasji do muzyki',
-  // DODANE IKONY Z POPRZEDNIEJ WERSJI
   icons: {
     icon: [
       {
@@ -45,11 +42,7 @@ export default function RootLayout({
   return (
     <html lang="pl">
       <body className={`${montserrat.variable} ${fontYoungest.variable}`}>
-        <Navbar />
-          <main>
-            {children}
-          </main>
-        <Footer />
+        {children}
         <Analytics />
         <SpeedInsights />
       </body>
