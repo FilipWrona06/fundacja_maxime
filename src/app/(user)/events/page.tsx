@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { eventsData } from '@/data/events';
+import { Button } from '@/components/ui/Button';
 
 // =======================================================
 //  1. CENTRALNA DEFINICJA DANYCH DLA WYDARZEŃ
@@ -35,7 +36,7 @@ export default function EventsPage(){
                 upcomingEvents.map((event) => (
                   <div
                     key={event.id}
-                    className={`group bg-transparent border-2 border-philippineSilver hover:font-semibold shadow-lg hover:shadow-2xl hover:scale-105 rounded-3xl overflow-hidden hover:bg-philippineSilver hover:text-raisinBlack transition-all duration-250`}
+                    className={`group bg-transparent border-2 border-philippineSilver hover:font-semibold shadow-lg hover:shadow-2xl hover:scale-105 rounded-3xl overflow-hidden transition-all duration-250`}
                   >
                     <div className="md:flex">
                       <div className="md:flex-shrink-0 md:w-5/12">
@@ -56,21 +57,20 @@ export default function EventsPage(){
                           </Link>
                           <p className="mt-4">{event.location}</p>
                         </div>
-                        <div>
+                        <div className='mt-5'>
                           {event.status === 'nadchodzące' && (
-                            <Link
+                            <Button asLink
                               href={event.ticketUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="mt-6 w-full md:w-auto inline-block text-center px-6 py-3 font-bold text-white bg-raisinBlack rounded-lg hover:bg-opacity-80 transition-all shadow-md hover:shadow-lg"
                             >
                               Kup Bilet
-                            </Link>
+                            </Button>
                           )}
                           {event.status === 'wyprzedane' && (
-                            <button disabled className="mt-6 w-full md:w-auto px-6 py-3 font-bold text-gray-700 bg-gray-200 rounded-lg cursor-not-allowed">
+                            <Button disabled variant='solid'>
                               Wyprzedane
-                            </button>
+                            </Button>
                           )}
                         </div>
                       </div>
@@ -90,7 +90,7 @@ export default function EventsPage(){
                 {pastEvents.map((event) => (
                   <div
                     key={event.id}
-                    className={`group bg-transparent border-2 border-philippineSilver hover:font-semibold shadow-lg hover:shadow-2xl hover:scale-105 rounded-3xl overflow-hidden hover:bg-philippineSilver hover:text-raisinBlack transition-all duration-250 opacity-60`}
+                    className={`group bg-transparent border-2 border-philippineSilver hover:font-semibold shadow-lg hover:shadow-2xl hover:scale-105 rounded-3xl overflow-hidden transition-all duration-250 opacity-60`}
                   >
                     <div className="md:flex">
                        <div className="md:flex-shrink-0 md:w-5/12">

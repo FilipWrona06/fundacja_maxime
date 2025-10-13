@@ -4,6 +4,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { Button } from '@/components/ui/Button'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -35,11 +36,11 @@ export default function LoginPage() {
 
   return (
     // Główny kontener centrujący wszystko na stronie
-    <main className="flex items-center justify-center min-h-screen font-sans">
-      <div className="w-full max-w-md p-8 space-y-8 rounded-2xl shadow-lg">
+    <main className="flex items-center justify-center min-h-screen">
+      <div className="w-full max-w-md p-8 space-y-8 rounded-3xl shadow-2xl border m-5">
         
         {/* Tytuł z niestandardowym fontem */}
-        <h1 className="text-6xl text-center font-serif">
+        <h1 className="text-6xl text-center">
           Logowanie
         </h1>
         
@@ -58,7 +59,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-3 mt-1  border border-gray-300 rounded-lg focus:outline-none focus:ring-2"
+              className="w-full px-4 py-3 mt-1  border rounded-lg focus:outline-none focus:ring-2"
               placeholder="twoj@email.com"
             />
           </div>
@@ -77,19 +78,21 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-3 mt-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2"
+              className="w-full px-4 py-3 mt-1 border rounded-lg focus:outline-none focus:ring-2"
               placeholder="••••••••"
             />
           </div>
           
           {/* Przycisk logowania */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-3 font-bold  rounded-lg hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 disabled:opacity-50"
-          >
-            {loading ? 'Logowanie...' : 'Zaloguj się'}
-          </button>
+          <div className='text-center'>
+            <Button
+                type="submit"
+                disabled={loading}
+                className='w-full'
+            >
+                {loading ? 'Logowanie...' : 'Zaloguj się'}
+            </Button>
+          </div>
         </form>
 
         {/* Komunikat o błędzie */}

@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/Button';
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -88,19 +89,12 @@ const Navbar = () => {
                 );
               })}
               {/* Przycisk "Wesprzyj nas"*/}
-              <Link
-                href="https://patronite.pl/stowarzyszeniemaxime"
+              <Button asLink href="https://patronite.pl/stowarzyszeniemaxime"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`
-                  bg-transparent border-2 border-philippineSilver font-bold 
-                  rounded-3xl hover:bg-philippineSilver hover:text-raisinBlack 
-                  transition-colors text-center
-                  ml-4 px-5 py-2 text-sm
-                `}
               >
                 Wesprzyj nas
-              </Link>
+              </Button>
             </div>
           </div>
 
@@ -138,10 +132,7 @@ const Navbar = () => {
               rel="noopener noreferrer"
               onClick={closeMenu}
               className={`
-                bg-transparent border-2 border-philippineSilver font-bold 
-                rounded-3xl hover:bg-philippineSilver hover:text-raisinBlack 
-                transition-colors text-center
-                w-full mt-2 px-5 py-3 text-base
+                bg-transparent border-2 border-philippineSilver rounded-full px-8 py-3 text-sm font-montserrat font-bold tracking-wider hover:bg-philippineSilver hover:text-raisinBlack transition-all duration-250
               `}
             >
               Wesprzyj nas

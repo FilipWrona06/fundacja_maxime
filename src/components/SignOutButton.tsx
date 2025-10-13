@@ -1,22 +1,20 @@
 // src/components/SignOutButton.tsx
-
-import { createClient } from "@/lib/supabase/server"; // Upewnij się, że ścieżka jest poprawna
+import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { Button } from "./ui/Button"; // <-- Importujemy nasz komponent
 
 export default function SignOutButton() {
   const signOut = async () => {
     "use server";
-
-    // ZMIANA TUTAJ: Dodajemy 'await'
     const supabase = await createClient();
-
     await supabase.auth.signOut();
-    return redirect("/"); // Przekierowanie do strony logowania
+    return redirect("/");
   };
 
   return (
     <form action={signOut}>
-      <button type="submit">Wyloguj</button>
+      {/* Używamy komponentu Button zamiast długiej listy klas */}
+      <Button type="submit">Wyloguj</Button>
     </form>
   );
 }

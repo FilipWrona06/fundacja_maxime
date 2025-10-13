@@ -30,7 +30,7 @@ export default function NewsPage(){
               <Link
                 href={`/news/${article.slug}`}
                 key={article.id}
-                className="block group bg-transparent border-2 border-philippineSilver hover:font-semibold shadow-lg hover:shadow-2xl hover:scale-105 rounded-3xl overflow-hidden hover:bg-philippineSilver hover:text-raisinBlack transition-all duration-250"
+                className="block group bg-transparent border-2 border-philippineSilver hover:font-semibold shadow-lg hover:shadow-2xl hover:scale-105 rounded-3xl overflow-hidden transition-all duration-250"
               >
                 <div className="md:flex">
                   <div className="md:flex-shrink-0 md:w-5/12">

@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { newsData } from '@/data/news';
+import { Button } from '@/components/ui/Button';
 
 // =====================================================
 //  1. CENTRALNA DEFINICJA DANYCH DLA AKTUALNOŚCI
@@ -60,13 +61,12 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
         />
 
         {/*Przycisk Powrotu*/}
-        <div className="text-center mt-12">
-          <Link
+        <div className="text-center mt-5">
+          <Button asLink
             href="/news"
-            className="bg-transparent border-2 border-philippineSilver rounded-full px-8 py-3 text-sm font-montserrat font-bold tracking-wider hover:bg-philippineSilver hover:text-raisinBlack transition-all duration-250"
           >
             ← Wróć do aktualności
-          </Link>
+          </Button>
         </div>
       </div>
     </main>

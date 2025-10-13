@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
 import React from 'react';
 
@@ -42,18 +43,16 @@ export default function Home() {
       {/* PRZYCISKI AKCJI*/}
       {/* ============================================ */}
       <div className="relative z-30 flex flex-col sm:flex-row items-center justify-center gap-4">
-        <Link 
+        <Button asLink 
           href="/events" 
-          className="bg-transparent border-2 border-philippineSilver rounded-full px-8 py-3 text-sm font-montserrat font-bold tracking-wider hover:bg-philippineSilver hover:text-raisinBlack transition-all duration-250"
         >
           Zobacz nadchodzące koncerty
-        </Link>
-        <Link 
+        </Button>
+        <Button asLink 
           href="/about" 
-          className="bg-transparent border-2 border-philippineSilver rounded-full px-8 py-3 text-sm font-montserrat font-bold tracking-wider hover:bg-philippineSilver hover:text-raisinBlack transition-all duration-250"
         >
           Poznaj nas
-        </Link>
+        </Button>
       </div>
 
     </main>

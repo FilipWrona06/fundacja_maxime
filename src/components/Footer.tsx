@@ -4,6 +4,7 @@ import { useState, useEffect, FormEvent, ReactNode } from 'react';
 import Link from 'next/link';
 import jsonp from 'jsonp';
 import { FaFacebook, FaInstagram, FaYoutube, FaHeart } from 'react-icons/fa';
+import { Button } from './ui/Button';
 
 // ======================================================
 //GŁÓWNY I JEDYNY KOMPONENT STOPKI
@@ -122,13 +123,13 @@ const Footer = () => {
                   aria-label="Adres e-mail do newslettera"
                   className="w-full px-4 py-2 bg-black/50 placeholder-philippineSilver rounded-3xl focus:outline-none focus:ring-2 focus:ring-philippineSilver font-montserrat" 
                 />
-                <button 
-                  type="submit" 
-                  disabled={status === 'loading'}
-                  className="w-full bg-transparent border-2 border-philippineSilver font-montserrat font-bold px-4 py-2 rounded-3xl hover:bg-philippineSilver hover:text-raisinBlack transition-colors duration-250 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {status === 'loading' ? 'Zapisywanie...' : 'Zapisz się'}
-                </button>
+            <Button 
+              type="submit" 
+              disabled={status === 'loading'}
+              // Nie musimy podawać variant="outline", bo jest domyślny!
+            >
+              {status === 'loading' ? 'Zapisywanie...' : 'Zapisz się'}
+            </Button>
               </form>
               <div className="h-6 mt-2 text-center">
                 {status === 'success' && <p className="text-sm font-montserrat text-green-400">{message}</p>}

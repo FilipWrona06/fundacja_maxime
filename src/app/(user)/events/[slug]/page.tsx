@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { eventsData } from '@/data/events';
+import { Button } from '@/components/ui/Button';
 
 // =======================================================
 //  1. CENTRALNA DEFINICJA DANYCH DLA WYDARZEŃ
@@ -61,13 +62,12 @@ export default function EventPage({ params }: { params: { slug: string } }) {
             dangerouslySetInnerHTML={{ __html: event.details }}
           />
           
-          <div className="mt-12 text-center">
-            <Link
+          <div className="mt-5 text-center">
+            <Button asLink
               href="/events"
-              className="bg-transparent border-2 border-philippineSilver rounded-full px-8 py-3 text-sm font-montserrat font-bold tracking-wider hover:bg-philippineSilver hover:text-raisinBlack transition-all duration-250"
             >
               ← Wróć do wszystkich wydarzeń
-            </Link>
+            </Button>
           </div>
         </div>
       </div>

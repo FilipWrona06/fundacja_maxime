@@ -2,6 +2,7 @@
 
 'use client';
 
+import { Button } from '@/components/ui/Button';
 import { contactDetails } from '@/data/contact';
 import React, { FormEvent } from 'react';
 // ZAKTUALIZOWANE: Dodajemy FaHeart do importów
@@ -32,8 +33,7 @@ export default function ContactPage() {
   };
 
   return (
-    <main className="min-h-screen">
-      <div className="container mx-auto px-4 py-16">
+      <main className="container mx-auto px-4 py-16">
         <header className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
             Skontaktuj się z nami
@@ -97,18 +97,17 @@ export default function ContactPage() {
                 <label htmlFor="message" className="block text-sm font-medium">Wiadomość</label>
                 <textarea id="message" name="message" rows={4} required className="mt-1 block w-full px-4 py-2 bg-transparent border-2 border-philippineSilver rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-raisinBlack transition-all"></textarea>
               </div>
-              <div>
-                <button
+              <div className='text-center'>
+                <Button
                   type="submit"
-                  className="w-full flex justify-center py-3 px-4 bg-transparent border-2 border-philippineSilver hover:bg-philippineSilver hover:text-raisinBlack rounded-3xl shadow-lg hover:shadow-2xl hover:scale-105 text-lg font-bold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-raisinBlack transition-all duration-250"
+                  className='w-full'
                 >
                   Wyślij wiadomość
-                </button>
+                </Button>
               </div>
             </form>
           </div>
         </div>
-      </div>
-    </main>
+      </main>
   );
 }
