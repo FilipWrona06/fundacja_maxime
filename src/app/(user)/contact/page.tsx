@@ -47,19 +47,19 @@ export default function ContactPage() {
           <div className="bg-transparent border-2 border-philippineSilver shadow-lg rounded-3xl p-8 transition-all">
             <form onSubmit={handleFormSubmit} className="space-y-6">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium">Imię i nazwisko</label>
+                <label htmlFor="name" className="block text-sm font-bold">Imię i nazwisko</label>
                 <input type="text" id="name" name="name" required className="mt-1 block w-full px-4 py-2 bg-transparent border-2 border-philippineSilver rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-raisinBlack transition-all"/>
               </div>
               <div>
-                <label htmlFor="email" className="block text-sm font-medium">Adres email</label>
+                <label htmlFor="email" className="block text-sm font-bold">Adres email</label>
                 <input type="email" id="email" name="email" required className="mt-1 block w-full px-4 py-2 bg-transparent border-2 border-philippineSilver rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-raisinBlack transition-all"/>
               </div>
               <div>
-                <label htmlFor="message" className="block text-sm font-medium">Wiadomość</label>
+                <label htmlFor="message" className="block text-sm font-bold">Wiadomość</label>
                 <textarea id="message" name="message" rows={4} required className="mt-1 block w-full px-4 py-2 bg-transparent border-2 border-philippineSilver rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-raisinBlack transition-all"></textarea>
               </div>
               <div className='text-center'>
-                <Button type="submit" className='w-full'>
+                <Button type="submit" className='w-full text-lg'>
                   Wyślij wiadomość
                 </Button>
               </div>

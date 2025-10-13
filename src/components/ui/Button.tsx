@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 const buttonVariants = {
   variant: {
-    outline: 'bg-transparent border-2 border-philippineSilver hover:bg-philippineSilver hover:text-raisinBlack',
+    outline: 'bg-transparent border-2 border-philippineSilver hover:bg-philippineSilver hover:text-raisinBlack hover:scale-105',
     solid: 'bg-philippineSilver text-raisinBlack border-2 border-philippineSilver',
   },
 };
