@@ -7,6 +7,7 @@ import { Button } from './ui/Button';
 import { NavigationLinks } from './ui/NavigationLinks';
 import { SocialLinks } from './ui/SocialLinks';
 import { ContactDetails } from './ui/ContactDetails';
+import { Divider } from './ui/Divider';
 
 const Footer = () => {
   //LOGIKA FORMULARZA NEWSLETTERA
@@ -118,7 +119,8 @@ const Footer = () => {
           </div>
 
         {/* SEKCJA PRAW AUTORSKICH */}
-        <div className="border-t border-philippineSilver mt-12 pt-8 text-center text-sm font-montserrat">
+        <div className="mt-10 text-center text-sm font-montserrat">
+          <Divider className='mb-5' />
           <p>
             &copy; {new Date().getFullYear()} Fundacja Maxime. Wszkie prawa zastrzeżone | Wykonanie: 
             <a href="https://www.instagram.com/filip_wrona/" target="_blank" rel="noopener noreferrer" className="hover:text-philippineSilver transition-colors">

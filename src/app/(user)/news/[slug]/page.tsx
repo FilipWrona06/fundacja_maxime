@@ -4,6 +4,7 @@ import Link from 'next/link';
 import React from 'react';
 import { newsData } from '@/data/news';
 import { Button } from '@/components/ui/Button';
+import { Divider } from '@/components/ui/Divider';
 
 // =====================================================
 //  1. CENTRALNA DEFINICJA DANYCH DLA AKTUALNOŚCI
@@ -53,7 +54,7 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
           </p>
         </header>
 
-        <hr className="my-8 border-philippineSilver" />
+        <Divider className='mb-5 w-full' />
 
         <article 
           className="prose prose-lg dark:prose-invert max-w-none"

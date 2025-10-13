@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { eventsData } from '@/data/events';
 import { Button } from '@/components/ui/Button';
+import { Divider } from '@/components/ui/Divider';
 
 // =======================================================
 //  1. CENTRALNA DEFINICJA DANYCH DLA WYDARZEŃ
@@ -44,7 +45,7 @@ export default function EventPage({ params }: { params: { slug: string } }) {
               <span>🕒 {event.time}</span>
               <span>📍 {event.location}</span>
             </div>
-            <div className="w-3/4 h-0.5 bg-philippineSilver mx-auto mt-8"></div>
+            <Divider />
           </header>
 
           <div className="relative w-full h-64 md:h-96 rounded-3xl overflow-hidden mb-12 shadow-lg">

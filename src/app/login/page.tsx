@@ -49,7 +49,7 @@ export default function LoginPage() {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium"
+              className="block text-sm font-bold"
             >
               Adres e-mail
             </label>
@@ -68,7 +68,7 @@ export default function LoginPage() {
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium"
+              className="block text-sm font-bold"
             >
               Hasło
             </label>

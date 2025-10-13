@@ -3,6 +3,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { eventsData } from '@/data/events';
 import { Button } from '@/components/ui/Button';
+import { Divider } from '@/components/ui/Divider';
+import { PageHeader } from '@/components/ui/PageHeader';
 
 // =======================================================
 //  1. CENTRALNA DEFINICJA DANYCH DLA WYDARZEŃ
@@ -18,15 +20,11 @@ export default function EventsPage(){
     return (
     <main className="min-h-screen">
       <div className="container mx-auto px-4 py-16">
-        <header className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-            Wydarzenia
-          </h1>
-          <p className="mt-4 text-lg">
-            Zobacz, gdzie możesz nas spotkać i wesprzeć nasze działania na żywo!
-          </p>
-          <div className="w-3/4 h-0.5 bg-philippineSilver mx-auto mt-8"></div>
-        </header>
+
+        <PageHeader
+        title='Wydarzenia'
+        description='Zobacz, gdzie możesz nas spotkać i wesprzeć nasze działania na żywo!'
+        />
 
         <div className="max-w-4xl mx-auto space-y-16">
           <section>

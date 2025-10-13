@@ -1,3 +1,5 @@
+import { Divider } from '@/components/ui/Divider';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { newsData } from '@/data/news';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -14,15 +16,10 @@ export default function NewsPage(){
     return (
     <main className="min-h-screen">
       <div className="container mx-auto px-4 py-16">
-        <header className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-            Aktualności
-          </h1>
-          <p className="mt-4 text-lg">
-            Bądź na bieżąco z życiem naszej fundacji.
-          </p>
-          <div className="w-3/4 h-0.5 bg-philippineSilver mx-auto mt-8"></div>
-        </header>
+        <PageHeader
+        title='Aktualności'
+        description='Bądź na bieżąco z życiem naszej fundacji.'
+        />
 
         <div className="max-w-4xl mx-auto">
           <div className="space-y-12">

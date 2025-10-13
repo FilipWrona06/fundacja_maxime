@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/Button';
 import { SocialLinks } from '@/components/ui/SocialLinks';
 import { ContactDetails } from '@/components/ui/ContactDetails';
 import React, { FormEvent } from 'react';
+import { Divider } from '@/components/ui/Divider';
+import { PageHeader } from '@/components/ui/PageHeader';
 
 export default function ContactPage() {
   const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -15,15 +17,11 @@ export default function ContactPage() {
 
   return (
       <main className="container mx-auto px-4 py-16">
-        <header className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-            Skontaktuj się z nami
-          </h1>
-          <p className="mt-4 text-lg">
-            Masz pytania lub chcesz nawiązać współpracę? Wypełnij formularz lub skorzystaj z poniższych danych.
-          </p>
-          <div className="w-3/4 h-0.5 bg-philippineSilver mx-auto mt-8"></div>
-        </header>
+
+        <PageHeader
+        title='Skontaktuj się z nami'
+        description='Masz pytania lub chcesz nawiązać współpracę? Wypełnij formularz lub skorzystaj z poniższych danych.'
+        />
 
         <div className="max-w-6xl mx-auto lg:grid lg:grid-cols-2 lg:gap-12">
           {/* SEKCJA DANYCH KONTAKTOWYCH */}
