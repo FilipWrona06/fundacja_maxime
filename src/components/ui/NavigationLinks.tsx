@@ -6,10 +6,9 @@ import { usePathname } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
 import { clsx } from 'clsx';
 
-// Definiujemy warianty stylów
 const linkVariants = {
-  primary: 'px-3 py-2 rounded-3xl font-bold lg:text-base xl:text-lg hover:bg-philippineSilver hover:scale-105',
-  subtle: 'hover:font-bold', // Prostszy wariant dla stopki
+  primary: 'px-2.5 py-2 rounded-3xl font-bold lg:text-base xl:text-lg hover:bg-philippineSilver hover:text-raisinBlack hover:scale-105',
+  subtle: 'hover:font-bold',
 };
 
 interface NavigationLinksProps {
@@ -17,7 +16,7 @@ interface NavigationLinksProps {
   children: React.ReactNode;
   className?: string;
   onClick?: () => void;
-  variant?: keyof typeof linkVariants; // Dodajemy prop wariantu
+  variant?: keyof typeof linkVariants;
 }
 
 export const NavigationLinks = ({
@@ -25,18 +24,17 @@ export const NavigationLinks = ({
   children,
   className,
   onClick,
-  variant = 'primary', // Ustawiamy 'primary' jako domyślny
+  variant = 'primary',
 }: NavigationLinksProps) => {
   const pathname = usePathname();
   const isActive = pathname === href;
 
   const finalClasses = twMerge(
     clsx(
-      'font-montserrat duration-250 transition-colors', // Wspólne style
-      linkVariants[variant], // Dynamicznie stosujemy style wariantu
+      'font-montserrat duration-300 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-philippineSilver',
+      linkVariants[variant],
       {
-        // Aktywny stan ma sens tylko dla wariantu 'primary'
-        'bg-philippineSilver/20': isActive && variant === 'primary',
+        'bg-philippineSilver/20 text-philippineSilver': isActive && variant === 'primary',
       },
       className
     )

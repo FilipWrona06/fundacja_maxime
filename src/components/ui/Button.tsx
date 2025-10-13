@@ -7,7 +7,7 @@ import Link from 'next/link';
 const buttonVariants = {
   variant: {
     outline: 'bg-transparent border-2 border-philippineSilver hover:bg-philippineSilver hover:text-raisinBlack hover:scale-105',
-    solid: 'bg-philippineSilver text-raisinBlack border-2 border-philippineSilver',
+    solid: 'bg-philippineSilver text-raisinBlack border-2 border-philippineSilver hover:bg-philippineSilver/90',
   },
 };
 
@@ -18,13 +18,13 @@ type BaseProps = {
 };
 
 type ButtonAsButton = BaseProps &
-  React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, keyof BaseProps> & {
     asLink?: false;
     href?: never;
   };
 
 type ButtonAsLink = BaseProps &
-  React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+  Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof BaseProps> & {
     asLink: true;
     href: string;
   };
@@ -36,17 +36,13 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
     
     const finalClasses = twMerge(
       clsx(
-        'rounded-full px-6 py-3 text-sm font-montserrat font-bold tracking-wider transition-all duration-250 disabled:opacity-60 disabled:pointer-events-none inline-flex items-center justify-center',
+        'rounded-full px-4.5 py-3 text-sm font-montserrat font-bold tracking-wider transition-all duration-300 disabled:opacity-60 disabled:pointer-events-none inline-flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-philippineSilver focus-visible:ring-offset-2 focus-visible:ring-offset-raisinBlack',
         buttonVariants.variant[props.variant ?? 'outline'],
         props.className
       )
     );
 
     if (props.asLink) {
-      // ======================================================================
-      // ZMIANA TUTAJ: Dodajemy 'asLink' do destrukturyzacji,
-      // aby nie zostało przekazane w obiekcie 'rest'.
-      // ======================================================================
       const { className, variant, children, asLink, ...rest } = props;
       
       return (
@@ -60,7 +56,8 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
       );
     }
 
-    const { className, variant, asLink, children, ...rest } = props;
+    // Dla button nie destrukturyzujemy 'asLink', bo nie istnieje w tym typie
+    const { className, variant, children, ...rest } = props;
     return (
       <button 
         className={finalClasses} 
