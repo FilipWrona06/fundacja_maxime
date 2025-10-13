@@ -1,14 +1,13 @@
+// src/components/Footer.tsx
 'use client';
 
-import { useState, useEffect, FormEvent, ReactNode } from 'react';
-import Link from 'next/link';
+import { useState, useEffect, FormEvent } from 'react';
 import jsonp from 'jsonp';
-import { FaFacebook, FaInstagram, FaYoutube, FaHeart } from 'react-icons/fa';
 import { Button } from './ui/Button';
+import { NavigationLinks } from './ui/NavigationLinks';
+import { SocialLinks } from './ui/SocialLinks';
+import { ContactDetails } from './ui/ContactDetails';
 
-// ======================================================
-//GŁÓWNY I JEDYNY KOMPONENT STOPKI
-// ====================================================
 const Footer = () => {
   //LOGIKA FORMULARZA NEWSLETTERA
   const [email, setEmail] = useState('');
@@ -17,10 +16,7 @@ const Footer = () => {
 
   useEffect(() => {
     if (status === 'success' || status === 'error') {
-      const timer = setTimeout(() => {
-        setStatus('idle');
-        setMessage('');
-      }, 5000);
+      const timer = setTimeout(() => { setStatus('idle'); setMessage(''); }, 5000);
       return () => clearTimeout(timer);
     }
   }, [status]);
@@ -32,20 +28,14 @@ const Footer = () => {
       setMessage('Proszę podać prawidłowy adres e-mail.');
       return;
     }
-
     setStatus('loading');
     setMessage('');
-    
     const mailchimpUrl = 'https://interia.us22.list-manage.com/subscribe/post?u=571c8b619e1df84cb6ac15b70&id=dfa3ed976c&f_id=00f1c2e1f0';
     const url = mailchimpUrl.replace('/post?', '/post-json?');
-
     jsonp(`${url}&EMAIL=${encodeURIComponent(email)}`, { param: 'c' }, (err, data) => {
       if (err || data.result !== 'success') {
         setStatus('error');
-        setMessage(data?.msg?.includes("is already subscribed") 
-          ? 'Ten adres jest już zapisany.' 
-          : 'Błąd. Sprawdź adres i spróbuj ponownie.'
-        );
+        setMessage(data?.msg?.includes("is already subscribed") ? 'Ten adres jest już zapisany.' : 'Błąd. Sprawdź adres i spróbuj ponownie.');
       } else {
         setStatus('success');
         setMessage('Dziękujemy! Sprawdź skrzynkę, by potwierdzić zapis.');
@@ -56,63 +46,53 @@ const Footer = () => {
 
   return (
       <footer className="container mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-8">
 
-          {/* ========================================= */}
-          {/* SEKCJA BRANDINGOWA*/}
-          {/* ========================================== */}
-          <div className="md:col-span-2">
-            <h3 className="text-4xl font-youngest mb-4">Fundacja Maxime</h3>
-            <p className="font-montserrat text-sm max-w-md">
-              Dzielimy się pasją do muzyki klasycznej, inspirując i edukując kolejne pokolenia artystów i słuchaczy.
-            </p>
-            <div className="flex gap-4 mt-6">
-              <a href="https://www.facebook.com/stowarzyszeniemaxime" target="_blank" rel="noopener noreferrer" title="Nasz Facebook" className="text-2xl hover:text-philippineSilver transition-colors">
-                <FaFacebook />
-              </a>
-              <a href="https://www.instagram.com/maxime.orchestra/" target="_blank" rel="noopener noreferrer" title="Nasz Instagram" className="text-2xl hover:text-philippineSilver transition-colors">
-                <FaInstagram />
-              </a>
-              <a href="https://www.youtube.com/@stowarzyszeniemaxime" target="_blank" rel="noopener noreferrer" title="Nasz kanał YouTube" className="text-2xl hover:text-philippineSilver transition-colors">
-                <FaYoutube />
-              </a>
-              <a href="https://patronite.pl/stowarzyszeniemaxime" target="_blank" rel="noopener noreferrer" title="Wesprzyj nas na Patronite" className="text-2xl hover:text-philippineSilver transition-colors">
-                <FaHeart />
-              </a>
+            {/* SEKCJA BRANDINGOWA */}
+            <div className="md:col-span-2">
+              <h3 className="text-4xl font-youngest mb-4">Fundacja Maxime</h3>
+              <p className="font-montserrat text-sm max-w-md">
+                Dzielimy się pasją do muzyki klasycznej, inspirując i edukując kolejne pokolenia artystów i słuchaczy.
+              </p>
+              <div className="flex gap-4 mt-6">
+                <SocialLinks platform="facebook" />
+                <SocialLinks platform="instagram" />
+                <SocialLinks platform="youtube" />
+                <SocialLinks platform="patronite" />
+              </div>
             </div>
-          </div>
 
-          {/* ========================================= */}
-          {/* SEKCJA NAWIGACJI*/}
-          {/* ========================================== */}
-          <div>
-            <h4 className="text-lg font-montserrat font-bold mb-4">Nawigacja</h4>
-            <div className="flex flex-col gap-2 font-montserrat text-sm">
-              <Link href="/about" className="hover:text-philippineSilver transition-colors">O nas</Link>
-              <Link href="/events" className="hover:text-philippineSilver transition-colors">Wydarzenia</Link>
-              <Link href="/gallery" className="hover:text-philippineSilver transition-colors">Galeria</Link>
-              <Link href="/contact" className="hover:text-philippineSilver transition-colors">Kontakt</Link>
+            {/* 
+              ======================================================================
+              ZMIANA TUTAJ: Tworzymy nowy kontener, który zajmie 2 kolumny w siatce
+              i używa Flexboxa do podziału przestrzeni wewnątrz.
+              ======================================================================
+            */}
+            <div className="lg:col-span-2 flex gap-8">
+
+              {/* SEKCJA NAWIGACJI (teraz zajmuje 1/3 dostępnej przestrzeni) */}
+              <div className="w-1/3">
+                <h4 className="text-lg font-montserrat font-bold mb-4">Nawigacja</h4>
+                <div className="flex flex-col gap-2 font-montserrat text-sm">
+                  <NavigationLinks href="/about" variant="subtle">O nas</NavigationLinks>
+                  <NavigationLinks href="/events" variant="subtle">Wydarzenia</NavigationLinks>
+                  <NavigationLinks href="/gallery" variant="subtle">Galeria</NavigationLinks>
+                  <NavigationLinks href="/contact" variant="subtle">Kontakt</NavigationLinks>
+                </div>
+              </div>
+
+              {/* SEKCJA KONTAKTOWA (teraz zajmuje 2/3 dostępnej przestrzeni) */}
+              <div className="w-2/3">
+                <h4 className="text-lg font-montserrat font-bold mb-4">Kontakt</h4>
+                <ContactDetails 
+                  className="font-montserrat text-sm space-y-2" 
+                  showLabels={false} />
+              </div>
             </div>
-          </div>
 
-          {/* =================================== */}
-          {/* SEKCJA KONTAKTOWA*/}
-          {/* ========================================= */}
-          <div>
-            <h4 className="text-lg font-montserrat font-bold mb-4">Kontakt</h4>
-            <div className="text-sm font-montserrat space-y-2">
-              <p>ul. Kossaka 12, Dąbrowa Górnicza</p>
-              <p>kontakt@maxime.pl</p>
-              <p>(+48) 123 456 789</p>
-            </div>
-          </div>
-
-          {/* ====================================== */}
-          {/* SEKCJA NEWSLETTERA*/}
-          {/* ========================================== */}
-          <div className="md:col-span-4 lg:col-span-1">
-            <h4 className="text-lg font-montserrat font-bold mb-4">Bądź na bieżąco</h4>
-            <>
+            {/* SEKCJA NEWSLETTERA (pozostaje bez zmian) */}
+            <div className="md:col-span-4 lg:col-span-1">
+              <h4 className="text-lg font-montserrat font-bold mb-4">Bądź na bieżąco</h4>
               <form onSubmit={handleSubmit} className="flex flex-col gap-2">
                 <input 
                   type="email" 
@@ -123,29 +103,24 @@ const Footer = () => {
                   aria-label="Adres e-mail do newslettera"
                   className="w-full px-4 py-2 bg-black/50 placeholder-philippineSilver rounded-3xl focus:outline-none focus:ring-2 focus:ring-philippineSilver font-montserrat" 
                 />
-            <Button 
-              type="submit" 
-              disabled={status === 'loading'}
-              // Nie musimy podawać variant="outline", bo jest domyślny!
-            >
-              {status === 'loading' ? 'Zapisywanie...' : 'Zapisz się'}
-            </Button>
+                <Button 
+                  type="submit" 
+                  disabled={status === 'loading'}
+                >
+                  {status === 'loading' ? 'Zapisywanie...' : 'Zapisz się'}
+                </Button>
               </form>
               <div className="h-6 mt-2 text-center">
                 {status === 'success' && <p className="text-sm font-montserrat text-green-400">{message}</p>}
                 {status === 'error' && <p className="text-sm font-montserrat text-red-400">{message}</p>}
               </div>
-            </>
+            </div>
           </div>
 
-        </div>
-
-        {/* ========================================== */}
-        {/* SEKCJA PRAW AUTORSKICH*/}
-        {/* ========================================== */}
+        {/* SEKCJA PRAW AUTORSKICH */}
         <div className="border-t border-philippineSilver mt-12 pt-8 text-center text-sm font-montserrat">
           <p>
-            &copy; {new Date().getFullYear()} Fundacja Maxime. Wszelkie prawa zastrzeżone | Wykonanie: 
+            &copy; {new Date().getFullYear()} Fundacja Maxime. Wszkie prawa zastrzeżone | Wykonanie: 
             <a href="https://www.instagram.com/filip_wrona/" target="_blank" rel="noopener noreferrer" className="hover:text-philippineSilver transition-colors">
               Filip Wrona
             </a>

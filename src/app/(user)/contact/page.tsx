@@ -1,30 +1,11 @@
 // src/app/contact/page.tsx
-
 'use client';
 
 import { Button } from '@/components/ui/Button';
-import { contactDetails } from '@/data/contact';
+import { SocialLinks } from '@/components/ui/SocialLinks';
+import { ContactDetails } from '@/components/ui/ContactDetails';
 import React, { FormEvent } from 'react';
-// ZAKTUALIZOWANE: Dodajemy FaHeart do importów
-import { FaFacebook, FaInstagram, FaYoutube, FaHeart, FaMapMarkerAlt, FaEnvelope, FaPhone } from 'react-icons/fa';
 
-// =================================================================
-//  1. CENTRALNA DEFINICJA DANYCH KONTAKTOWYCH
-// =================================================================
-
-// =================================================================
-//  2. ZAKTUALIZOWANE MAPOWANIE IKON
-// =================================================================
-
-const contactIcons: { [key: string]: React.ReactNode } = {
-  Adres: <FaMapMarkerAlt />,
-  Email: <FaEnvelope />,
-  Telefon: <FaPhone />,
-};
-
-// =================================================================
-//  3. GŁÓWNY KOMPONENT STRONY KONTAKTOWEJ
-// =================================================================
 export default function ContactPage() {
   const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -45,44 +26,24 @@ export default function ContactPage() {
         </header>
 
         <div className="max-w-6xl mx-auto lg:grid lg:grid-cols-2 lg:gap-12">
-          {/* --- SEKCJA DANYCH KONTAKTOWYCH --- */}
+          {/* SEKCJA DANYCH KONTAKTOWYCH */}
           <div className="mb-12 lg:mb-0 bg-transparent border-2 border-philippineSilver shadow-lg rounded-3xl p-8 transition-all">
             <h2 className="text-2xl font-bold">Dane kontaktowe</h2>
-            <div className="mt-6 space-y-6">
-              {contactDetails.map((detail) => (
-                <a key={detail.label} href={detail.href} target="_blank" rel="noopener noreferrer" className="flex items-start group">
-                  <div className="flex-shrink-0 mt-1">{contactIcons[detail.label]}</div>
-                  <div className="ml-4">
-                    <p className="text-lg font-semibold">{detail.label}</p>
-                    <p className="group-hover:font-semibold transition-all">{detail.value}</p>
-                  </div>
-                </a>
-              ))}
-            </div>
+            
+            <ContactDetails className="mt-6 text-lg" />
             
             <hr className="my-8 border-philippineSilver" />
             <h3 className="text-xl font-bold mb-4">Znajdź nas w sieci</h3>
             
-            {/* ================================================== */}
-            {/* ZAKTUALIZOWANE: Statyczna lista linków social media */}
-            {/* ================================================== */}
-            <div className="flex gap-6 text-3xl">
-              <a href="https://www.facebook.com/stowarzyszeniemaxime" target="_blank" rel="noopener noreferrer" title="Nasz Facebook" className="text-2xl hover:text-philippineSilver transition-colors">
-                <FaFacebook />
-              </a>
-              <a href="https://www.instagram.com/maxime.orchestra/" target="_blank" rel="noopener noreferrer" title="Nasz Instagram" className="text-2xl hover:text-philippineSilver transition-colors">
-                <FaInstagram />
-              </a>
-              <a href="https://www.youtube.com/@stowarzyszeniemaxime" target="_blank" rel="noopener noreferrer" title="Nasz kanał YouTube" className="text-2xl hover:text-philippineSilver transition-colors">
-                <FaYoutube />
-              </a>
-              <a href="https://patronite.pl/stowarzyszeniemaxime" target="_blank" rel="noopener noreferrer" title="Wesprzyj nas na Patronite" className="text-2xl hover:text-philippineSilver transition-colors">
-                <FaHeart />
-              </a>
+            <div className="flex gap-6 text-2xl">
+              <SocialLinks platform="facebook" />
+              <SocialLinks platform="instagram" />
+              <SocialLinks platform="youtube" />
+              <SocialLinks platform="patronite" />
             </div>
           </div>
 
-          {/* --- SEKCJA FORMULARZA KONTAKTOWEGO (bez zmian) --- */}
+          {/* SEKCJA FORMULARZA KONTAKTOWEGO */}
           <div className="bg-transparent border-2 border-philippineSilver shadow-lg rounded-3xl p-8 transition-all">
             <form onSubmit={handleFormSubmit} className="space-y-6">
               <div>
@@ -98,10 +59,7 @@ export default function ContactPage() {
                 <textarea id="message" name="message" rows={4} required className="mt-1 block w-full px-4 py-2 bg-transparent border-2 border-philippineSilver rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-raisinBlack transition-all"></textarea>
               </div>
               <div className='text-center'>
-                <Button
-                  type="submit"
-                  className='w-full'
-                >
+                <Button type="submit" className='w-full'>
                   Wyślij wiadomość
                 </Button>
               </div>

@@ -36,7 +36,7 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
     
     const finalClasses = twMerge(
       clsx(
-        'rounded-full px-8 py-3 text-sm font-montserrat font-bold tracking-wider transition-all duration-250 disabled:opacity-60 disabled:pointer-events-none inline-flex items-center justify-center',
+        'rounded-full px-6 py-3 text-sm font-montserrat font-bold tracking-wider transition-all duration-250 disabled:opacity-60 disabled:pointer-events-none inline-flex items-center justify-center',
         buttonVariants.variant[props.variant ?? 'outline'],
         props.className
       )
