@@ -1,30 +1,27 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { eventsData } from '@/data/events';
+// Importujemy już przetworzone i posortowane dane
+import { upcomingEvents, pastEvents } from '@/data/events';
 import { Button } from '@/components/ui/Button';
 import { Divider } from '@/components/ui/Divider';
 import { PageHeader } from '@/components/ui/PageHeader';
 
-// =======================================================
-//  1. CENTRALNA DEFINICJA DANYCH DLA WYDARZEŃ
-// =======================================================
-
 // ========================================================
-//  2. GŁÓWNY KOMPONENT STRONY Z LISTĄ WYDARZEŃ
+//  GŁÓWNY KOMPONENT STRONY Z LISTĄ WYDARZEŃ
 // ========================================================
-export default function EventsPage(){
-    const upcomingEvents = eventsData.filter((event) => event.status !== 'zakończone');
-  const pastEvents = eventsData.filter((event) => event.status === 'zakończone');
+export default function EventsPage() {
+  // Nie ma już potrzeby filtrowania danych w komponencie!
+  // `upcomingEvents` i `pastEvents` są już gotowe do użycia.
 
-    return (
+  return (
     <main className="min-h-screen">
       <div className="container mx-auto px-4 py-16">
 
         <PageHeader
-        title='Wydarzenia'
-        description='Zobacz, gdzie możesz nas spotkać i wesprzeć nasze działania na żywo!'
-        dividerWidth='3/5'
+          title='Wydarzenia'
+          description='Zobacz, gdzie możesz nas spotkać i wesprzeć nasze działania na żywo!'
+          dividerWidth='3/5'
         />
 
         <div className="max-w-4xl mx-auto space-y-16">
@@ -35,7 +32,7 @@ export default function EventsPage(){
                 upcomingEvents.map((event) => (
                   <div
                     key={event.id}
-                    className={`group bg-transparent border-2 border-philippineSilver hover:font-semibold shadow-lg hover:shadow-2xl hover:scale-105 rounded-3xl overflow-hidden transition-all duration-250`}
+                    className={`group bg-transparent border-2 border-philippineSilver shadow-lg hover:shadow-2xl hover:scale-105 rounded-3xl overflow-hidden transition-all duration-250`}
                   >
                     <div className="md:flex">
                       <div className="md:flex-shrink-0 md:w-5/12">
@@ -44,7 +41,7 @@ export default function EventsPage(){
                             src={event.imageSrc}
                             alt={event.title}
                             fill
-                            className="object-cover transition-transform duration-300"
+                            className="object-cover transition-transform duration-250"
                           />
                         </div>
                       </div>
@@ -57,6 +54,7 @@ export default function EventsPage(){
                           <p className="mt-4">{event.location}</p>
                         </div>
                         <div className='mt-5'>
+                          {/* Logika wyświetlania przycisków pozostaje bez zmian, bo wciąż używa `status` */}
                           {event.status === 'nadchodzące' && (
                             <Button asLink
                               href={event.ticketUrl}
@@ -87,9 +85,10 @@ export default function EventsPage(){
               <h2 className="text-3xl font-bold mb-8">Archiwum wydarzeń</h2>
               <div className="space-y-12">
                 {pastEvents.map((event) => (
+                  // Reszta JSX dla wydarzeń archiwalnych pozostaje bez zmian
                   <div
                     key={event.id}
-                    className={`group bg-transparent border-2 border-philippineSilver hover:font-semibold shadow-lg hover:shadow-2xl hover:scale-105 rounded-3xl overflow-hidden transition-all duration-250 opacity-60`}
+                    className={`group bg-transparent border-2 border-philippineSilver shadow-lg hover:shadow-2xl hover:scale-105 rounded-3xl overflow-hidden transition-all duration-250 opacity-60`}
                   >
                     <div className="md:flex">
                        <div className="md:flex-shrink-0 md:w-5/12">

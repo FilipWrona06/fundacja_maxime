@@ -1,4 +1,3 @@
-import { Divider } from '@/components/ui/Divider';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { newsData } from '@/data/news';
 import Image from 'next/image';
@@ -28,7 +27,7 @@ export default function NewsPage(){
               <Link
                 href={`/news/${article.slug}`}
                 key={article.id}
-                className="block group bg-transparent border-2 border-philippineSilver hover:font-semibold shadow-lg hover:shadow-2xl hover:scale-105 rounded-3xl overflow-hidden transition-all duration-250"
+                className="block group bg-transparent border-2 border-philippineSilver shadow-lg hover:shadow-2xl hover:scale-105 rounded-3xl overflow-hidden transition-all duration-250"
               >
                 <div className="md:flex">
                   <div className="md:flex-shrink-0 md:w-5/12">

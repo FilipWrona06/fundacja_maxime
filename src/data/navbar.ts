@@ -1,3 +1,4 @@
+//src/data/navbar.ts
 export const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'O nas' },

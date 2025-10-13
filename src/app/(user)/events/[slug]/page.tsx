@@ -1,16 +1,20 @@
+// EventPage.tsx
+
 import React from 'react';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import { eventsData } from '@/data/events';
+// ZMIANA: Importujemy `allEventsData` zamiast `eventsData`
+import { allEventsData } from '@/data/events';
 import { Button } from '@/components/ui/Button';
-import { PageHeader } from '@/components/ui/PageHeader'; // Importujemy uniwersalny komponent nagłówka
+import { PageHeader } from '@/components/ui/PageHeader';
 
 // ======================================================
 //  FUNKCJE NEXT.JS DO OBSŁUGI DANYCH
 // ======================================================
 
 export async function generateStaticParams() {
-  return eventsData.map((event) => ({
+  // ZMIANA: Używamy `allEventsData` do generowania statycznych ścieżek
+  return allEventsData.map((event) => ({
     slug: event.slug,
   }));
 }
@@ -19,7 +23,8 @@ export async function generateStaticParams() {
 //  GŁÓWNY KOMPONENT STRONY POJEDYNCZEGO WYDARZENIA
 // ====================================================
 export default function EventPage({ params }: { params: { slug: string } }) {
-  const event = eventsData.find((e) => e.slug === params.slug);
+  // ZMIANA: Wyszukujemy wydarzenie w `allEventsData`
+  const event = allEventsData.find((e) => e.slug === params.slug);
 
   // Jeśli wydarzenie o danym slugu nie istnieje, zwróć stronę 404
   if (!event) {
@@ -44,10 +49,6 @@ export default function EventPage({ params }: { params: { slug: string } }) {
 
           {/* Użycie zrefaktoryzowanego komponentu PageHeader */}
           <PageHeader title={event.title} dividerWidth="full">
-            {/* 
-              Dowolna treść przekazana tutaj zostanie wyrenderowana 
-              wewnątrz komponentu PageHeader. To daje nam maksymalną elastyczność.
-            */}
             <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-lg">
               <span>📅 {`${event.date.day} ${event.date.month} ${event.date.year}`}</span>
               <span>🕒 {event.time}</span>
