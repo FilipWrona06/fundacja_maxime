@@ -46,7 +46,8 @@ const Footer = () => {
   };
 
   return (
-      <footer className="container mx-auto px-6 py-12">
+      <footer className="px-6 py-12 border-t border-t-philippineSilver/5">
+        <div className='container mx-auto'>
           <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-8">
 
             {/* SEKCJA BRANDINGOWA */}
@@ -55,12 +56,7 @@ const Footer = () => {
               <p className="font-montserrat text-sm max-w-md">
                 Dzielimy się pasją do muzyki klasycznej, inspirując i edukując kolejne pokolenia artystów i słuchaczy.
               </p>
-              <div className="flex gap-4 mt-6">
-                <SocialLinks platform="facebook" />
-                <SocialLinks platform="instagram" />
-                <SocialLinks platform="youtube" />
-                <SocialLinks platform="patronite" />
-              </div>
+              <SocialLinks className="mt-5" />
             </div>
 
             {/* 
@@ -74,7 +70,7 @@ const Footer = () => {
               {/* SEKCJA NAWIGACJI (teraz zajmuje 1/3 dostępnej przestrzeni) */}
               <div className="w-1/3">
                 <h4 className="text-lg font-montserrat font-bold mb-4">Nawigacja</h4>
-                <div className="flex flex-col gap-2 font-montserrat text-sm">
+                <div className="columns-2 flex flex-col gap-2 font-montserrat text-sm">
                   <NavigationLinks href="/about" variant="subtle">O nas</NavigationLinks>
                   <NavigationLinks href="/events" variant="subtle">Wydarzenia</NavigationLinks>
                   <NavigationLinks href="/gallery" variant="subtle">Galeria</NavigationLinks>
@@ -119,7 +115,7 @@ const Footer = () => {
           </div>
 
         {/* SEKCJA PRAW AUTORSKICH */}
-        <div className="mt-10 text-center text-sm font-montserrat">
+        <div className="mt-5 text-center text-sm font-montserrat">
           <Divider className='mb-5' />
           <p>
             &copy; {new Date().getFullYear()} Fundacja Maxime. Wszkie prawa zastrzeżone | Wykonanie: 
@@ -127,6 +123,7 @@ const Footer = () => {
               Filip Wrona
             </a>
           </p>
+        </div>
         </div>
       </footer>
   );

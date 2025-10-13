@@ -9,6 +9,7 @@ const dividerVariants = {
     '4/5': 'w-4/5', // <-- DODANO NOWĄ WARTOŚĆ
     '3/4': 'w-3/4',
     '1/2': 'w-1/2',
+    '3/5': 'w-3/5',
   },
 };
 
@@ -22,7 +23,7 @@ const Divider = React.forwardRef<HTMLDivElement, DividerProps>(
   // =======================================================
   // ZMIANA TUTAJ: Zmieniamy domyślną wartość z '3/4' na '4/5'
   // =======================================================
-  ({ className, width = '4/5', ...props }, ref) => {
+  ({ className, width = 'full', ...props }, ref) => {
     
     const finalClasses = twMerge(
       clsx(

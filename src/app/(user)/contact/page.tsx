@@ -21,6 +21,7 @@ export default function ContactPage() {
         <PageHeader
         title='Skontaktuj się z nami'
         description='Masz pytania lub chcesz nawiązać współpracę? Wypełnij formularz lub skorzystaj z poniższych danych.'
+        dividerWidth='3/4'
         />
 
         <div className="max-w-6xl mx-auto lg:grid lg:grid-cols-2 lg:gap-12">
@@ -30,15 +31,10 @@ export default function ContactPage() {
             
             <ContactDetails className="mt-6 text-lg" />
             
-            <hr className="my-8 border-philippineSilver" />
+            <Divider className='w-full my-5' />
             <h3 className="text-xl font-bold mb-4">Znajdź nas w sieci</h3>
             
-            <div className="flex gap-6 text-2xl">
-              <SocialLinks platform="facebook" />
-              <SocialLinks platform="instagram" />
-              <SocialLinks platform="youtube" />
-              <SocialLinks platform="patronite" />
-            </div>
+            <SocialLinks />
           </div>
 
           {/* SEKCJA FORMULARZA KONTAKTOWEGO */}

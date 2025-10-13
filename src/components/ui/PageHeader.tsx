@@ -49,7 +49,7 @@ const PageHeader = React.forwardRef<HTMLElement, PageHeaderProps>(
         <Divider 
           width={dividerWidth}
           className={clsx(
-            "mt-8",
+            "mt-5",
             dividerWidth !== 'full' && 'mx-auto'
           )}
         />

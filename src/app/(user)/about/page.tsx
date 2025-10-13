@@ -14,7 +14,8 @@ export default function AboutPage() {
       
       <PageHeader
       title='Nasza Misja'
-      description='W Fundacji Maxime wierzymy, że każdy zasługuje na równe szanse. Naszą misją jest tworzenie inspirującej przestrzeni dla rozwoju, edukacji i integracji społecznej.' />
+      description='W Fundacji Maxime wierzymy, że każdy zasługuje na równe szanse. Naszą misją jest tworzenie inspirującej przestrzeni dla rozwoju, edukacji i integracji społecznej.'
+      />
 
       {/* ============================================= */}
       {/* SEKCJA OSI CZASU*/}

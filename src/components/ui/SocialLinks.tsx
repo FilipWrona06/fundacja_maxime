@@ -1,56 +1,40 @@
-// src/components/ui/SocialLinks.tsx
 import React from 'react';
+import { socialPlatforms } from '@/data/socials'; // Krok 1: Importujemy czyste dane
 import { FaFacebook, FaInstagram, FaYoutube, FaHeart } from 'react-icons/fa';
+import { twMerge } from 'tailwind-merge';
+import { clsx } from 'clsx';
 
-// 1. Definiujemy centralne dane dla każdej platformy
-const socialPlatforms = {
-  facebook: {
-    href: 'https://www.facebook.com/stowarzyszeniemaxime',
-    title: 'Nasz Facebook',
-    icon: <FaFacebook />,
-  },
-  instagram: {
-    href: 'https://www.instagram.com/maxime.orchestra/',
-    title: 'Nasz Instagram',
-    icon: <FaInstagram />,
-  },
-  youtube: {
-    href: 'https://www.youtube.com/@stowarzyszeniemaxime',
-    title: 'Nasz kanał YouTube',
-    icon: <FaYoutube />,
-  },
-  patronite: {
-    href: 'https://patronite.pl/stowarzyszeniemaxime',
-    title: 'Wesprzyj nas na Patronite',
-    icon: <FaHeart />,
-  },
+// Krok 2: Definiujemy warstwę prezentacji (mapowanie nazw na ikony)
+const socialIcons: { [key: string]: React.ReactNode } = {
+  facebook: <FaFacebook />,
+  instagram: <FaInstagram />,
+  youtube: <FaYoutube />,
+  patronite: <FaHeart />,
 };
 
-// 2. Typy propsów - teraz przyjmujemy tylko nazwę platformy
-type Platform = keyof typeof socialPlatforms;
-
+// Krok 3: Definiujemy propsy. Komponent przyjmuje teraz tylko `className`.
 interface SocialLinksProps {
-  platform: Platform;
+  className?: string;
 }
 
-// 3. Zaktualizowany komponent
-export const SocialLinks = ({ platform }: SocialLinksProps) => {
-  const platformData = socialPlatforms[platform];
-
-  // Zabezpieczenie na wypadek podania nieprawidłowej platformy
-  if (!platformData) {
-    return null;
-  }
+// Krok 4: Komponent renderuje całą grupę linków, a nie pojedynczy.
+export const SocialLinks = ({ className }: SocialLinksProps) => {
+  const finalClasses = twMerge(clsx('flex gap-6', className));
 
   return (
-    <a
-      href={platformData.href}
-      target="_blank"
-      rel="noopener noreferrer"
-      title={platformData.title}
-      className="text-2xl hover:scale-125 transition-colors duration-250"
-    >
-      {platformData.icon}
-    </a>
+    <div className={finalClasses}>
+      {socialPlatforms.map((platform) => (
+        <a
+          key={platform.platform}
+          href={platform.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          title={platform.title}
+          className="hover:scale-125 ml-1 text-2xl transition-transform duration-250"
+        >
+          {socialIcons[platform.platform]}
+        </a>
+      ))}
+    </div>
   );
 };

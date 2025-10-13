@@ -16,7 +16,7 @@ const Navbar = () => {
   const rightLinks = navLinks.slice(4);
 
   return (
-    <header className="bg-raisinBlack p-4 sticky top-0 z-50">
+    <header className="bg-raisinBlack p-4 sticky top-0 z-50  border-b border-b-philippineSilver/5">
       <div className="container mx-auto">
         <div className="flex justify-between items-center">
           
