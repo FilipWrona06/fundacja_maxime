@@ -20,9 +20,9 @@ const Navbar = () => {
       <div className="container mx-auto">
         <div className="flex justify-between items-center">
           
-          {/* WIDOK DESKTOPOWY */}
-          <nav className="hidden lg:flex w-full items-center" aria-label="Nawigacja główna">
-            <div className="flex-1 flex justify-start lg:space-x-2 xl:space-x-3">
+          {/* WIDOK DESKTOPOWY - tylko dla ekranów ≥1280px */}
+          <nav className="hidden xl:flex w-full items-center" aria-label="Nawigacja główna">
+            <div className="flex-1 flex justify-start space-x-2">
               {leftLinks.map((link) => (
                 <NavigationLinks key={link.href} href={link.href}>
                   {link.label}
@@ -30,7 +30,7 @@ const Navbar = () => {
               ))}
             </div>
 
-            <div className="lg:text-3xl xl:text-4xl px-4">
+            <div className="text-4xl px-4">
               <Link 
                 href="/" 
                 className="font-youngest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-philippineSilver rounded-lg"
@@ -39,7 +39,7 @@ const Navbar = () => {
               </Link>
             </div>
 
-            <div className="flex-1 flex justify-end items-center lg:space-x-2 xl:space-x-3">
+            <div className="flex-1 flex justify-end items-center space-x-2">
               {rightLinks.map((link) => (
                 <NavigationLinks key={link.href} href={link.href}>
                   {link.label}
@@ -56,8 +56,8 @@ const Navbar = () => {
             </div>
           </nav>
 
-          {/* NAGŁÓWEK MOBILNY */}
-          <div className="lg:hidden flex justify-between items-center w-full">
+          {/* NAGŁÓWEK MOBILNY I TABLET - dla ekranów <1280px */}
+          <div className="xl:hidden flex justify-between items-center w-full">
             <div className="text-4xl pl-1.5">
               <Link 
                 href="/" 
@@ -85,11 +85,11 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* ROZWIJANE MENU MOBILNE */}
+        {/* ROZWIJANE MENU MOBILNE I TABLET */}
         {isOpen && (
           <nav 
             id="mobile-menu"
-            className="lg:hidden mt-4 space-y-2 flex flex-col items-center"
+            className="xl:hidden mt-4 space-y-2 flex flex-col items-center"
             aria-label="Nawigacja mobilna"
           >
             <Button 

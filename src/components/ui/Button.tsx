@@ -36,7 +36,7 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
     
     const finalClasses = twMerge(
       clsx(
-        'rounded-full px-4.5 py-3 text-sm font-montserrat font-bold tracking-wider transition-all duration-300 disabled:opacity-60 disabled:pointer-events-none inline-flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-philippineSilver focus-visible:ring-offset-2 focus-visible:ring-offset-raisinBlack',
+        'rounded-full px-5 py-3 text-sm font-montserrat font-bold tracking-wider transition-all duration-300 disabled:opacity-60 disabled:pointer-events-none inline-flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-philippineSilver focus-visible:ring-offset-2 focus-visible:ring-offset-raisinBlack',
         buttonVariants.variant[props.variant ?? 'outline'],
         props.className
       )
@@ -56,7 +56,6 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
       );
     }
 
-    // Dla button nie destrukturyzujemy 'asLink', bo nie istnieje w tym typie
     const { className, variant, children, ...rest } = props;
     return (
       <button 

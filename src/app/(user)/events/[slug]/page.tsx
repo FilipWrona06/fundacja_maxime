@@ -48,7 +48,7 @@ export default function EventPage({ params }: { params: { slug: string } }) {
           </div>
 
           {/* Użycie zrefaktoryzowanego komponentu PageHeader */}
-          <PageHeader title={event.title} dividerWidth="full">
+          <PageHeader title={event.title}>
             <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-lg">
               <span>📅 {`${event.date.day} ${event.date.month} ${event.date.year}`}</span>
               <span>🕒 {event.time}</span>

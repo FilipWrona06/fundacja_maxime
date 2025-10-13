@@ -21,7 +21,6 @@ export default function ContactPage() {
         <PageHeader
         title='Skontaktuj się z nami'
         description='Masz pytania lub chcesz nawiązać współpracę? Wypełnij formularz lub skorzystaj z poniższych danych.'
-        dividerWidth='3/4'
         />
 
         <div className="max-w-6xl mx-auto lg:grid lg:grid-cols-2 lg:gap-12">

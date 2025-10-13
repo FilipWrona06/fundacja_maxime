@@ -21,7 +21,6 @@ export default function EventsPage() {
         <PageHeader
           title='Wydarzenia'
           description='Zobacz, gdzie możesz nas spotkać i wesprzeć nasze działania na żywo!'
-          dividerWidth='3/5'
         />
 
         <div className="max-w-4xl mx-auto space-y-16">

@@ -18,7 +18,6 @@ export default function NewsPage(){
         <PageHeader
         title='Aktualności'
         description='Bądź na bieżąco z życiem naszej fundacji.'
-        dividerWidth='3/5'
         />
 
         <div className="max-w-4xl mx-auto">

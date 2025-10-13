@@ -1,34 +1,18 @@
+// src/components/ui/Divider.tsx
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
 import { clsx } from 'clsx';
 
-// Definicja wariantów dla komponentu Divider
-const dividerVariants = {
-  width: {
-    'full': 'w-full',
-    '4/5': 'w-4/5', // <-- DODANO NOWĄ WARTOŚĆ
-    '3/4': 'w-3/4',
-    '1/2': 'w-1/2',
-    '3/5': 'w-3/5',
-  },
-};
-
-// Zaktualizowane typy propsów
 export type DividerProps = React.HTMLAttributes<HTMLDivElement> & {
   className?: string;
-  width?: keyof typeof dividerVariants.width;
 };
 
 const Divider = React.forwardRef<HTMLDivElement, DividerProps>(
-  // =======================================================
-  // ZMIANA TUTAJ: Zmieniamy domyślną wartość z '3/4' na '4/5'
-  // =======================================================
-  ({ className, width = 'full', ...props }, ref) => {
+  ({ className, ...props }, ref) => {
     
     const finalClasses = twMerge(
       clsx(
-        'h-0.5 bg-philippineSilver',
-        dividerVariants.width[width],
+        'h-0.5 w-full bg-philippineSilver/20',
         className
       )
     );
@@ -38,6 +22,7 @@ const Divider = React.forwardRef<HTMLDivElement, DividerProps>(
         ref={ref}
         className={finalClasses}
         role="separator"
+        aria-orientation="horizontal"
         {...props}
       />
     );

@@ -10,7 +10,7 @@ import { ContactDetails } from './ui/ContactDetails';
 import { Divider } from './ui/Divider';
 
 const Footer = () => {
-  //LOGIKA FORMULARZA NEWSLETTERA
+  // LOGIKA FORMULARZA NEWSLETTERA
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
@@ -46,51 +46,56 @@ const Footer = () => {
   };
 
   return (
-      <footer className="px-6 py-12 border-t border-t-philippineSilver/5">
-        <div className='container mx-auto'>
-          <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-8">
+    <footer className="px-6 py-12 border-t border-t-philippineSilver/5">
+      <div className='container mx-auto'>
+        {/* Grid: Mobile (1 col) → iPad (2 cols) → Desktop (5 cols) 
+            Używamy xl zamiast lg, żeby iPad (1024px) nie przełączał się na desktop layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-8">
 
-            {/* SEKCJA BRANDINGOWA */}
-            <div className="md:col-span-2">
+          {/* SEKCJA BRANDINGOWA - full width na iPadzie */}
+          <div className="md:col-span-2 xl:col-span-2">
+            <div className="md:text-center xl:text-left md:flex md:flex-col md:items-center xl:block">
               <h3 className="text-4xl font-youngest mb-4">Fundacja Maxime</h3>
               <p className="font-montserrat text-sm max-w-md">
                 Dzielimy się pasją do muzyki klasycznej, inspirując i edukując kolejne pokolenia artystów i słuchaczy.
               </p>
-              <SocialLinks className="mt-5" />
+              <SocialLinks className="mt-5 md:justify-center xl:justify-start" />
             </div>
+          </div>
 
-            {/* 
-              ======================================================================
-              ZMIANA TUTAJ: Tworzymy nowy kontener, który zajmie 2 kolumny w siatce
-              i używa Flexboxa do podziału przestrzeni wewnątrz.
-              ======================================================================
-            */}
-            <div className="lg:col-span-2 flex gap-8">
-
-              {/* SEKCJA NAWIGACJI (teraz zajmuje 1/3 dostępnej przestrzeni) */}
-              <div className="w-1/3">
-                <h4 className="text-lg font-montserrat font-bold mb-4">Nawigacja</h4>
-                <div className="columns-2 flex flex-col gap-2 font-montserrat text-sm">
-                  <NavigationLinks href="/about" variant="subtle">O nas</NavigationLinks>
-                  <NavigationLinks href="/events" variant="subtle">Wydarzenia</NavigationLinks>
-                  <NavigationLinks href="/gallery" variant="subtle">Galeria</NavigationLinks>
-                  <NavigationLinks href="/contact" variant="subtle">Kontakt</NavigationLinks>
-                </div>
-              </div>
-
-              {/* SEKCJA KONTAKTOWA (teraz zajmuje 2/3 dostępnej przestrzeni) */}
-              <div className="w-2/3">
-                <h4 className="text-lg font-montserrat font-bold mb-4">Kontakt</h4>
-                <ContactDetails 
-                  className="font-montserrat text-sm space-y-2" 
-                  showLabels={false} />
-              </div>
+          {/* SEKCJA NAWIGACJI */}
+          <div className="md:col-span-1 xl:col-span-1">
+            <div className="md:text-center xl:text-left">
+              <h4 className="text-lg font-montserrat font-bold mb-4">Nawigacja</h4>
+              <nav className="flex flex-col gap-2 font-montserrat text-sm md:items-center xl:items-start" aria-label="Nawigacja stopki">
+                <NavigationLinks href="/about" variant="subtle">O nas</NavigationLinks>
+                <NavigationLinks href="/events" variant="subtle">Wydarzenia</NavigationLinks>
+                <NavigationLinks href="/gallery" variant="subtle">Galeria</NavigationLinks>
+                <NavigationLinks href="/contact" variant="subtle">Kontakt</NavigationLinks>
+              </nav>
             </div>
+          </div>
 
-            {/* SEKCJA NEWSLETTERA (pozostaje bez zmian) */}
-            <div className="md:col-span-4 lg:col-span-1">
+          {/* SEKCJA KONTAKTOWA */}
+          <div className="md:col-span-1 xl:col-span-1">
+            <div className="md:text-center xl:text-left md:flex md:flex-col md:items-center xl:block">
+              <h4 className="text-lg font-montserrat font-bold mb-4">Kontakt</h4>
+              <ContactDetails 
+                className="font-montserrat text-sm space-y-2 md:inline-flex md:flex-col md:items-start xl:block" 
+                showLabels={false} 
+              />
+            </div>
+          </div>
+
+          {/* SEKCJA NEWSLETTERA - full width na iPadzie */}
+          <div className="md:col-span-2 xl:col-span-1">
+            <div className="md:text-center xl:text-left md:flex md:flex-col md:items-center xl:block">
               <h4 className="text-lg font-montserrat font-bold mb-4">Bądź na bieżąco</h4>
-              <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+              <form 
+                onSubmit={handleSubmit} 
+                className="flex flex-col gap-2 w-full md:max-w-md xl:max-w-none"
+                aria-label="Formularz zapisu do newslettera"
+              >
                 <input 
                   type="email" 
                   placeholder="Twój adres e-mail"
@@ -107,25 +112,31 @@ const Footer = () => {
                   {status === 'loading' ? 'Zapisywanie...' : 'Zapisz się'}
                 </Button>
               </form>
-              <div className="h-6 mt-2 text-center">
+              <div className="h-6 mt-2 w-full md:max-w-md xl:max-w-none">
                 {status === 'success' && <p className="text-sm font-montserrat text-green-400">{message}</p>}
                 {status === 'error' && <p className="text-sm font-montserrat text-red-400">{message}</p>}
               </div>
             </div>
           </div>
+        </div>
 
         {/* SEKCJA PRAW AUTORSKICH */}
-        <div className="mt-5 text-center text-sm font-montserrat">
+        <div className="mt-8 text-center text-sm font-montserrat">
           <Divider className='mb-5' />
           <p>
-            &copy; {new Date().getFullYear()} Fundacja Maxime. Wszkie prawa zastrzeżone | Wykonanie: 
-            <a href="https://www.instagram.com/filip_wrona/" target="_blank" rel="noopener noreferrer" className="hover:text-philippineSilver transition-colors">
+            &copy; {new Date().getFullYear()} Fundacja Maxime. Wszystkie prawa zastrzeżone | Wykonanie: 
+            <a 
+              href="https://www.instagram.com/filip_wrona/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="hover:text-philippineSilver transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-philippineSilver rounded ml-1"
+            >
               Filip Wrona
             </a>
           </p>
         </div>
-        </div>
-      </footer>
+      </div>
+    </footer>
   );
 };
 

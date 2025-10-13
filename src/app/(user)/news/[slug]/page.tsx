@@ -51,7 +51,6 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
       title={article.title}
       publishDate={article.date}
       className='text-left'
-      dividerWidth='full'
       />
 
         <article 
