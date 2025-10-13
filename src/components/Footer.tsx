@@ -17,7 +17,7 @@ const Footer = () => {
 
   useEffect(() => {
     if (status === 'success' || status === 'error') {
-      const timer = setTimeout(() => { setStatus('idle'); setMessage(''); }, 5000);
+      const timer = setTimeout(() => { setStatus('idle'); setMessage(''); }, 15000);
       return () => clearTimeout(timer);
     }
   }, [status]);
