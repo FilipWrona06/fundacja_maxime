@@ -2,21 +2,33 @@ import React from 'react';
 import { twMerge } from 'tailwind-merge';
 import { clsx } from 'clsx';
 
-// Definicja typów dla propsów komponentu
-// Dziedziczymy standardowe atrybuty DIV i dodajemy opcjonalny className
+// Definicja wariantów dla komponentu Divider
+const dividerVariants = {
+  width: {
+    'full': 'w-full',
+    '4/5': 'w-4/5', // <-- DODANO NOWĄ WARTOŚĆ
+    '3/4': 'w-3/4',
+    '1/2': 'w-1/2',
+  },
+};
+
+// Zaktualizowane typy propsów
 export type DividerProps = React.HTMLAttributes<HTMLDivElement> & {
   className?: string;
+  width?: keyof typeof dividerVariants.width;
 };
 
 const Divider = React.forwardRef<HTMLDivElement, DividerProps>(
-  ({ className, ...props }, ref) => {
+  // =======================================================
+  // ZMIANA TUTAJ: Zmieniamy domyślną wartość z '3/4' na '4/5'
+  // =======================================================
+  ({ className, width = '4/5', ...props }, ref) => {
     
-    // Łączymy bazowe, stałe style z dodatkowymi klasami przekazanymi przez props.
-    // twMerge inteligentnie rozwiąże konflikty (np. jeśli przekażesz w className 'w-full').
     const finalClasses = twMerge(
       clsx(
-        'w-3/4 h-0.5 bg-philippineSilver mx-auto mt-5', // Twoje bazowe, niezmienne style
-        className // Dodatkowe klasy przekazane z zewnątrz
+        'h-0.5 bg-philippineSilver',
+        dividerVariants.width[width],
+        className
       )
     );
 
@@ -24,7 +36,7 @@ const Divider = React.forwardRef<HTMLDivElement, DividerProps>(
       <div
         ref={ref}
         className={finalClasses}
-        role="separator" // Dobra praktyka dla dostępności (accessibility)
+        role="separator"
         {...props}
       />
     );

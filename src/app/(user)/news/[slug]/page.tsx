@@ -5,6 +5,7 @@ import React from 'react';
 import { newsData } from '@/data/news';
 import { Button } from '@/components/ui/Button';
 import { Divider } from '@/components/ui/Divider';
+import { PageHeader } from '@/components/ui/PageHeader';
 
 // =====================================================
 //  1. CENTRALNA DEFINICJA DANYCH DLA AKTUALNOŚCI
@@ -34,6 +35,7 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
 
   return (
     <main className="container mx-auto px-4 py-12 md:py-20">
+
       <div className="max-w-3xl mx-auto">
         <div className="relative w-full h-64 md:h-96 rounded-3xl overflow-hidden mb-8 shadow-2xl">
           <Image
@@ -45,16 +47,12 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
           />
         </div>
 
-        <header>
-          <h1 className="text-3xl md:text-5xl font-bold leading-tight">
-            {article.title}
-          </h1>
-          <p className="mt-4 text-lg">
-            Opublikowano: {article.date}
-          </p>
-        </header>
-
-        <Divider className='mb-5 w-full' />
+      <PageHeader
+      title={article.title}
+      publishDate={article.date}
+      className='text-left'
+      dividerWidth='full'
+      />
 
         <article 
           className="prose prose-lg dark:prose-invert max-w-none"
