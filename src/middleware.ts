@@ -3,14 +3,13 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
-  // Tworzymy pustą odpowiedź, którą będziemy modyfikować
+  // Tworzymy *jedną* odpowiedź, którą będziemy modyfikować przez cały cykl middleware.
   let response = NextResponse.next({
     request: {
       headers: request.headers,
     },
   })
 
-  // Tworzymy klienta Supabase, który potrafi zarządzać ciasteczkami w middleware
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -20,17 +19,9 @@ export async function middleware(request: NextRequest) {
           return request.cookies.get(name)?.value
         },
         set(name: string, value: string, options: CookieOptions) {
-          // Ważne: musimy zaktualizować ciasteczka zarówno w żądaniu, jak i w odpowiedzi
-          request.cookies.set({
-            name,
-            value,
-            ...options,
-          })
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          })
+          // --- WAŻNA ZMIANA TUTAJ ---
+          // Modyfikujemy bezpośrednio obiekt `response` utworzony na początku.
+          // Nie tworzymy nowej instancji `NextResponse`.
           response.cookies.set({
             name,
             value,
@@ -38,19 +29,12 @@ export async function middleware(request: NextRequest) {
           })
         },
         remove(name: string, options: CookieOptions) {
-          request.cookies.set({
-            name,
-            value: '',
-            ...options,
-          })
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          })
+          // --- WAŻNA ZMIANA TUTAJ ---
+          // Modyfikujemy bezpośrednio obiekt `response` utworzony na początku.
+          // Nie tworzymy nowej instancji `NextResponse`.
           response.cookies.set({
             name,
-            value: '',
+            value: '', // Ustawienie pustej wartości to standardowy sposób na usunięcie ciasteczka
             ...options,
           })
         },
@@ -58,22 +42,14 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  // Kluczowa linia: odświeża sesję użytkownika.
-  // To również sprawia, że sesja jest dostępna dla Komponentów Serwerowych.
+  // Odświeża sesję użytkownika i sprawia, że jest dostępna dla Komponentów Serwerowych.
   await supabase.auth.getUser()
 
   return response
 }
 
-// Konfiguracja, aby middleware nie działał na ścieżkach statycznych
 export const config = {
   matcher: [
-    /*
-     * Dopasuj wszystkie ścieżki żądań, z wyjątkiem tych, które zaczynają się od:
-     * - _next/static (pliki statyczne)
-     * - _next/image (optymalizacja obrazów)
-     * - favicon.ico (plik ikony)
-     */
     '/((?!_next/static|_next/image|favicon.ico).*)',
   ],
 }
