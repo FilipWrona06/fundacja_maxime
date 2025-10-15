@@ -15,6 +15,9 @@ const Footer = () => {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
 
+  // ZMIANA: Użycie zmiennej środowiskowej dla URL-a Mailchimp
+  const mailchimpUrl = process.env.NEXT_PUBLIC_MAILCHIMP_SUBSCRIBE_URL!;
+
   useEffect(() => {
     if (status === 'success' || status === 'error') {
       const timer = setTimeout(() => { setStatus('idle'); setMessage(''); }, 15000);
@@ -31,12 +34,15 @@ const Footer = () => {
     }
     setStatus('loading');
     setMessage('');
-    const mailchimpUrl = 'https://interia.us22.list-manage.com/subscribe/post?u=571c8b619e1df84cb6ac15b70&id=dfa3ed976c&f_id=00f1c2e1f0';
+    
     const url = mailchimpUrl.replace('/post?', '/post-json?');
     jsonp(`${url}&EMAIL=${encodeURIComponent(email)}`, { param: 'c' }, (err, data) => {
       if (err || data.result !== 'success') {
         setStatus('error');
-        setMessage(data?.msg?.includes("is already subscribed") ? 'Ten adres jest już zapisany.' : 'Błąd. Sprawdź adres i spróbuj ponownie.');
+        // Zmieniona obsługa błędu, by być bardziej odpornym na brak data.msg
+        setMessage(data?.msg?.includes("is already subscribed") 
+                   ? 'Ten adres jest już zapisany.' 
+                   : (data?.msg || 'Błąd. Sprawdź adres i spróbuj ponownie.'));
       } else {
         setStatus('success');
         setMessage('Dziękujemy! Sprawdź skrzynkę, by potwierdzić zapis.');
@@ -48,8 +54,7 @@ const Footer = () => {
   return (
     <footer className="px-6 py-12 border-t border-t-philippineSilver/5">
       <div className='container mx-auto'>
-        {/* Grid: Mobile (1 col) → iPad (2 cols) → Desktop (5 cols) 
-            Używamy xl zamiast lg, żeby iPad (1024px) nie przełączał się na desktop layout */}
+        {/* Grid: Mobile (1 col) → iPad (2 cols) → Desktop (5 cols) */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-8">
 
           {/* SEKCJA BRANDINGOWA - full width na iPadzie */}
@@ -63,27 +68,32 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* SEKCJA NAWIGACJI */}
+          {/* SEKCJA NAWIGACJI - ZMIANA: Użycie semantycznych UL/LI */}
           <div className="md:col-span-1 xl:col-span-1">
             <div className="md:text-center xl:text-left">
               <h4 className="text-lg font-montserrat font-bold mb-4">Nawigacja</h4>
-              <nav className="flex flex-col gap-2 font-montserrat text-sm md:items-center xl:items-start" aria-label="Nawigacja stopki">
-                <NavigationLinks href="/about" variant="subtle">O nas</NavigationLinks>
-                <NavigationLinks href="/events" variant="subtle">Wydarzenia</NavigationLinks>
-                <NavigationLinks href="/gallery" variant="subtle">Galeria</NavigationLinks>
-                <NavigationLinks href="/contact" variant="subtle">Kontakt</NavigationLinks>
+              <nav aria-label="Nawigacja stopki">
+                <ul className="flex flex-col gap-2 font-montserrat text-sm md:items-center xl:items-start">
+                  <li><NavigationLinks href="/about" variant="subtle">O nas</NavigationLinks></li>
+                  <li><NavigationLinks href="/events" variant="subtle">Wydarzenia</NavigationLinks></li>
+                  <li><NavigationLinks href="/gallery" variant="subtle">Galeria</NavigationLinks></li>
+                  <li><NavigationLinks href="/contact" variant="subtle">Kontakt</NavigationLinks></li>
+                </ul>
               </nav>
             </div>
           </div>
 
-          {/* SEKCJA KONTAKTOWA */}
+          {/* SEKCJA KONTAKTOWA - ZMIANA: Użycie semantycznych UL/LI (zakładając, że ContactDetails renderuje LI) */}
           <div className="md:col-span-1 xl:col-span-1">
             <div className="md:text-center xl:text-left md:flex md:flex-col md:items-center xl:block">
               <h4 className="text-lg font-montserrat font-bold mb-4">Kontakt</h4>
-              <ContactDetails 
-                className="font-montserrat text-sm space-y-2 md:inline-flex md:flex-col md:items-start xl:block" 
-                showLabels={false} 
-              />
+              <ul className="font-montserrat text-sm space-y-2 md:inline-flex md:flex-col md:items-start xl:block">
+                <ContactDetails 
+                  // Jeśli ContactDetails renderuje już <li>, to po prostu umieść go tutaj
+                  // W przeciwnym razie, może trzeba będzie opakować każdy element w <li> wewnątrz ContactDetails
+                  showLabels={false} 
+                />
+              </ul>
             </div>
           </div>
 

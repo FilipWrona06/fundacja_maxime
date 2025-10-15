@@ -2,8 +2,8 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-// Importujemy już przetworzone i posortowane dane
-import { upcomingEvents, pastEvents } from '@/data/events';
+// Importujemy już przetworzone i posortowane dane ORAZ nową funkcję formatującą
+import { upcomingEvents, pastEvents, formatEventDateTimeToPolish } from '@/data/events';
 import { Button } from '@/components/ui/Button';
 import { PageHeader } from '@/components/ui/PageHeader';
 
@@ -11,9 +11,6 @@ import { PageHeader } from '@/components/ui/PageHeader';
 //  GŁÓWNY KOMPONENT STRONY Z LISTĄ WYDARZEŃ
 // ========================================================
 export default function EventsPage() {
-  // Nie ma już potrzeby filtrowania danych w komponencie!
-  // `upcomingEvents` i `pastEvents` są już gotowe do użycia.
-
   return (
     <main className="min-h-screen">
       <div className="container mx-auto px-4 py-16">
@@ -46,14 +43,16 @@ export default function EventsPage() {
                       </div>
                       <div className="p-8 md:w-7/12 flex flex-col justify-between">
                         <div>
-                          <p className="text-sm font-bold uppercase tracking-wide">{`${event.date.day} ${event.date.month} ${event.date.year} · ${event.time}`}</p>
+                          {/* TUTAJ ZMIANA: Używamy formatEventDateTimeToPolish */}
+                          <p className="text-sm font-bold uppercase tracking-wide">
+                            {formatEventDateTimeToPolish(event.dateTime)}
+                          </p>
                           <Link href={`/events/${event.slug}`} className="cursor-pointer">
                             <h2 className="mt-2 text-2xl font-bold transition-colors">{event.title}</h2>
                           </Link>
                           <p className="mt-4">{event.location}</p>
                         </div>
                         <div className='mt-5'>
-                          {/* Logika wyświetlania przycisków pozostaje bez zmian, bo wciąż używa `status` */}
                           {event.status === 'nadchodzące' && (
                             <Button asLink
                               href={event.ticketUrl}
@@ -84,7 +83,6 @@ export default function EventsPage() {
               <h2 className="text-3xl font-bold mb-8">Archiwum wydarzeń</h2>
               <div className="space-y-12">
                 {pastEvents.map((event) => (
-                  // Reszta JSX dla wydarzeń archiwalnych pozostaje bez zmian
                   <div
                     key={event.id}
                     className={`group bg-transparent border-2 border-philippineSilver shadow-lg hover:shadow-2xl hover:scale-105 rounded-3xl overflow-hidden transition-all duration-250 opacity-60`}
@@ -102,7 +100,10 @@ export default function EventsPage() {
                       </div>
                       <div className="p-8 md:w-7/12 flex flex-col justify-between">
                         <div>
-                          <p className="text-sm font-bold uppercase tracking-wide">{`${event.date.day} ${event.date.month} ${event.date.year} · ${event.time}`}</p>
+                          {/* TUTAJ ZMIANA: Używamy formatEventDateTimeToPolish */}
+                          <p className="text-sm font-bold uppercase tracking-wide">
+                            {formatEventDateTimeToPolish(event.dateTime)}
+                          </p>
                           <Link href={`/events/${event.slug}`} className="cursor-pointer">
                             <h2 className="mt-2 text-2xl font-bold transition-colors">{event.title}</h2>
                           </Link>

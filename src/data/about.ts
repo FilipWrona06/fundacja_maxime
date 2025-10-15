@@ -8,7 +8,8 @@ export type TimelineItem = {
   imageAlt: string;
 };
 
-export const timelineData: TimelineItem[] = [
+// Dodano 'readonly'
+export const timelineData: readonly TimelineItem[] = [
   {
     year: '2022',
     title: 'Narodziny orkiestry',

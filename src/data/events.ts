@@ -3,25 +3,22 @@
 export interface Event {
   id: number;
   title: string;
-  date: { day: string; month: string; year: string; };
+  // Zmieniamy na pojedynczy string w formacie ISO 8601 (np. 'RRRR-MM-DDTHH:mm')
+  dateTime: string;
   location: string;
-  time: string;
   imageSrc: string;
   ticketUrl: string;
-  // Status nie jest już kluczowy do kategoryzacji, ale wciąż przydatny do oznaczania "wyprzedanych"
   status: 'nadchodzące' | 'wyprzedane' | 'zakończone';
   slug: string;
   details: string;
 }
 
 const eventsDataRaw: Event[] = [
-  // Twoja lista wydarzeń pozostaje bez zmian...
   {
     id: 1,
     title: 'Koncert Charytatywny: Gramy dla Dzieciaków',
-    date: { day: '15', month: 'LIS', year: '2025' },
+    dateTime: '2025-11-15T19:00', // Format ISO 8601
     location: 'Klub Stodoła, Warszawa',
-    time: '19:00',
     imageSrc: '/events/event1.jpg',
     ticketUrl: 'https://www.biletomat.pl/',
     status: 'nadchodzące',
@@ -31,9 +28,8 @@ const eventsDataRaw: Event[] = [
   {
     id: 2,
     title: 'Akustyczny Wieczór z Gwiazdami',
-    date: { day: '05', month: 'GRU', year: '2025' },
+    dateTime: '2025-12-05T20:00', // Format ISO 8601
     location: 'Filharmonia Narodowa, Warszawa',
-    time: '20:00',
     imageSrc: '/events/event2.jpg',
     ticketUrl: '#',
     status: 'wyprzedane',
@@ -43,9 +39,8 @@ const eventsDataRaw: Event[] = [
   {
     id: 3,
     title: 'Gala Fundacji Maxime 2024',
-    date: { day: '10', month: 'WRZ', year: '2024' },
+    dateTime: '2024-09-10T18:00', // Format ISO 8601
     location: 'Teatr Wielki - Opera Narodowa, Warszawa',
-    time: '18:00',
     imageSrc: '/events/event3.jpg',
     ticketUrl: '#',
     status: 'zakończone',
@@ -55,9 +50,8 @@ const eventsDataRaw: Event[] = [
   {
     id: 4,
     title: 'Wielki Bieg Charytatywny',
-    date: { day: '14', month: 'PAŹ', year: '2025' },
+    dateTime: '2025-10-14T10:00', // Format ISO 8601
     location: 'Park Skaryszewski, Warszawa',
-    time: '10:00',
     imageSrc: '/events/event3.jpg',
     ticketUrl: 'https://www.biletomat.pl/',
     status: 'nadchodzące',
@@ -67,9 +61,8 @@ const eventsDataRaw: Event[] = [
   {
     id: 5,
     title: 'Aukcja Sztuki Nowoczesnej',
-    date: { day: '01', month: 'MAR', year: '2025' },
+    dateTime: '2025-03-01T17:00', // Format ISO 8601
     location: 'Muzeum Narodowe, Warszawa',
-    time: '17:00',
     imageSrc: '/events/event2.jpg',
     ticketUrl: '#',
     status: 'zakończone',
@@ -79,21 +72,34 @@ const eventsDataRaw: Event[] = [
 ];
 
 /**
- * Konwertuje datę i czas wydarzenia na pełny obiekt Date.
- * @param event - Obiekt wydarzenia.
+ * Konwertuje ciąg znaków ISO 8601 na obiekt Date.
+ * @param dateTimeString - Data i czas w formacie ISO 8601, np. '2025-11-15T19:00'.
  * @returns Pełny obiekt Date z datą i godziną.
  */
-const getEventDateTime = (event: Event): Date => {
-  const monthMap: { [key: string]: number } = {
-    'STY': 0, 'LUT': 1, 'MAR': 2, 'KWI': 3, 'MAJ': 4, 'CZE': 5,
-    'LIP': 6, 'SIE': 7, 'WRZ': 8, 'PAŹ': 9, 'LIS': 10, 'GRU': 11
-  };
-  const day = parseInt(event.date.day, 10);
-  const month = monthMap[event.date.month.toUpperCase()];
-  const year = parseInt(event.date.year, 10);
-  const [hours, minutes] = event.time.split(':').map(Number);
+const getEventDateTime = (dateTimeString: string): Date => {
+  return new Date(dateTimeString);
+};
 
-  return new Date(year, month, day, hours, minutes);
+/**
+ * Formatuje datę i czas wydarzenia do czytelnego polskiego formatu.
+ * @param dateTimeString - Data i czas w formacie ISO 8601.
+ * @returns Sformatowany ciąg znaków, np. "15 listopada 2025, 19:00".
+ */
+export const formatEventDateTimeToPolish = (dateTimeString: string): string => {
+  const date = getEventDateTime(dateTimeString);
+  if (isNaN(date.getTime())) {
+    return "Nieznana data";
+  }
+
+  const options: Intl.DateTimeFormatOptions = {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false // 24-godzinny format
+  };
+  return new Intl.DateTimeFormat('pl-PL', options).format(date);
 };
 
 /**
@@ -110,8 +116,8 @@ const processEventsData = () => {
 
   // 1. Dynamiczny podział wydarzeń na podstawie aktualnego czasu
   eventsDataRaw.forEach(event => {
-    const eventDate = getEventDateTime(event);
-    if (eventDate > now) {
+    const eventDateTime = getEventDateTime(event.dateTime); // Używamy nowej funkcji i właściwości
+    if (eventDateTime > now) {
       upcomingEvents.push(event);
     } else {
       pastEvents.push(event);
@@ -119,10 +125,10 @@ const processEventsData = () => {
   });
 
   // 2. Sortowanie nadchodzących wydarzeń (od najbliższego do najdalszego)
-  upcomingEvents.sort((a, b) => getEventDateTime(a).getTime() - getEventDateTime(b).getTime());
+  upcomingEvents.sort((a, b) => getEventDateTime(a.dateTime).getTime() - getEventDateTime(b.dateTime).getTime());
 
   // 3. Sortowanie archiwalnych wydarzeń (od najświeższego do najstarszego)
-  pastEvents.sort((a, b) => getEventDateTime(b).getTime() - getEventDateTime(a).getTime());
+  pastEvents.sort((a, b) => getEventDateTime(b.dateTime).getTime() - getEventDateTime(a.dateTime).getTime());
 
   return { upcomingEvents, pastEvents };
 };

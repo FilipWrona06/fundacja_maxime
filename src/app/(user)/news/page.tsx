@@ -1,6 +1,7 @@
-//src/app/(user)/news/page.tsx
+// src/app/(user)/news/page.tsx
 import { PageHeader } from '@/components/ui/PageHeader';
-import { newsData } from '@/data/news';
+// ZMIANA: Importujemy również formatToPolishDate
+import { newsData, formatToPolishDate } from '@/data/news';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -41,7 +42,10 @@ export default function NewsPage(){
                     </div>
                   </div>
                   <div className="p-8 md:w-7/12">
-                    <p className="text-sm font-bold uppercase tracking-wide">{article.date}</p>
+                    {/* ZMIANA: Używamy formatToPolishDate do sformatowania daty */}
+                    <p className="text-sm font-bold uppercase tracking-wide">
+                      {formatToPolishDate(article.date)}
+                    </p>
                     <h2 className="mt-2 text-2xl font-bold transition-colors">{article.title}</h2>
                     <p className="mt-4">{article.excerpt}</p>
                     <p className="mt-6 font-bold">Czytaj dalej →</p>

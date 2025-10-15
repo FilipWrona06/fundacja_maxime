@@ -5,15 +5,25 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Button } from './ui/Button';
 import { NavigationLinks } from './ui/NavigationLinks';
-import { navLinks } from '@/data/navbar';
+import { navLinks, NavLink } from '@/data/navbar';
+import SignOutButton from './SignOutButton';
+import { User } from '@supabase/supabase-js';
 
-const Navbar = () => {
+interface NavbarProps {
+  user: User | null;
+}
+
+const Navbar = ({ user }: NavbarProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
 
   const leftLinks = navLinks.slice(0, 4);
   const rightLinks = navLinks.slice(4);
+
+  const loggedInUserLinks: NavLink[] = [
+    { href: '/dashboard', label: 'Dashboard' },
+  ];
 
   return (
     <header className="bg-raisinBlack p-4 sticky top-0 z-50 border-b border-b-philippineSilver/5">
@@ -40,19 +50,34 @@ const Navbar = () => {
             </div>
 
             <div className="flex-1 flex justify-end items-center space-x-2">
+              {/* Standardowe linki prawej strony (Wydarzenia, Kontakt) */}
               {rightLinks.map((link) => (
                 <NavigationLinks key={link.href} href={link.href}>
                   {link.label}
                 </NavigationLinks>
               ))}
-              <Button 
-                asLink 
-                href="https://patronite.pl/stowarzyszeniemaxime"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Wesprzyj nas
-              </Button>
+              
+              {/* Link do Dashboardu - tylko dla zalogowanych */}
+              {user && loggedInUserLinks.map((link) => (
+                <NavigationLinks key={link.href} href={link.href}>
+                  {link.label}
+                </NavigationLinks>
+              ))}
+
+              {/* Przycisk "Wesprzyj nas" - tylko dla NIEzalogowanych użytkowników */}
+              {!user && (
+                <Button 
+                  asLink 
+                  href="https://patronite.pl/stowarzyszeniemaxime"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Wesprzyj nas
+                </Button>
+              )}
+
+              {/* Przycisk wylogowania - tylko dla zalogowanych */}
+              {user && <SignOutButton />}
             </div>
           </nav>
 
@@ -92,17 +117,21 @@ const Navbar = () => {
             className="xl:hidden mt-4 space-y-2 flex flex-col items-center"
             aria-label="Nawigacja mobilna"
           >
-            <Button 
-              asLink 
-              href="https://patronite.pl/stowarzyszeniemaxime" 
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={closeMenu}
-              className='w-full'
-            >
-              Wesprzyj nas
-            </Button>
+            {/* Przycisk "Wesprzyj nas" - tylko dla NIEzalogowanych użytkowników */}
+            {!user && (
+              <Button 
+                asLink 
+                href="https://patronite.pl/stowarzyszeniemaxime" 
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={closeMenu}
+                className='w-full'
+              >
+                Wesprzyj nas
+              </Button>
+            )}
 
+            {/* Wszystkie standardowe linki nawigacyjne */}
             {navLinks.map((link) => (
               <NavigationLinks 
                 key={link.href} 
@@ -113,6 +142,21 @@ const Navbar = () => {
                 {link.label}
               </NavigationLinks>
             ))}
+            
+            {/* Link do Dashboardu - tylko dla zalogowanych */}
+            {user && loggedInUserLinks.map((link) => (
+              <NavigationLinks
+                key={link.href}
+                href={link.href}
+                onClick={closeMenu}
+                className="block w-full text-center"
+              >
+                {link.label}
+              </NavigationLinks>
+            ))}
+
+            {/* Przycisk wylogowania - tylko dla zalogowanych */}
+            {user && <SignOutButton />}
           </nav>
         )}
       </div>

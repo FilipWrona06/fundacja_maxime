@@ -5,12 +5,15 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/Button'
+// ZMIANA: Importujemy nasz nowy komponent Input
+import { Input } from '@/components/ui/Input';
+
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false) // Dodajemy stan ładowania
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
 
   const handleSignIn = async (e: React.FormEvent) => {
@@ -25,7 +28,17 @@ export default function LoginPage() {
     })
 
     if (error) {
-      setError('Nieprawidłowy adres e-mail lub hasło. Spróbuj ponownie.')
+      if (error.message.includes('Invalid login credentials')) {
+        setError('Nieprawidłowy adres e-mail lub hasło. Spróbuj ponownie.');
+      } else if (error.message.includes('Email not confirmed') || error.message.includes('Email not verified')) {
+        setError('Twój adres e-mail nie został potwierdzony. Sprawdź swoją skrzynkę odbiorczą.');
+      } else if (error.message.includes('User not found') || error.message.includes('User is disabled')) {
+        setError('Użytkownik nie istnieje lub jest nieaktywny.');
+      }
+      else {
+        setError('Wystąpił nieoczekiwany błąd. Spróbuj ponownie później.');
+        console.error('Supabase login error:', error);
+      }
     } else {
       router.refresh()
       router.push('/dashboard')
@@ -35,55 +48,36 @@ export default function LoginPage() {
   }
 
   return (
-    // Główny kontener centrujący wszystko na stronie
     <main className="flex items-center justify-center min-h-screen">
       <div className="w-full max-w-md p-8 space-y-8 rounded-3xl shadow-2xl border m-5">
         
-        {/* Tytuł z niestandardowym fontem */}
         <h1 className="text-6xl text-center">
           Logowanie
         </h1>
         
         <form onSubmit={handleSignIn} className="space-y-6">
-          {/* Pole e-mail */}
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-bold"
-            >
-              Adres e-mail
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-4 py-3 mt-1  border rounded-lg focus:outline-none focus:ring-2"
-              placeholder="twoj@email.com"
-            />
-          </div>
+          {/* ZMIANA: Użycie komponentu Input dla pola e-mail */}
+          <Input
+            id="email"
+            label="Adres e-mail"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            placeholder="twoj@email.com"
+          />
           
-          {/* Pole hasła */}
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-bold"
-            >
-              Hasło
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full px-4 py-3 mt-1 border rounded-lg focus:outline-none focus:ring-2"
-              placeholder="••••••••"
-            />
-          </div>
+          {/* ZMIANA: Użycie komponentu Input dla pola hasła */}
+          <Input
+            id="password"
+            label="Hasło"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            placeholder="••••••••"
+          />
           
-          {/* Przycisk logowania */}
           <div className='text-center'>
             <Button
                 type="submit"
@@ -95,9 +89,8 @@ export default function LoginPage() {
           </div>
         </form>
 
-        {/* Komunikat o błędzie */}
         {error && (
-          <p className="p-3 text-sm text-center text-red-800 bg-red-100 rounded-lg">
+          <p className="p-3 text-sm text-center text-red-400 bg-red-900/20 rounded-lg">
             {error}
           </p>
         )}

@@ -15,7 +15,7 @@ export default async function AdminLayout({
 
   // Jeśli użytkownik nie jest zalogowany, przekieruj go
   if (!user) {
-    redirect('/login');
+    redirect('/');
   }
 
   // Jeśli jest zalogowany, po prostu wyświetl zawartość strony (np. dashboard)

@@ -25,21 +25,24 @@ const PageHeader = React.forwardRef<HTMLElement, PageHeaderProps>(
           {title}
         </h1>
 
-        {/* Jeśli komponent ma dzieci, renderuj je */}
+        {/* Priorytet dla children: jeśli są, renderuj je */}
         {children && <div className="mt-4">{children}</div>}
 
-        {/* Jeśli nie ma dzieci, użyj starej logiki dla opisu */}
-        {!children && description && (
-          <p className="mt-6 text-lg lg:text-xl max-w-3xl mx-auto leading-relaxed">
-            {description}
-          </p>
-        )}
-
-        {/* Jeśli nie ma ani dzieci, ani opisu, użyj logiki dla daty */}
-        {!children && publishDate && !description && (
-          <p className="mt-4 text-lg text-gray-400">
-            Opublikowano: {publishDate}
-          </p>
+        {/* Jeśli NIE MA children, sprawdź description i publishDate */}
+        {!children && (
+          <>
+            {description && (
+              <p className="mt-6 text-lg lg:text-xl max-w-3xl mx-auto leading-relaxed">
+                {description}
+              </p>
+            )}
+            {/* ZMIANA: publishDate renderuje się, jeśli istnieje, niezależnie od description, gdy brak children */}
+            {publishDate && (
+              <p className={`${description ? 'mt-4' : 'mt-6'} text-lg text-gray-400`}>
+                Opublikowano: {publishDate}
+              </p>
+            )}
+          </>
         )}
 
         <Divider className="mt-5 w-3/4 mx-auto" />
