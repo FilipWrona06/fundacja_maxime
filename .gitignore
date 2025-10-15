@@ -2,17 +2,6 @@
 
 # dependencies
 /node_modules
-/.pnp
-.pnp.*
-.yarn/*
-# Zazwyczaj śledzone dla "zero-installs" w Yarn Berry
-!.yarn/cache 
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-# Generowane SDK dla środowisk IDE (np. TypeScript)
-!.yarn/sdks 
-!.yarn/versions
 
 # testing
 /coverage
@@ -24,7 +13,7 @@
 # production
 /build
 # Dodano, jeśli używasz również folderu 'dist' do kompilacji
-/dist 
+/dist
 
 # misc
 .DS_Store
@@ -32,9 +21,6 @@
 
 # debug
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
 .env*
@@ -45,6 +31,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# supabase
+supabase/.temp # Tymczasowe pliki generowane przez Supabase CLI
 
 # IDE (opcjonalnie - usuń komentarze, jeśli chcesz ignorować)
 # .vscode/ # Folder z ustawieniami VS Code. Używaj ostrożnie, jeśli zespół dzieli konfigurację.

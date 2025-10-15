@@ -2,7 +2,8 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import React from 'react';
-import { newsData } from '@/data/news';
+// Zmieniamy import, aby uwzględnić formatToPolishDate
+import { newsData, formatToPolishDate } from '@/data/news';
 import { Button } from '@/components/ui/Button';
 import { PageHeader } from '@/components/ui/PageHeader';
 
@@ -48,11 +49,12 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
 
       <PageHeader
       title={article.title}
-      publishDate={article.date}
+      // Używamy formatToPolishDate, aby data była wyświetlana w polskim formacie
+      publishDate={formatToPolishDate(article.date)}
       className='text-left'
       />
 
-        <article 
+        <article
           className="prose prose-lg dark:prose-invert max-w-none"
           dangerouslySetInnerHTML={{ __html: article.content }}
         />

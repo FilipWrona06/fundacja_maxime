@@ -1,5 +1,12 @@
 //src/data/navbar.ts
-export const navLinks = [
+
+// Opcjonalny interfejs dla linków nawigacyjnych
+export interface NavLink {
+  href: string;
+  label: string;
+}
+
+export const navLinks: NavLink[] = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'O nas' },
   { href: '/gallery', label: 'Galeria' },
