@@ -1,4 +1,4 @@
-// src/app/page.tsx
+// src/app/(user)/page.tsx
 import { Button } from '@/components/ui/Button';
 import { Metadata } from 'next';
 

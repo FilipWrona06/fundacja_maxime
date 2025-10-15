@@ -1,4 +1,4 @@
-// src/app/page.tsx
+// src/app/(admin)/dashboard/page.tsx
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import SignOutButton from '@/components/SignOutButton' // Zaimportuj przycisk

@@ -1,3 +1,4 @@
+//src/data/socials.ts
 export interface SocialPlatform {
   // Zmieniamy 'label' na 'name' lub 'platform' dla jasności
   platform: 'facebook' | 'instagram' | 'youtube' | 'patronite';

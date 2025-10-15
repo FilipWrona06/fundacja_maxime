@@ -1,3 +1,4 @@
+//src/app/(user)/news/page.tsx
 import { PageHeader } from '@/components/ui/PageHeader';
 import { newsData } from '@/data/news';
 import Image from 'next/image';

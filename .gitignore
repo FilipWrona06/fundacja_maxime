@@ -5,9 +5,13 @@
 /.pnp
 .pnp.*
 .yarn/*
+# Zazwyczaj śledzone dla "zero-installs" w Yarn Berry
+!.yarn/cache 
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
+# Generowane SDK dla środowisk IDE (np. TypeScript)
+!.yarn/sdks 
 !.yarn/versions
 
 # testing
@@ -19,6 +23,8 @@
 
 # production
 /build
+# Dodano, jeśli używasz również folderu 'dist' do kompilacji
+/dist 
 
 # misc
 .DS_Store
@@ -39,3 +45,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# IDE (opcjonalnie - usuń komentarze, jeśli chcesz ignorować)
+# .vscode/ # Folder z ustawieniami VS Code. Używaj ostrożnie, jeśli zespół dzieli konfigurację.
+# .idea/ # Folder z ustawieniami WebStorm/IntelliJ

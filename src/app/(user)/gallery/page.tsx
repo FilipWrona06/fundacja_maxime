@@ -1,10 +1,10 @@
+//src/app/(user)/gallery/page.tsx
 'use client';
 
 import { useState, useCallback, useEffect, MouseEvent } from 'react';
 import Image from 'next/image';
 import React from 'react';
 import { GalleryImage, galleryImages } from '@/data/gallery';
-import { Divider } from '@/components/ui/Divider';
 import { PageHeader } from '@/components/ui/PageHeader';
 
 // =====================================================

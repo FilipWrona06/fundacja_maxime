@@ -1,4 +1,4 @@
-// EventPage.tsx
+// src/app/(user)/events/[slug]/page.tsx
 
 import React from 'react';
 import { notFound } from 'next/navigation';

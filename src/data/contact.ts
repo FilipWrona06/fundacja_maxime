@@ -1,3 +1,4 @@
+//src/data/contact.ts
 export interface ContactDetail {
   label: string;
   value: string;

@@ -1,3 +1,4 @@
+//src/data/gallery.ts
 export interface GalleryImage {
   src: string;
   alt: string;

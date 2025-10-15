@@ -1,10 +1,10 @@
+// src/app/(user)/events/page.tsx
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 // Importujemy już przetworzone i posortowane dane
 import { upcomingEvents, pastEvents } from '@/data/events';
 import { Button } from '@/components/ui/Button';
-import { Divider } from '@/components/ui/Divider';
 import { PageHeader } from '@/components/ui/PageHeader';
 
 // ========================================================
