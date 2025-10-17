@@ -1,61 +1,36 @@
 // src/app/(user)/news/page.tsx
+
 import { PageHeader } from '@/components/ui/PageHeader';
-// ZMIANA: Importujemy również formatToPolishDate
 import { newsData, formatToPolishDate } from '@/data/news';
-import Image from 'next/image';
-import Link from 'next/link';
 import React from 'react';
+import { Card } from '@/components/ui/Card'; // <-- NOWY IMPORT
 
-// =================================================
-//  1. CENTRALNA DEFINICJA DANYCH DLA AKTUALNOŚCI
-// ====================================================
-
-// ===================================================
-//  2. GŁÓWNY KOMPONENT STRONY Z LISTĄ AKTUALNOŚCI
-// ====================================================
-export default function NewsPage(){
-    return (
+export default function NewsPage() {
+  return (
     <main className="min-h-screen">
       <div className="container mx-auto px-4 py-16">
         <PageHeader
-        title='Aktualności'
-        description='Bądź na bieżąco z życiem naszej fundacji.'
+          title="Aktualności"
+          description="Bądź na bieżąco z życiem naszej fundacji."
         />
 
         <div className="max-w-4xl mx-auto">
           <div className="space-y-12">
             {newsData.map((article) => (
-              <Link
-                href={`/news/${article.slug}`}
+              // Użycie nowego komponentu Card
+              <Card
                 key={article.id}
-                className="block group bg-transparent border-2 border-philippineSilver shadow-lg hover:shadow-2xl hover:scale-105 rounded-3xl overflow-hidden transition-all duration-250"
-              >
-                <div className="md:flex">
-                  <div className="md:flex-shrink-0 md:w-5/12">
-                    <div className="relative h-48 md:h-full w-full">
-                      <Image
-                        src={article.imageSrc}
-                        alt={article.title}
-                        fill
-                        className="object-cover transition-transform duration-300"
-                      />
-                    </div>
-                  </div>
-                  <div className="p-8 md:w-7/12">
-                    {/* ZMIANA: Używamy formatToPolishDate do sformatowania daty */}
-                    <p className="text-sm font-bold uppercase tracking-wide">
-                      {formatToPolishDate(article.date)}
-                    </p>
-                    <h2 className="mt-2 text-2xl font-bold transition-colors">{article.title}</h2>
-                    <p className="mt-4">{article.excerpt}</p>
-                    <p className="mt-6 font-bold">Czytaj dalej →</p>
-                  </div>
-                </div>
-              </Link>
+                href={`/news/${article.slug}`}
+                imageSrc={article.imageSrc}
+                imageAlt={article.title}
+                date={formatToPolishDate(article.date)}
+                title={article.title}
+                excerpt={article.excerpt}
+              />
             ))}
           </div>
         </div>
       </div>
     </main>
-    );
-};
+  );
+}

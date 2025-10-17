@@ -26,7 +26,7 @@ export async function generateStaticParams() {
 // ======================================================
 //  3. GŁÓWNY KOMPONENT STRONY POJEDYNCZEGO ARTYKUŁU
 // =======================================================
-export default function ArticlePage({ params }: { params: { slug: string } }) {
+export default async function ArticlePage({ params }: { params: { slug: string } }) {
   const article = newsData.find((a) => a.slug === params.slug);
 
   if (!article) {

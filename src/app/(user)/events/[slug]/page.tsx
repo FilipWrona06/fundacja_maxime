@@ -22,7 +22,7 @@ export async function generateStaticParams() {
 // ====================================================
 //  GŁÓWNY KOMPONENT STRONY POJEDYNCZEGO WYDARZENIA
 // ====================================================
-export default function EventPage({ params }: { params: { slug: string } }) {
+export default async function EventPage({ params }: { params: { slug: string } }) {
   // Wyszukujemy wydarzenie w `allEventsData`
   const event = allEventsData.find((e) => e.slug === params.slug);
 
