@@ -1,38 +1,33 @@
 import React from 'react';
 import { User } from '@supabase/supabase-js';
 import SignOutButton from '@/components/ui/SignOutButton';
-import Link from 'next/link'; // KROK 1: Importujemy komponent Link
 
-// KROK 2: Dodajemy ikonę, aby link był bardziej czytelny
-const ExternalLinkIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-    <polyline points="15 3 21 3 21 9" />
-    <line x1="10" y1="14" x2="21" y2="3" />
-  </svg>
-);
-
+// KROK 1: Przywracamy prosty interfejs propsów
 interface AdminHeaderProps {
   user: User;
+  onMenuButtonClick: () => void; // Nadal potrzebujemy tego do otwierania menu
 }
 
-export default function AdminHeader({ user }: AdminHeaderProps) {
+const MenuIcon = (props: React.SVGProps<SVGSVGElement>) => ( <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg> );
+
+export default function AdminHeader({ user, onMenuButtonClick }: AdminHeaderProps) {
   return (
     <header className="h-16 bg-white dark:bg-gray-800 border-b dark:border-gray-700 flex items-center justify-between px-6">
       
-      {/* KROK 3: Dodajemy link do strony głównej w pustym divie po lewej */}
-      <div className="flex items-center">
-        <Link 
-          href="/" 
-          className="flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
-          rel="noopener noreferrer" // Dobre praktyki bezpieczeństwa dla `target="_blank"`
-        >
-          <ExternalLinkIcon className="h-4 w-4" />
-          <span>Przejdź do strony</span>
-        </Link>
-      </div>
+      {/* KROK 2: Lewa strona zawiera teraz TYLKO przycisk hamburgera */}
+      {/* Jest widoczny tylko do 'xl', na większych ekranach znika */}
+      <button 
+        onClick={onMenuButtonClick}
+        className="xl:hidden text-gray-700 dark:text-gray-200"
+        aria-label="Otwórz menu"
+      >
+        <MenuIcon className="h-6 w-6" />
+      </button>
 
-      {/* Prawa strona z danymi użytkownika pozostaje bez zmian */}
+      {/* Pusty div, który zajmuje miejsce na desktopie, aby wyrównać prawą stronę */}
+      <div className="hidden xl:block"></div>
+      
+      {/* Prawa strona bez zmian */}
       <div className="flex items-center">
         <span className="text-sm text-gray-600 dark:text-gray-400 mr-4">{user.email}</span>
         <SignOutButton />
