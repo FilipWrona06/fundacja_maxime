@@ -1,28 +1,24 @@
-// src/app/(admin)/dashboard/gallery/page.tsx
-
 import { createClient } from '@/lib/supabase/server';
-import { GalleryManager } from './GalleryManager'; // Importujemy istniejący komponent kliencki
+import { GalleryManager } from './GalleryManager';
 
-// Ten plik jest Komponentem Serwerowym. Jego zadaniem jest pobranie danych.
 export default async function ManageGalleryPage() {
   const supabase = await createClient();
+  
+  // Zmieniamy sortowanie na 'position'
   const { data: galleryImages, error } = await supabase
     .from('gallery')
     .select('*')
-    .order('created_at', { ascending: false });
+    .order('position', { ascending: true });
 
-  // Prosta obsługa błędów
   if (error) {
     return <p className="text-red-500">Wystąpił błąd podczas pobierania danych galerii: {error.message}</p>;
   }
 
-  // Renderujemy główny layout strony i przekazujemy dane do komponentu klienckiego
   return (
     <div>
       <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Zarządzaj Galerią</h1>
-      <p className="mt-2 text-gray-600 dark:text-gray-400">Dodawaj i usuwaj zdjęcia z głównej galerii na stronie.</p>
+      <p className="mt-2 text-gray-600 dark:text-gray-400">Przeciągnij zdjęcia, aby zmienić ich kolejność, a następnie zapisz zmiany.</p>
       
-      {/* Używamy tutaj Twojego istniejącego komponentu GalleryManager */}
       <GalleryManager initialImages={galleryImages || []} />
     </div>
   );
