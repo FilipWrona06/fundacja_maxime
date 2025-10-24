@@ -1,0 +1,55 @@
+/* src/app/globals.css */
+@import "tailwindcss";
+
+@theme {
+  /* Główna paleta kolorów */
+  --color-raisinBlack: rgb(38, 38, 38);
+  --color-philippineSilver: rgb(178, 178, 178);
+  
+  /* Kolory zapasowe (na przyszłość) */
+  --color-arylideYellow: rgb(239, 213, 111);
+  --color-oxfordBlue: rgb(0, 28, 72);
+
+  /* Fonty */
+  --font-montserrat: var(--font-montserrat);
+  --font-youngest: var(--font-youngest);
+}
+
+@layer base {
+  /* Podstawowe style body */
+  body {
+    @apply bg-raisinBlack text-white font-montserrat;
+  }
+
+  /* Smooth scrolling dla całej strony */
+  html {
+    @apply scroll-smooth;
+  }
+
+  /* Lepsze renderowanie fontów */
+  * {
+    @apply antialiased;
+  }
+
+  /* Focus visible dla accessibility */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-philippineSilver ring-offset-2 ring-offset-raisinBlack;
+  }
+
+  /* Stylizacja selection */
+  ::selection {
+    @apply bg-philippineSilver text-raisinBlack;
+  }
+}
+
+@layer utilities {
+  /* Utility do ukrywania scrollbara, zachowując funkcjonalność */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
