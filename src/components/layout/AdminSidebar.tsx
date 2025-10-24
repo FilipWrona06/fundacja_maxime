@@ -24,6 +24,9 @@ export default function AdminSidebar() {
             <HomeIcon className="h-5 w-5 mr-3" />
             Dashboard
           </Link>
+          <Link href="/dashboard/timeline" className="flex items-center ...">
+             Oś czasu
+          </Link>
           <Link href="/settings" className="flex items-center px-4 py-2 mt-2 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md">
             <SettingsIcon className="h-5 w-5 mr-3" />
             Ustawienia
