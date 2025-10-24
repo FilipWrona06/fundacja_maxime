@@ -74,3 +74,65 @@ export async function deleteTimelineItem(id: number, imageUrl: string) {
     revalidatePath('/about');
     revalidatePath('/dashboard/timeline');
 }
+
+export async function updateTimelineItem(prevState: FormState, formData: FormData): Promise<FormState> {
+  const supabase = await createClient();
+
+  // Pobieramy ID, które przekażemy w ukrytym polu formularza
+  const id = Number(formData.get('id'));
+  if (isNaN(id)) {
+    return { success: false, message: 'Nieprawidłowe ID wpisu.' };
+  }
+
+  const validatedFields = TimelineSchema.safeParse({
+    title: formData.get('title'),
+    description: formData.get('description'),
+    imageAlt: formData.get('imageAlt'),
+  });
+
+  if (!validatedFields.success) {
+    return { success: false, message: "Proszę poprawić błędy w formularzu.", errors: validatedFields.error.flatten().fieldErrors };
+  }
+
+  const { title, description, imageAlt } = validatedFields.data;
+  const imageFile = formData.get('image') as File;
+  const oldImageUrl = formData.get('oldImageUrl') as string;
+
+  let newImageUrl = oldImageUrl;
+
+  // Sprawdzamy, czy użytkownik załadował NOWY obrazek
+  if (imageFile && imageFile.size > 0) {
+    // 1. Upload nowego obrazka
+    const filePath = `public/${Date.now()}-${imageFile.name}`;
+    const { error: uploadError } = await supabase.storage.from('timeline-images').upload(filePath, imageFile);
+    if (uploadError) { return { success: false, message: `Błąd wysyłania nowego obrazka: ${uploadError.message}` }; }
+
+    newImageUrl = supabase.storage.from('timeline-images').getPublicUrl(filePath).data.publicUrl;
+
+    // 2. Usunięcie STAREGO obrazka (jeśli istniał)
+    if (oldImageUrl) {
+      const oldFileName = oldImageUrl.split('/').pop();
+      if (oldFileName) {
+        await supabase.storage.from('timeline-images').remove([`public/${oldFileName}`]);
+      }
+    }
+  }
+
+  // Aktualizujemy wpis w bazie danych
+  const { error: dbError } = await supabase
+    .from('timeline')
+    .update({
+      title,
+      description,
+      image_alt: imageAlt,
+      image_url: newImageUrl, // Używamy nowego lub starego URL
+    })
+    .eq('id', id);
+
+  if (dbError) { return { success: false, message: `Błąd bazy danych podczas aktualizacji: ${dbError.message}` }; }
+
+  revalidatePath('/about');
+  revalidatePath('/dashboard/timeline');
+
+  return { success: true, message: 'Wpis został pomyślnie zaktualizowany.' };
+}

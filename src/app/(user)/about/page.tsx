@@ -94,9 +94,9 @@ export default async function AboutPage() {
                   {item.title}
                 </h2>
                 
-                <p className="text-base md:text-lg font-montserrat leading-relaxed text-philippineSilver">
-                  {item.description}
-                </p>
+<p className="text-base md:text-lg font-montserrat leading-relaxed text-philippineSilver break-words">
+  {item.description}
+</p>
               </div>
 
             </section>
