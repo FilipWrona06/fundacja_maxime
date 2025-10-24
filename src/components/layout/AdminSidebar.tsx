@@ -43,6 +43,9 @@ export default function AdminSidebar({ onClose }: AdminSidebarProps) {
             <ImageIcon className="h-5 w-5 mr-3" />
             Galeria
           </Link>
+          <Link href="/dashboard/news" className="flex items-center px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md">
+            Aktualności
+            </Link>
           <Link href="/settings" className="flex items-center px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md">
             <SettingsIcon className="h-5 w-5 mr-3" />
             Ustawienia
