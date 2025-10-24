@@ -17,11 +17,11 @@ export default async function ManageEventsPage() {
         {events?.map(event => (
           <li key={event.id} className="flex justify-between items-center bg-white dark:bg-gray-800 p-4 rounded-md shadow">
             <span>{event.title}</span>
-            <div className="flex gap-4">
-              {/* Link do edycji można dodać później */}
-              {/* <Link href={`/dashboard/events/edit/${event.id}`} className="font-medium text-indigo-600">Edytuj</Link> */}
+            <div className="flex gap-4 items-center">
+              {/* NOWY LINK DO EDYCJI */}
+              <Link href={`/dashboard/events/edit/${event.id}`} className="font-medium text-indigo-600 hover:text-indigo-500">Edytuj</Link>
               <form action={deleteEvent.bind(null, event.id, event.image_url)}>
-                <button type="submit" className="font-medium text-red-600">Usuń</button>
+                <button type="submit" className="font-medium text-red-600 hover:text-red-500">Usuń</button>
               </form>
             </div>
           </li>
