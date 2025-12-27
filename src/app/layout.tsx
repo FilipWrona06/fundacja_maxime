@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
+import { Navbar } from "@/components/layout/Navbar";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -29,6 +30,7 @@ export default function RootLayout({
   return (
     <html lang="pl">
       <body className={`${montserrat.variable} ${fontYoungest.variable}`}>
+        <Navbar />
         {children}
       </body>
     </html>
