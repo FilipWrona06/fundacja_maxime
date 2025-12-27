@@ -2,16 +2,16 @@
 
 @theme {
   /* Kolory z Brandbooka */
-  --color-raisinBlack: #262626;      /* Główne tło */
-  --color-philippineSilver: #B2B2B2; /* Tekst poboczny */
-  --color-arylideYellow: #EFCB6F;    /* Akcent / CTA */
-  --color-oxfordBlue: #001C48;       /* Ciemny akcent */
-  --color-white: #FFFFFF;
+  --color-raisinBlack: #262626; /* Główne tło */
+  --color-philippineSilver: #b2b2b2; /* Tekst poboczny */
+  --color-arylideYellow: #efcb6f; /* Akcent / CTA */
+  --color-oxfordBlue: #001c48; /* Ciemny akcent */
+  --color-white: #ffffff;
 
   /* Fonty */
   --font-montserrat: var(--font-montserrat);
   --font-youngest: var(--font-youngest);
-  
+
   /* Animacje */
   --ease-wabi: cubic-bezier(0.25, 1, 0.5, 1); /* Płynne, naturalne wyhamowanie */
 }

@@ -15,7 +15,7 @@ export const Logo = ({ className }: LogoProps) => {
         height={425}
         priority
         // Zmieniłem logikę w className:
-        // Usunąłem warunek isLightMode. 
+        // Usunąłem warunek isLightMode.
         // Dodałem 'invert brightness-200' na stałe.
         // Dzięki temu czarny SVG będzie zawsze zamieniony na biały.
         className="w-auto h-full object-contain invert brightness-200 transition-all duration-300"
