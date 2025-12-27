@@ -1,14 +1,18 @@
+import { About } from "@/components/home/About";
 import { Hero } from "@/components/home/Hero";
+import { Timeline } from "@/components/home/Timeline";
 
 export default function Home() {
   return (
     <main className="bg-raisinBlack min-h-screen">
+      {/* 1. HERO - Wideo na pełny ekran */}
       <Hero />
 
-      {/* Tutaj będą kolejne sekcje, np. O nas, Aktualności itp. */}
-      <section className="py-20 text-center text-philippineSilver">
-        <p>Tu zaczyna się dalsza część strony...</p>
-      </section>
+      {/* 2. ABOUT - Sekcja o nas ze zdjęciem */}
+      <About />
+
+      {/* 3. Timeline - oś czasu fundacji / stowarzyszenia */}
+      <Timeline />
     </main>
   );
 }
