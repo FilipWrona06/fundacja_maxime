@@ -16,24 +16,17 @@ export const Hero = () => {
     offset: ["start start", "end start"],
   });
 
-  // --- FIZYKA (Bardziej "mięsista") ---
+  // --- FIZYKA (Butter Smooth) ---
   const smoothProgress = useSpring(scrollYProgress, {
     mass: 0.1,
-    stiffness: 80, // Trochę mniejsza sztywność dla łagodniejszego startu
+    stiffness: 80,
     damping: 20,
     restDelta: 0.001,
   });
 
-  // --- SUBTELNE ZMIANY ---
-
-  // 1. Tło przesuwa się bardzo powoli (tylko 15%) - daje to poczucie, że jest "bardzo daleko"
+  // --- SUBTELNE ZMIANY PARALLAX ---
   const backgroundY = useTransform(smoothProgress, [0, 1], ["0%", "15%"]);
-
-  // 2. Tekst przesuwa się odrobinę szybciej (25%) - odkleja się od tła, ale nie ucieka z ekranu
   const textY = useTransform(smoothProgress, [0, 1], ["0%", "25%"]);
-
-  // 3. Opacity: Zaczynamy od 1, kończymy na 0.4 (40% widoczności).
-  // Nigdy nie znika całkowicie, tylko lekko przygasa.
   const opacity = useTransform(smoothProgress, [0, 0.9], [1, 0.4]);
 
   return (
@@ -46,11 +39,10 @@ export const Hero = () => {
         className="absolute inset-0 z-0 will-change-transform"
         style={{
           y: backgroundY,
-          // Tło niech zanika trochę mocniej niż tekst, żeby skupić wzrok na treści
           opacity: useTransform(smoothProgress, [0, 0.9], [1, 0.3]),
         }}
       >
-        {/* Overlay */}
+        {/* Overlay (Winieta) */}
         <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,rgba(38,38,38,0.4)_0%,rgba(38,38,38,0.75)_100%)]" />
 
         <BackgroundVideo
@@ -72,7 +64,7 @@ export const Hero = () => {
         className="relative z-20 container mx-auto px-4 text-center flex flex-col items-center will-change-transform"
         style={{
           y: textY,
-          opacity: opacity, // Tekst zanika tylko do 40%
+          opacity: opacity,
         }}
       >
         {/* Badge */}
@@ -116,11 +108,14 @@ export const Hero = () => {
       {/* Scroll Indicator */}
       <motion.div
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce"
-        // Strzałka znika szybciej, bo nie jest potrzebna jak już scrollujemy
         style={{ opacity: useTransform(smoothProgress, [0, 0.2], [1, 0]) }}
       >
         <ChevronDown className="w-10 h-10 text-white/75" strokeWidth={1} />
       </motion.div>
+
+      {/* --- ŁAGODNE PRZEJŚCIE (Gradient Fade Out) --- */}
+      {/* Użyłem bg-linear-to-t zgodnie z nowym standardem Tailwind v4 */}
+      <div className="absolute bottom-0 left-0 w-full h-100 bg-linear-to-t from-raisinBlack via-raisinBlack/50 to-transparent z-10 pointer-events-none" />
     </section>
   );
 };

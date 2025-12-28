@@ -62,6 +62,31 @@ export const Timeline = () => {
     return () => unsubscribe();
   }, [scrollYProgress]);
 
+  // --- NOWA FUNKCJA: Przewijanie do roku po kliknięciu ---
+  const handleScrollTo = (index: number) => {
+    if (!containerRef.current) return;
+
+    // Pobieramy pozycję sekcji względem początku strony
+    const containerTop =
+      containerRef.current.getBoundingClientRect().top + window.scrollY;
+    const containerHeight = containerRef.current.offsetHeight;
+    const windowHeight = window.innerHeight;
+
+    // Obliczamy "scrollowalną" wysokość (cała sekcja minus jeden ekran, bo sticky kończy się wcześniej)
+    const scrollableHeight = containerHeight - windowHeight;
+
+    // Obliczamy cel scrolla:
+    // Pozycja startowa + (procent postępu * dostępna wysokość)
+    // Dodajemy mały offset (+10px), żeby "wskoczyło" pewnie w dany rok
+    const targetScroll =
+      containerTop + (index / timelineData.length) * scrollableHeight + 10;
+
+    window.scrollTo({
+      top: targetScroll,
+      behavior: "smooth", // Płynne przewijanie
+    });
+  };
+
   return (
     <section ref={containerRef} className="relative h-[300vh] bg-raisinBlack">
       <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center">
@@ -91,7 +116,6 @@ export const Timeline = () => {
                 const isActive = idx === activeIndex;
 
                 return (
-                  // Używamy item.year jako klucza zamiast indeksu
                   <div key={item.year} className="relative flex items-center">
                     {/* Magiczna kropka */}
                     {isActive && (
@@ -107,8 +131,10 @@ export const Timeline = () => {
                     )}
 
                     <button
-                      type="button" // Dodany typ przycisku
-                      className={`text-lg font-youngest transition-colors duration-300 text-left ${
+                      type="button"
+                      // --- ZMIANA: Dodano obsługę kliknięcia ---
+                      onClick={() => handleScrollTo(idx)}
+                      className={`text-lg font-youngest transition-colors duration-300 text-left cursor-pointer hover:text-arylideYellow/80 ${
                         isActive
                           ? "text-arylideYellow"
                           : "text-philippineSilver/30"
@@ -155,7 +181,6 @@ export const Timeline = () => {
                 animate={{ opacity: 1, scale: 1, rotate: 0 }}
                 exit={{ opacity: 0, scale: 1.05, rotate: -2 }}
                 transition={{ duration: 0.5, ease: "circOut" }}
-                // Zmieniono aspect-[4/5] na aspect-4/5
                 className="relative w-full max-w-md aspect-4/5"
               >
                 <div className="absolute inset-0 border border-white/20 translate-x-3 translate-y-3 md:translate-x-5 md:translate-y-5 z-0" />
@@ -168,7 +193,6 @@ export const Timeline = () => {
                     className="object-cover"
                     priority
                   />
-                  {/* Zmieniono bg-gradient-to-t na bg-linear-to-t (Tailwind v4) */}
                   <div className="absolute inset-0 bg-linear-to-t from-raisinBlack/60 to-transparent opacity-60" />
                 </div>
               </motion.div>
