@@ -45,7 +45,6 @@ export const About = () => {
 
   return (
     <section className="relative py-24 md:py-32 bg-raisinBlack overflow-hidden">
-
       <div className="container mx-auto px-4">
         <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
           {/* --- LEWA STRONA: ZDJĘCIE --- */}
