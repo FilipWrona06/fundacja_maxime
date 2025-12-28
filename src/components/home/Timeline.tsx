@@ -62,62 +62,38 @@ export const Timeline = () => {
     return () => unsubscribe();
   }, [scrollYProgress]);
 
-  // --- NOWA FUNKCJA: Przewijanie do roku po kliknięciu ---
+  // Funkcja przewijania do roku po kliknięciu
   const handleScrollTo = (index: number) => {
     if (!containerRef.current) return;
 
-    // Pobieramy pozycję sekcji względem początku strony
     const containerTop =
       containerRef.current.getBoundingClientRect().top + window.scrollY;
     const containerHeight = containerRef.current.offsetHeight;
     const windowHeight = window.innerHeight;
-
-    // Obliczamy "scrollowalną" wysokość (cała sekcja minus jeden ekran, bo sticky kończy się wcześniej)
     const scrollableHeight = containerHeight - windowHeight;
-
-    // Obliczamy cel scrolla:
-    // Pozycja startowa + (procent postępu * dostępna wysokość)
-    // Dodajemy mały offset (+10px), żeby "wskoczyło" pewnie w dany rok
     const targetScroll =
       containerTop + (index / timelineData.length) * scrollableHeight + 10;
 
     window.scrollTo({
       top: targetScroll,
-      behavior: "smooth", // Płynne przewijanie
+      behavior: "smooth",
     });
   };
 
   return (
     <section ref={containerRef} className="relative h-[300vh] bg-raisinBlack">
       <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center">
-        {/* TŁO: Wielki rok */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center pointer-events-none z-0">
-          <AnimatePresence mode="wait">
-            <motion.span
-              key={timelineData[activeIndex].year}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 0.03, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
-              className="font-youngest text-[20vw] md:text-[25vw] text-white leading-none whitespace-nowrap select-none"
-            >
-              {timelineData[activeIndex].year}
-            </motion.span>
-          </AnimatePresence>
-        </div>
 
         <div className="container mx-auto px-4 relative z-10 h-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
           {/* --- LEWA STRONA --- */}
           <div className="w-full md:w-1/2 flex flex-row gap-8 items-center md:items-start justify-center md:justify-start">
             {/* Oś czasu (Lista) */}
             <div className="hidden md:flex flex-col gap-12 py-4 border-l border-white/10 pl-8 relative">
-              {/* Pętla po latach */}
               {timelineData.map((item, idx) => {
                 const isActive = idx === activeIndex;
 
                 return (
                   <div key={item.year} className="relative flex items-center">
-                    {/* Magiczna kropka */}
                     {isActive && (
                       <motion.div
                         layoutId="timeline-dot"
@@ -132,7 +108,6 @@ export const Timeline = () => {
 
                     <button
                       type="button"
-                      // --- ZMIANA: Dodano obsługę kliknięcia ---
                       onClick={() => handleScrollTo(idx)}
                       className={`text-lg font-youngest transition-colors duration-300 text-left cursor-pointer hover:text-arylideYellow/80 ${
                         isActive
