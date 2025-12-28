@@ -1,7 +1,11 @@
 import { About } from "@/components/home/About";
+import { CallToAction } from "@/components/home/CallToAction";
 import { Events } from "@/components/home/Events";
 import { Hero } from "@/components/home/Hero";
+import { Newsletter } from "@/components/home/Newsletter";
 import { Partners } from "@/components/home/Partners";
+import { SocialProof } from "@/components/home/SocialProof";
+import { Support } from "@/components/home/Support";
 import { Timeline } from "@/components/home/Timeline";
 
 export default function Home() {
@@ -9,18 +13,14 @@ export default function Home() {
     <main className="bg-raisinBlack min-h-screen">
       {/* 1. HERO - Wideo na pełny ekran */}
       <Hero />
-
-      {/* 2. ABOUT - Sekcja o nas ze zdjęciem */}
-      <About />
-
-      {/* 3. Partners - Sekcja partnerów */}
       <Partners />
-
-      {/* 4. Timeline - oś czasu fundacji / stowarzyszenia */}
+      <About />
       <Timeline />
-
-      {/* 5. Events - nadchodzące wydarzenia */}
       <Events />
+      <Support />
+      <SocialProof />
+      <Newsletter />
+      <CallToAction />
     </main>
   );
 }

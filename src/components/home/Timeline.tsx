@@ -83,7 +83,6 @@ export const Timeline = () => {
   return (
     <section ref={containerRef} className="relative h-[300vh] bg-raisinBlack">
       <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center">
-
         <div className="container mx-auto px-4 relative z-10 h-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
           {/* --- LEWA STRONA --- */}
           <div className="w-full md:w-1/2 flex flex-row gap-8 items-center md:items-start justify-center md:justify-start">

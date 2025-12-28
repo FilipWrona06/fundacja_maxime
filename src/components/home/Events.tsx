@@ -150,7 +150,7 @@ export const Events = () => {
   }, []);
 
   return (
-    <section className="py-24 bg-raisinBlack border-t border-white/5 overflow-hidden">
+    <section className="py-24 bg-raisinBlack overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="flex flex-col items-center text-center mb-16">
           <span className="text-arylideYellow text-xs font-bold tracking-[0.2em] uppercase mb-4 block">

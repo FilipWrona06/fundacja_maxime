@@ -32,7 +32,7 @@ const marqueeItems = [
 
 export const Partners = () => {
   return (
-    <section className="py-16 bg-raisinBlack border-t border-white/5 overflow-hidden relative">
+    <section className="py-16 bg-raisinBlack overflow-hidden relative">
       {/* Nagłówek sekcji */}
       <div className="container mx-auto px-4 mb-10 text-center">
         <span className="text-arylideYellow/60 text-xs font-bold tracking-[0.3em] uppercase block mb-2">

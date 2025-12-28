@@ -1,23 +1,61 @@
 @import "tailwindcss";
 
 @theme {
-  /* Kolory z Brandbooka */
+  /* --- Kolory z Brandbooka --- */
   --color-raisinBlack: #262626; /* Główne tło */
   --color-philippineSilver: #b2b2b2; /* Tekst poboczny */
   --color-arylideYellow: #efcb6f; /* Akcent / CTA */
   --color-oxfordBlue: #001c48; /* Ciemny akcent */
   --color-white: #ffffff;
 
-  /* Fonty */
+  /* --- Fonty --- */
   --font-montserrat: var(--font-montserrat);
   --font-youngest: var(--font-youngest);
 
-  /* Animacje */
+  /* --- Easing --- */
   --ease-wabi: cubic-bezier(0.25, 1, 0.5, 1); /* Płynne, naturalne wyhamowanie */
+
+  /* --- ANIMACJE --- */
+
+  /* 1. Shine (Lśnienie tekstu w CTA) */
+  --animate-shine: shine 8s linear infinite;
+
+  @keyframes shine {
+    0% {
+      background-position: 200% center;
+    }
+    100% {
+      background-position: -200% center;
+    }
+  }
+
+  /* 2. Fade Up (Używane w Hero do wjazdu napisów) */
+  --animate-fade-up: fade-up 0.8s var(--ease-wabi) forwards;
+
+  @keyframes fade-up {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
 @layer base {
   body {
     @apply bg-raisinBlack text-white font-montserrat antialiased selection:bg-arylideYellow selection:text-raisinBlack;
+  }
+
+  /* Opcjonalne: Poprawa renderowania fontów na ciemnym tle */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply text-balance; /* Lepsze łamanie linii w nagłówkach */
   }
 }
