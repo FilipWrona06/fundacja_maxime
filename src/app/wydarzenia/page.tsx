@@ -4,6 +4,7 @@ import { clsx } from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Clock, MapPin, Ticket } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link"; // 1. Import Link
 import { useMemo, useState } from "react";
 
 // --- TYPY I DANE ---
@@ -17,7 +18,7 @@ type Event = {
   price: string;
   image: string;
   description: string;
-  type: string; // Dodano typ wydarzenia do wyświetlania na kalendarzu
+  type: string;
 };
 
 const mockEvents: Event[] = [
@@ -216,7 +217,6 @@ export default function EventsPage() {
                 const date = cell.date as Date;
                 const isSelected =
                   selectedDate?.toDateString() === date.toDateString();
-                // Sprawdzamy czy jest wydarzenie w tym dniu
                 const dayEvent = mockEvents.find(
                   (e) => e.date.toDateString() === date.toDateString(),
                 );
@@ -231,16 +231,13 @@ export default function EventsPage() {
                     onClick={() => setSelectedDate(date)}
                     className={clsx(
                       "relative min-h-35 p-3 flex flex-col justify-between transition-all duration-200 group text-right",
-                      // ZMIANA: Tło dla dni z wydarzeniami jest jaśniejsze, żeby się odcinało
                       hasEvent
                         ? "bg-[#252525] hover:bg-[#333]"
                         : "bg-raisinBlack hover:bg-white/3",
-                      // Zaznaczenie (nadpisuje tło)
                       isSelected &&
                         "bg-[#2a2a2a] ring-1 ring-inset ring-arylideYellow z-10 shadow-2xl",
                     )}
                   >
-                    {/* Numer Dnia */}
                     <span
                       className={clsx(
                         "text-lg font-montserrat font-medium mb-2 w-8 h-8 flex items-center justify-center rounded-full transition-colors ml-auto",
@@ -249,14 +246,13 @@ export default function EventsPage() {
                           : isToday
                             ? "text-arylideYellow border border-arylideYellow"
                             : hasEvent
-                              ? "text-white" // Dni z eventami mają biały numer
-                              : "text-white/30 group-hover:text-white", // Puste dni mają szary
+                              ? "text-white"
+                              : "text-white/30 group-hover:text-white",
                       )}
                     >
                       {date.getDate()}
                     </span>
 
-                    {/* ZMIANA: Pasek zamiast kropki - bardzo widoczny */}
                     {hasEvent && (
                       <div className="w-full mt-auto">
                         <div
@@ -276,7 +272,7 @@ export default function EventsPage() {
               })}
             </div>
 
-            {/* Legenda pod kalendarzem */}
+            {/* Legenda */}
             <div className="mt-6 flex gap-6 text-xs text-philippineSilver justify-end opacity-60">
               <div className="flex items-center gap-2">
                 <div className="w-6 h-4 bg-oxfordBlue border-l-2 border-arylideYellow rounded-sm" />{" "}
@@ -289,7 +285,7 @@ export default function EventsPage() {
             </div>
           </div>
 
-          {/* PRAWA: SIDEBAR (25%) - Lista wydarzeń */}
+          {/* PRAWA: SIDEBAR (25%) */}
           <div className="lg:w-1/4 w-full flex flex-col border-l border-white/5 lg:pl-8 min-h-150">
             <div className="mb-8 pt-4">
               <span className="text-white/30 text-xs font-mono uppercase tracking-widest block mb-2">
@@ -317,23 +313,33 @@ export default function EventsPage() {
                       transition={{ duration: 0.3 }}
                       className="group bg-[#222] border border-white/5 rounded-sm overflow-hidden hover:border-arylideYellow/30 transition-colors"
                     >
-                      {/* Obrazek na górze */}
+                      {/* Obrazek (Teraz jest Linkiem) */}
                       <div className="relative h-40 w-full overflow-hidden">
-                        <Image
-                          src={event.image}
-                          alt={event.title}
-                          fill
-                          className="object-cover transition-transform duration-700 group-hover:scale-105"
-                        />
-                        <div className="absolute inset-0 bg-oxfordBlue/30 mix-blend-multiply" />
+                        <Link
+                          href={`/wydarzenia/${event.id}`}
+                          className="block w-full h-full"
+                        >
+                          <Image
+                            src={event.image}
+                            alt={event.title}
+                            fill
+                            className="object-cover transition-transform duration-700 group-hover:scale-105"
+                          />
+                          <div className="absolute inset-0 bg-oxfordBlue/30 mix-blend-multiply" />
+                        </Link>
                       </div>
 
-                      {/* Treść na dole */}
+                      {/* Treść */}
                       <div className="p-5">
                         <div className="flex justify-between items-start mb-3">
-                          <h4 className="text-lg font-bold text-white group-hover:text-arylideYellow transition-colors leading-tight">
-                            {event.title}
-                          </h4>
+                          <Link
+                            href={`/wydarzenia/${event.id}`}
+                            className="group-hover:text-arylideYellow transition-colors"
+                          >
+                            <h4 className="text-lg font-bold text-white leading-tight">
+                              {event.title}
+                            </h4>
+                          </Link>
                         </div>
 
                         <div className="flex flex-col gap-2 text-xs text-philippineSilver mb-4 font-medium border-l-2 border-white/10 pl-3">
@@ -355,12 +361,13 @@ export default function EventsPage() {
                           {event.description}
                         </p>
 
-                        <button
-                          type="button"
-                          className="w-full py-2 border border-white/10 text-white text-xs font-bold uppercase tracking-widest hover:bg-arylideYellow hover:text-raisinBlack hover:border-arylideYellow transition-all rounded-sm"
+                        {/* 2. Przycisk (Link do slug) */}
+                        <Link
+                          href={`/wydarzenia/${event.id}`}
+                          className="block w-full text-center py-2 border border-white/10 text-white text-xs font-bold uppercase tracking-widest hover:bg-arylideYellow hover:text-raisinBlack hover:border-arylideYellow transition-all rounded-sm"
                         >
                           Szczegóły
-                        </button>
+                        </Link>
                       </div>
                     </motion.div>
                   ))
