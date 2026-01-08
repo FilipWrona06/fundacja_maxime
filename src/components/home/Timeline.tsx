@@ -131,7 +131,7 @@ export const Timeline = () => {
                   exit={{ opacity: 0, x: 20 }}
                   transition={{ duration: 0.4, ease: "easeOut" }}
                 >
-                  <span className="md:hidden text-arylideYellow font-youngest text-4xl mb-4 block">
+                  <span className="md:hidden text-arylideYellow font-youngest text-4xl mb-4 mt-20 block">
                     {timelineData[activeIndex].year}
                   </span>
 
