@@ -105,7 +105,9 @@ export default function EventPage() {
                     fill
                     className={clsx(
                       "object-cover transition-all duration-700",
-                      isEnded ? "grayscale opacity-50 scale-100" : "group-hover:scale-105"
+                      isEnded
+                        ? "grayscale opacity-50 scale-100"
+                        : "group-hover:scale-105",
                     )}
                   />
                   {(isEnded || eventData.isSoldOut) && (
@@ -119,41 +121,99 @@ export default function EventPage() {
 
                 {/* Szczegóły */}
                 <div className="p-6 md:p-8 relative">
-                  {isEnded && <div className="absolute inset-0 bg-raisinBlack/20 z-10 pointer-events-none" />}
+                  {isEnded && (
+                    <div className="absolute inset-0 bg-raisinBlack/20 z-10 pointer-events-none" />
+                  )}
                   <div className="flex flex-col gap-4 mb-8">
                     <div className="flex items-center gap-4">
-                      <div className={clsx("w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-colors", isEnded ? "bg-white/5 text-white/20" : "bg-white/5 text-arylideYellow")}>
+                      <div
+                        className={clsx(
+                          "w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-colors",
+                          isEnded
+                            ? "bg-white/5 text-white/20"
+                            : "bg-white/5 text-arylideYellow",
+                        )}
+                      >
                         <Calendar size={20} />
                       </div>
                       <div>
-                        <span className="text-[10px] text-philippineSilver uppercase tracking-widest block">Data</span>
-                        <span className={clsx("font-bold text-lg", isEnded ? "text-philippineSilver line-through decoration-white/30" : "text-white")}>{eventData.date}</span>
+                        <span className="text-[10px] text-philippineSilver uppercase tracking-widest block">
+                          Data
+                        </span>
+                        <span
+                          className={clsx(
+                            "font-bold text-lg",
+                            isEnded
+                              ? "text-philippineSilver line-through decoration-white/30"
+                              : "text-white",
+                          )}
+                        >
+                          {eventData.date}
+                        </span>
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
-                      <div className={clsx("w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-colors", isEnded ? "bg-white/5 text-white/20" : "bg-white/5 text-arylideYellow")}>
+                      <div
+                        className={clsx(
+                          "w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-colors",
+                          isEnded
+                            ? "bg-white/5 text-white/20"
+                            : "bg-white/5 text-arylideYellow",
+                        )}
+                      >
                         <Clock size={20} />
                       </div>
                       <div>
-                        <span className="text-[10px] text-philippineSilver uppercase tracking-widest block">Godzina</span>
-                        <span className={clsx("font-bold text-lg", isEnded ? "text-philippineSilver" : "text-white")}>{eventData.time}</span>
-                        <span className="text-xs text-white/40 ml-2">(Otwarcie: {eventData.doorsOpen})</span>
+                        <span className="text-[10px] text-philippineSilver uppercase tracking-widest block">
+                          Godzina
+                        </span>
+                        <span
+                          className={clsx(
+                            "font-bold text-lg",
+                            isEnded ? "text-philippineSilver" : "text-white",
+                          )}
+                        >
+                          {eventData.time}
+                        </span>
+                        <span className="text-xs text-white/40 ml-2">
+                          (Otwarcie: {eventData.doorsOpen})
+                        </span>
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
-                      <div className={clsx("w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-colors", isEnded ? "bg-white/5 text-white/20" : "bg-white/5 text-arylideYellow")}>
+                      <div
+                        className={clsx(
+                          "w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-colors",
+                          isEnded
+                            ? "bg-white/5 text-white/20"
+                            : "bg-white/5 text-arylideYellow",
+                        )}
+                      >
                         <MapPin size={20} />
                       </div>
                       <div>
-                        <span className="text-[10px] text-philippineSilver uppercase tracking-widest block">Lokalizacja</span>
-                        <span className="text-white font-bold text-lg leading-tight">{eventData.location}</span>
+                        <span className="text-[10px] text-philippineSilver uppercase tracking-widest block">
+                          Lokalizacja
+                        </span>
+                        <span className="text-white font-bold text-lg leading-tight">
+                          {eventData.location}
+                        </span>
                       </div>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between mb-6 pt-6 border-t border-white/10 border-dashed relative z-20">
-                    <span className="text-philippineSilver text-sm">Cena biletu:</span>
-                    <span className={clsx("text-2xl font-youngest", isEnded ? "text-white/30" : "text-white")}>{eventData.price}</span>
+                    <span className="text-philippineSilver text-sm">
+                      Cena biletu:
+                    </span>
+                    <span
+                      className={clsx(
+                        "text-2xl font-youngest",
+                        isEnded ? "text-white/30" : "text-white",
+                      )}
+                    >
+                      {eventData.price}
+                    </span>
                   </div>
 
                   <button
@@ -163,16 +223,31 @@ export default function EventPage() {
                       "w-full py-4 px-6 rounded-sm font-bold uppercase tracking-widest text-sm flex items-center justify-center gap-3 transition-all duration-300 relative overflow-hidden group/btn z-20",
                       isEnded || eventData.isSoldOut
                         ? "bg-white/5 text-white/30 cursor-not-allowed border border-white/5"
-                        : "bg-arylideYellow text-raisinBlack hover:bg-white hover:shadow-[0_0_20px_rgba(239,203,111,0.4)]"
+                        : "bg-arylideYellow text-raisinBlack hover:bg-white hover:shadow-[0_0_20px_rgba(239,203,111,0.4)]",
                     )}
                   >
-                    {isEnded ? "Wydarzenie zakończone" : eventData.isSoldOut ? "Brak Biletów" : <><Ticket size={18} /> Kup Bilet Online</>}
+                    {isEnded ? (
+                      "Wydarzenie zakończone"
+                    ) : eventData.isSoldOut ? (
+                      "Brak Biletów"
+                    ) : (
+                      <>
+                        <Ticket size={18} /> Kup Bilet Online
+                      </>
+                    )}
                   </button>
-                  <p className="text-center text-[10px] text-white/30 mt-4">{isEnded ? "Sprzedaż biletów została zamknięta." : "Bezpieczna płatność przez PayU / BLIK"}</p>
+                  <p className="text-center text-[10px] text-white/30 mt-4">
+                    {isEnded
+                      ? "Sprzedaż biletów została zamknięta."
+                      : "Bezpieczna płatność przez PayU / BLIK"}
+                  </p>
                 </div>
               </motion.div>
 
-              <button type="button" className="flex items-center justify-center gap-2 text-xs text-philippineSilver uppercase tracking-widest hover:text-white transition-colors w-full py-2">
+              <button
+                type="button"
+                className="flex items-center justify-center gap-2 text-xs text-philippineSilver uppercase tracking-widest hover:text-white transition-colors w-full py-2"
+              >
                 <Share2 size={14} /> Udostępnij wydarzenie
               </button>
             </div>
@@ -181,51 +256,110 @@ export default function EventPage() {
           {/* --- 3. PRAWA KOLUMNA --- */}
           <div className="lg:col-span-7 xl:col-span-8 order-1 lg:order-2">
             <section className="mb-16 animate-fade-up [animation-delay:200ms]">
-              <h2 className="text-philippineSilver text-xl md:text-2xl leading-relaxed font-light mb-8">{eventData.subtitle}</h2>
-              <div className={clsx("w-16 h-1 mb-8", isEnded ? "bg-white/20" : "bg-arylideYellow")} />
-              <p className="text-white/80 leading-loose text-lg">{eventData.description}</p>
+              <h2 className="text-philippineSilver text-xl md:text-2xl leading-relaxed font-light mb-8">
+                {eventData.subtitle}
+              </h2>
+              <div
+                className={clsx(
+                  "w-16 h-1 mb-8",
+                  isEnded ? "bg-white/20" : "bg-arylideYellow",
+                )}
+              />
+              <p className="text-white/80 leading-loose text-lg">
+                {eventData.description}
+              </p>
             </section>
 
             <section className="mb-16 animate-fade-up [animation-delay:300ms]">
               <div className="flex items-center gap-3 mb-8">
-                <Music className={isEnded ? "text-white/30" : "text-arylideYellow"} />
+                <Music
+                  className={isEnded ? "text-white/30" : "text-arylideYellow"}
+                />
                 <h3 className="text-3xl font-youngest text-white">Repertuar</h3>
               </div>
               <div className="bg-white/5 border border-white/10 rounded-sm p-8">
                 {eventData.program.length > 0 ? (
                   <ul className="space-y-6">
                     {eventData.program.map((item, index) => (
-                      <li key={`${index}-${item.title}`} className="flex flex-col md:flex-row md:items-baseline justify-between gap-2 border-b border-white/5 last:border-0 pb-4 last:pb-0">
+                      <li
+                        key={`${index}-${item.title}`}
+                        className="flex flex-col md:flex-row md:items-baseline justify-between gap-2 border-b border-white/5 last:border-0 pb-4 last:pb-0"
+                      >
                         {item.composer.includes("Przerwa") ? (
-                          <span className="text-white/40 italic mx-auto text-sm">{item.composer}</span>
+                          <span className="text-white/40 italic mx-auto text-sm">
+                            {item.composer}
+                          </span>
                         ) : (
                           <>
-                            <span className={clsx("font-bold text-lg md:w-1/3", isEnded ? "text-white/60" : "text-arylideYellow")}>{item.composer}</span>
-                            <span className="text-white text-lg font-light md:w-2/3 md:text-right">{item.title}</span>
+                            <span
+                              className={clsx(
+                                "font-bold text-lg md:w-1/3",
+                                isEnded
+                                  ? "text-white/60"
+                                  : "text-arylideYellow",
+                              )}
+                            >
+                              {item.composer}
+                            </span>
+                            <span className="text-white text-lg font-light md:w-2/3 md:text-right">
+                              {item.title}
+                            </span>
                           </>
                         )}
                       </li>
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-philippineSilver text-sm italic">Program zostanie ogłoszony wkrótce.</p>
+                  <p className="text-philippineSilver text-sm italic">
+                    Program zostanie ogłoszony wkrótce.
+                  </p>
                 )}
               </div>
             </section>
 
             <section className="mb-16 animate-fade-up [animation-delay:400ms]">
               <div className="flex items-center gap-3 mb-8">
-                <User className={isEnded ? "text-white/30" : "text-arylideYellow"} />
+                <User
+                  className={isEnded ? "text-white/30" : "text-arylideYellow"}
+                />
                 <h3 className="text-3xl font-youngest text-white">Wykonawca</h3>
               </div>
-              <div className={clsx("group relative overflow-hidden rounded-sm border p-8 flex flex-col md:flex-row gap-8 items-center transition-colors", isEnded ? "border-white/5 bg-white/5" : "border-white/10 bg-white/5 hover:border-arylideYellow/30")}>
+              <div
+                className={clsx(
+                  "group relative overflow-hidden rounded-sm border p-8 flex flex-col md:flex-row gap-8 items-center transition-colors",
+                  isEnded
+                    ? "border-white/5 bg-white/5"
+                    : "border-white/10 bg-white/5 hover:border-arylideYellow/30",
+                )}
+              >
                 <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden shrink-0 border-4 border-white/10 shadow-2xl">
-                  <Image src="/images/about.jpg" alt="Orkiestra Maxime" fill className={clsx("object-cover transition-all duration-700", isEnded ? "grayscale" : "grayscale group-hover:grayscale-0")} />
+                  <Image
+                    src="/images/about.jpg"
+                    alt="Orkiestra Maxime"
+                    fill
+                    className={clsx(
+                      "object-cover transition-all duration-700",
+                      isEnded
+                        ? "grayscale"
+                        : "grayscale group-hover:grayscale-0",
+                    )}
+                  />
                 </div>
                 <div className="text-center md:text-left flex-1">
-                  <h4 className={clsx("text-2xl md:text-3xl font-bold mb-3 transition-colors", isEnded ? "text-white/70" : "text-white group-hover:text-arylideYellow")}>Orkiestra Maxime</h4>
+                  <h4
+                    className={clsx(
+                      "text-2xl md:text-3xl font-bold mb-3 transition-colors",
+                      isEnded
+                        ? "text-white/70"
+                        : "text-white group-hover:text-arylideYellow",
+                    )}
+                  >
+                    Orkiestra Maxime
+                  </h4>
                   <p className="text-philippineSilver text-sm leading-relaxed max-w-lg mx-auto md:mx-0">
-                    Główny zespół artystyczny Fundacji. Orkiestra zrzesza najzdolniejszych stypendystów oraz profesjonalnych muzyków ze Śląska.
+                    Główny zespół artystyczny Fundacji. Orkiestra zrzesza
+                    najzdolniejszych stypendystów oraz profesjonalnych muzyków
+                    ze Śląska.
                   </p>
                 </div>
               </div>
@@ -233,15 +367,27 @@ export default function EventPage() {
 
             <section className="mb-16 animate-fade-up [animation-delay:500ms]">
               <div className="flex items-center gap-3 mb-8">
-                <MapPin className={isEnded ? "text-white/30" : "text-arylideYellow"} />
-                <h3 className="text-3xl font-youngest text-white">Lokalizacja</h3>
+                <MapPin
+                  className={isEnded ? "text-white/30" : "text-arylideYellow"}
+                />
+                <h3 className="text-3xl font-youngest text-white">
+                  Lokalizacja
+                </h3>
               </div>
               <div className="bg-[#1a1a1a] border border-white/10 rounded-sm p-1">
                 <div className="relative w-full h-64 bg-white/5 flex flex-col items-center justify-center text-white/20 gap-2 overflow-hidden">
                   <MapPin size={48} className={isEnded ? "opacity-30" : ""} />
                   <span className="text-sm font-mono">{eventData.address}</span>
                   <span className="text-xs">Kliknij, aby otworzyć mapę</span>
-                  <a href={`https://maps.google.com/?q=${eventData.location}`} target="_blank" rel="noopener noreferrer" className="absolute inset-0 z-10" aria-label="Otwórz w Google Maps"><span className="sr-only">Otwórz w Google Maps</span></a>
+                  <a
+                    href={`https://maps.google.com/?q=${eventData.location}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="absolute inset-0 z-10"
+                    aria-label="Otwórz w Google Maps"
+                  >
+                    <span className="sr-only">Otwórz w Google Maps</span>
+                  </a>
                 </div>
               </div>
             </section>

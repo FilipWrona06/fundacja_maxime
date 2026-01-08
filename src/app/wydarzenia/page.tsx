@@ -23,10 +23,14 @@ export const eventsData = [
     image: "/images/hero-poster.jpg",
     type: "Koncert",
     isSoldOut: false,
-    description: "Zapraszamy na uroczystą inaugurację sezonu artystycznego. Będzie to wieczór, w którym tradycja spotka się z młodzieńczą energią. Usłyszymy monumentalne dzieła, które wymagają od orkiestry nie tylko technicznej perfekcji, ale przede wszystkim głębokiej wrażliwości.",
+    description:
+      "Zapraszamy na uroczystą inaugurację sezonu artystycznego. Będzie to wieczór, w którym tradycja spotka się z młodzieńczą energią. Usłyszymy monumentalne dzieła, które wymagają od orkiestry nie tylko technicznej perfekcji, ale przede wszystkim głębokiej wrażliwości.",
     program: [
       { composer: "Ludwig van Beethoven", title: "Uwertura 'Egmont' op. 84" },
-      { composer: "Fryderyk Chopin", title: "Koncert fortepianowy e-moll op. 11" },
+      {
+        composer: "Fryderyk Chopin",
+        title: "Koncert fortepianowy e-moll op. 11",
+      },
       { composer: "--- Przerwa (20 min) ---", title: "" },
       { composer: "Johannes Brahms", title: "IV Symfonia e-moll op. 98" },
     ],
@@ -45,7 +49,8 @@ export const eventsData = [
     image: "/images/about.jpg",
     type: "Edukacja",
     isSoldOut: false,
-    description: "Otwarte warsztaty prowadzone przez naszych solistów. Skupimy się na technice smyczkowej i pracy w sekcji.",
+    description:
+      "Otwarte warsztaty prowadzone przez naszych solistów. Skupimy się na technice smyczkowej i pracy w sekcji.",
     program: [
       { composer: "Część 1", title: "Technika indywidualna" },
       { composer: "Część 2", title: "Praca w sekcji orkiestrowej" },
@@ -65,7 +70,8 @@ export const eventsData = [
     image: "/images/timeline/2024.jpg",
     type: "Gala",
     isSoldOut: true,
-    description: "Radosne dźwięki walców i polek w wykonaniu pełnego składu orkiestry.",
+    description:
+      "Radosne dźwięki walców i polek w wykonaniu pełnego składu orkiestry.",
     program: [
       { composer: "Johann Strauss", title: "Nad pięknym modrym Dunajem" },
       { composer: "Johann Strauss", title: "Marsz Radetzky'ego" },
@@ -107,15 +113,27 @@ const parseDateString = (dateStr: string) => {
 
 const DAYS_OF_WEEK = ["Pn", "Wt", "Śr", "Cz", "Pt", "So", "Nd"];
 const MONTH_NAMES = [
-  "Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec",
-  "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień",
+  "Styczeń",
+  "Luty",
+  "Marzec",
+  "Kwiecień",
+  "Maj",
+  "Czerwiec",
+  "Lipiec",
+  "Sierpień",
+  "Wrzesień",
+  "Październik",
+  "Listopad",
+  "Grudzień",
 ];
 
 export default function EventsPage() {
   // Ustawiamy widok kalendarza na Styczeń 2026 (gdzie są nasze dane)
   const [currentDate, setCurrentDate] = useState(new Date(2026, 0, 1));
   // Domyślnie zaznaczony 10.01.2026 (żeby coś było widać na start)
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date(2026, 0, 10));
+  const [selectedDate, setSelectedDate] = useState<Date | null>(
+    new Date(2026, 0, 10),
+  );
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -168,30 +186,57 @@ export default function EventsPage() {
           <div className="lg:w-3/4 w-full">
             <div className="flex items-center justify-between mb-6 border-b border-white/10 pb-4">
               <h2 className="text-3xl font-montserrat font-bold text-white uppercase">
-                {MONTH_NAMES[month]} <span className="text-white/30">{year}</span>
+                {MONTH_NAMES[month]}{" "}
+                <span className="text-white/30">{year}</span>
               </h2>
               <div className="flex gap-2">
-                <button onClick={() => changeMonth(-1)} className="p-3 bg-[#222] border border-white/5 hover:border-arylideYellow rounded-sm text-white"><ChevronLeft size={20} /></button>
-                <button onClick={() => changeMonth(1)} className="p-3 bg-[#222] border border-white/5 hover:border-arylideYellow rounded-sm text-white"><ChevronRight size={20} /></button>
+                <button
+                  type="button"
+                  onClick={() => changeMonth(-1)}
+                  className="p-3 bg-[#222] border border-white/5 hover:border-arylideYellow rounded-sm text-white"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => changeMonth(1)}
+                  className="p-3 bg-[#222] border border-white/5 hover:border-arylideYellow rounded-sm text-white"
+                >
+                  <ChevronRight size={20} />
+                </button>
               </div>
             </div>
 
             <div className="grid grid-cols-7 mb-2">
               {DAYS_OF_WEEK.map((day) => (
-                <div key={day} className="text-right pr-2 text-xs font-bold text-philippineSilver/50 uppercase tracking-wider py-2">{day}</div>
+                <div
+                  key={day}
+                  className="text-right pr-2 text-xs font-bold text-philippineSilver/50 uppercase tracking-wider py-2"
+                >
+                  {day}
+                </div>
               ))}
             </div>
 
             <div className="grid grid-cols-7 gap-px bg-white/5 border border-white/5 rounded-sm overflow-hidden">
               {calendarGrid.map((cell) => {
-                if (cell.type === "empty") return <div key={cell.id} className="bg-raisinBlack min-h-35" />;
+                if (cell.type === "empty")
+                  return (
+                    <div key={cell.id} className="bg-raisinBlack min-h-35" />
+                  );
 
                 const date = cell.date as Date;
-                const isSelected = selectedDate?.toDateString() === date.toDateString();
-                const isToday = new Date().toDateString() === date.toDateString();
-                
+                const isSelected =
+                  selectedDate?.toDateString() === date.toDateString();
+                const isToday =
+                  new Date().toDateString() === date.toDateString();
+
                 // Sprawdzamy, czy w danym dniu jest jakieś wydarzenie
-                const dayEvent = eventsData.find(e => parseDateString(e.date).toDateString() === date.toDateString());
+                const dayEvent = eventsData.find(
+                  (e) =>
+                    parseDateString(e.date).toDateString() ===
+                    date.toDateString(),
+                );
                 const hasEvent = !!dayEvent;
 
                 return (
@@ -201,19 +246,35 @@ export default function EventsPage() {
                     onClick={() => setSelectedDate(date)}
                     className={clsx(
                       "relative min-h-35 p-3 flex flex-col justify-between transition-all duration-200 group text-right cursor-pointer",
-                      hasEvent ? "bg-[#252525] hover:bg-[#333]" : "bg-raisinBlack hover:bg-white/3",
-                      isSelected && "bg-[#2a2a2a] ring-1 ring-inset ring-arylideYellow z-10 shadow-2xl"
+                      hasEvent
+                        ? "bg-[#252525] hover:bg-[#333]"
+                        : "bg-raisinBlack hover:bg-white/3",
+                      isSelected &&
+                        "bg-[#2a2a2a] ring-1 ring-inset ring-arylideYellow z-10 shadow-2xl",
                     )}
                   >
-                    <span className={clsx(
-                      "text-lg font-montserrat font-medium mb-2 w-8 h-8 flex items-center justify-center rounded-full ml-auto",
-                      isSelected ? "bg-arylideYellow text-raisinBlack font-bold" : isToday ? "text-arylideYellow border border-arylideYellow" : "text-white/30 group-hover:text-white"
-                    )}>
+                    <span
+                      className={clsx(
+                        "text-lg font-montserrat font-medium mb-2 w-8 h-8 flex items-center justify-center rounded-full ml-auto",
+                        isSelected
+                          ? "bg-arylideYellow text-raisinBlack font-bold"
+                          : isToday
+                            ? "text-arylideYellow border border-arylideYellow"
+                            : "text-white/30 group-hover:text-white",
+                      )}
+                    >
                       {date.getDate()}
                     </span>
                     {hasEvent && (
                       <div className="w-full mt-auto">
-                        <div className={clsx("py-1.5 px-3 rounded-sm text-[10px] font-bold uppercase tracking-widest text-left truncate border-l-2", isSelected ? "bg-white text-raisinBlack border-arylideYellow" : "bg-oxfordBlue text-arylideYellow border-arylideYellow/50")}>
+                        <div
+                          className={clsx(
+                            "py-1.5 px-3 rounded-sm text-[10px] font-bold uppercase tracking-widest text-left truncate border-l-2",
+                            isSelected
+                              ? "bg-white text-raisinBlack border-arylideYellow"
+                              : "bg-oxfordBlue text-arylideYellow border-arylideYellow/50",
+                          )}
+                        >
                           {dayEvent.type}
                         </div>
                       </div>
@@ -227,9 +288,16 @@ export default function EventsPage() {
           {/* PRAWA: SIDEBAR */}
           <div className="lg:w-1/4 w-full flex flex-col border-l border-white/5 lg:pl-8 min-h-150">
             <div className="mb-8 pt-4">
-              <span className="text-white/30 text-xs font-mono uppercase tracking-widest block mb-2">Wybrany dzień</span>
+              <span className="text-white/30 text-xs font-mono uppercase tracking-widest block mb-2">
+                Wybrany dzień
+              </span>
               <h3 className="text-3xl text-white font-youngest">
-                {selectedDate ? selectedDate.toLocaleDateString("pl-PL", { day: "numeric", month: "long" }) : "Wybierz datę"}
+                {selectedDate
+                  ? selectedDate.toLocaleDateString("pl-PL", {
+                      day: "numeric",
+                      month: "long",
+                    })
+                  : "Wybierz datę"}
               </h3>
             </div>
 
@@ -245,30 +313,63 @@ export default function EventsPage() {
                       className="group bg-[#222] border border-white/5 rounded-sm overflow-hidden hover:border-arylideYellow/30 transition-colors"
                     >
                       <div className="relative h-40 w-full overflow-hidden">
-                        <Link href={`/wydarzenia/${event.id}`} className="block w-full h-full">
-                          <Image src={event.image} alt={event.title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                        <Link
+                          href={`/wydarzenia/${event.id}`}
+                          className="block w-full h-full"
+                        >
+                          <Image
+                            src={event.image}
+                            alt={event.title}
+                            fill
+                            className="object-cover transition-transform duration-700 group-hover:scale-105"
+                          />
                           <div className="absolute inset-0 bg-oxfordBlue/30 mix-blend-multiply" />
                         </Link>
                       </div>
                       <div className="p-5">
-                        <Link href={`/wydarzenia/${event.id}`} className="group-hover:text-arylideYellow transition-colors">
-                          <h4 className="text-lg font-bold text-white leading-tight mb-3">{event.title}</h4>
+                        <Link
+                          href={`/wydarzenia/${event.id}`}
+                          className="group-hover:text-arylideYellow transition-colors"
+                        >
+                          <h4 className="text-lg font-bold text-white leading-tight mb-3">
+                            {event.title}
+                          </h4>
                         </Link>
                         <div className="flex flex-col gap-2 text-xs text-philippineSilver mb-4 font-medium border-l-2 border-white/10 pl-3">
-                          <div className="flex items-center gap-2"><Clock size={14} className="text-arylideYellow" /> {event.time}</div>
-                          <div className="flex items-center gap-2"><MapPin size={14} className="text-arylideYellow" /> {event.location}</div>
-                          <div className="flex items-center gap-2 text-white"><Ticket size={14} className="text-arylideYellow" /> {event.price}</div>
+                          <div className="flex items-center gap-2">
+                            <Clock size={14} className="text-arylideYellow" />{" "}
+                            {event.time}
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <MapPin size={14} className="text-arylideYellow" />{" "}
+                            {event.location}
+                          </div>
+                          <div className="flex items-center gap-2 text-white">
+                            <Ticket size={14} className="text-arylideYellow" />{" "}
+                            {event.price}
+                          </div>
                         </div>
-                        <Link href={`/wydarzenia/${event.id}`} className="block w-full text-center py-2 border border-white/10 text-white text-xs font-bold uppercase tracking-widest hover:bg-arylideYellow hover:text-raisinBlack transition-all rounded-sm">
+                        <Link
+                          href={`/wydarzenia/${event.id}`}
+                          className="block w-full text-center py-2 border border-white/10 text-white text-xs font-bold uppercase tracking-widest hover:bg-arylideYellow hover:text-raisinBlack transition-all rounded-sm"
+                        >
                           Szczegóły
                         </Link>
                       </div>
                     </motion.div>
                   ))
                 ) : (
-                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center justify-center text-center py-12 opacity-40 border border-dashed border-white/10 rounded-sm">
-                    <p className="text-philippineSilver text-sm mb-2">Brak wydarzeń</p>
-                    <span className="text-xs text-arylideYellow/70">Wybierz inny dzień</span>
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="flex flex-col items-center justify-center text-center py-12 opacity-40 border border-dashed border-white/10 rounded-sm"
+                  >
+                    <p className="text-philippineSilver text-sm mb-2">
+                      Brak wydarzeń
+                    </p>
+                    <span className="text-xs text-arylideYellow/70">
+                      Wybierz inny dzień
+                    </span>
                   </motion.div>
                 )}
               </AnimatePresence>
