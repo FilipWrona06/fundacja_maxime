@@ -1,11 +1,9 @@
-// --- START OF FILE src/app/layout.tsx ---
+// src/app/layout.tsx
 
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
-import { Footer } from "@/components/layout/Footer"; // <--- IMPORT
-import { Navbar } from "@/components/layout/Navbar";
 
 export const metadata: Metadata = {
   title: "Fundacja Maxime - Z pasji do muzyki",
@@ -32,17 +30,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pl">
+      {/* Fonty i klasy globalne aplikujemy tutaj dla wszystkich */}
       <body
         className={`${montserrat.variable} ${fontYoungest.variable} bg-raisinBlack text-white antialiased`}
       >
-        {/* Navbar na samej górze */}
-        <Navbar />
-
-        {/* Treść strony */}
         {children}
-
-        {/* Footer na samym dole */}
-        <Footer />
       </body>
     </html>
   );
