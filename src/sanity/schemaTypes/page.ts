@@ -23,7 +23,7 @@ export const page = defineType({
       type: "array",
       of: [
         { type: "hero" }, // Tutaj dodajemy nasz blok Hero
-        // Tutaj w przyszłości dodasz { type: "about" }, { type: "partners" } itd.
+        { type: "partners" },
       ],
     }),
   ],
