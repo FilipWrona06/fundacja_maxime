@@ -25,6 +25,7 @@ export const page = defineType({
         { type: "hero" }, // Tutaj dodajemy nasz blok Hero
         { type: "partners" },
         { type: "about" },
+        { type: "timeline" },
       ],
     }),
   ],

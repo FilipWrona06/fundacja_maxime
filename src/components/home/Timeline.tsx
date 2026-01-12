@@ -1,5 +1,6 @@
 "use client";
 
+import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import {
   AnimatePresence,
   motion,
@@ -8,48 +9,33 @@ import {
 } from "framer-motion";
 import Image from "next/image";
 import { useRef, useState } from "react";
+import { urlFor } from "@/sanity/lib/image";
 
-const timelineData = [
-  {
-    year: "2022",
-    title: "Początek Harmonii",
-    description:
-      "Rok powstania fundacji. Pierwsze spotkania, formowanie zespołu i marzenie o stworzeniu przestrzeni, gdzie muzyka łączy pokolenia. Pierwszy kameralny koncert w lokalnym domu kultury.",
-    image: "/images/timeline/2022.jpg",
-  },
-  {
-    year: "2023",
-    title: "Pierwsze Sukcesy",
-    description:
-      "Rozszerzenie działalności o warsztaty dla młodzieży. Nasza orkiestra powiększyła się dwukrotnie. Zagraliśmy cykl koncertów 'Lato z Klasyką', zdobywając serca lokalnej publiczności.",
-    image: "/images/timeline/2023.jpg",
-  },
-  {
-    year: "2024",
-    title: "Nowe Horyzonty",
-    description:
-      "Współpraca z międzynarodowymi solistami i nagranie pierwszej płyty demo. Fundacja otrzymała prestiżowe wyróżnienie za wkład w rozwój kultury regionalnej.",
-    image: "/images/timeline/2024.jpg",
-  },
-  {
-    year: "2025",
-    title: "Przyszłość Brzmienia",
-    description:
-      "Otwarcie nowej sali prób i uruchomienie programu stypendialnego dla wybitnie uzdolnionych dzieci. Patrzymy w przyszłość z odwagą, planując trasę koncertową po całej Polsce.",
-    image: "/images/timeline/2025.jpg",
-  },
-  {
-    year: "2026",
-    title: "Międzynarodowe Echa",
-    description:
-      "Planujemy naszą pierwszą współpracę z zagranicznymi orkiestrami oraz festiwal muzyki filmowej. Chcemy, aby dźwięki Maxime zabrzmiały poza granicami kraju, promując polską kulturę.",
-    image: "/images/timeline/2026.jpg",
-  },
-];
+// --- TYPY ---
+interface TimelineItem {
+  _key: string;
+  year: string;
+  title: string;
+  description: string;
+  image: SanityImageSource;
+}
 
-export const Timeline = () => {
+interface TimelineProps {
+  data?: {
+    items?: TimelineItem[];
+    settings?: {
+      height?: string;
+    };
+  };
+}
+
+export const Timeline = ({ data }: TimelineProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  // Fallback data
+  const items = data?.items || [];
+  const height = data?.settings?.height || "300vh";
 
   // Przechowujemy timer do debouncingu
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
@@ -60,38 +46,34 @@ export const Timeline = () => {
   });
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    // 1. OBLICZ NOWY INDEKS (bezpiecznie)
-    const rawIndex = Math.floor(latest * timelineData.length);
-    const newIndex = Math.max(0, Math.min(rawIndex, timelineData.length - 1));
+    // Jeśli nie ma elementów, nie robimy nic
+    if (items.length === 0) return;
 
-    // Jeśli indeks się nie zmienił, nie rób nic
+    // 1. OBLICZ NOWY INDEKS (bezpiecznie)
+    const rawIndex = Math.floor(latest * items.length);
+    const newIndex = Math.max(0, Math.min(rawIndex, items.length - 1));
+
     if (newIndex === activeIndex) return;
 
-    // 2. LOGIKA PRZY SZYBKIM SCROLLU (Scroll to Top)
-    // Jeśli scrollujemy bardzo blisko góry (np. kliknięto "W górę"), wymuś natychmiastową aktualizację na 0
-    // i anuluj wszelkie opóźnienia.
+    // 2. LOGIKA PRZY SZYBKIM SCROLLU
     if (latest <= 0.05) {
       if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
       setActiveIndex(0);
       return;
     }
 
-    // 3. DEBOUNCE (Stabilizacja)
-    // Zamiast aktualizować stan natychmiast, czekamy chwilę.
-    // Jeśli w międzyczasie przyjdzie nowa wartość (bo użytkownik szybko scrolluje),
-    // anulujemy poprzednią. To zapobiega renderowaniu stanów pośrednich.
-
+    // 3. DEBOUNCE
     if (debounceTimeout.current) {
       clearTimeout(debounceTimeout.current);
     }
 
     debounceTimeout.current = setTimeout(() => {
       setActiveIndex(newIndex);
-    }, 50); // 50ms opóźnienia - wystarczająco by pominąć klatki przy szybkim scrollu, ale płynnie przy wolnym
+    }, 50);
   });
 
   const handleScrollTo = (index: number) => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || items.length === 0) return;
 
     const containerTop =
       containerRef.current.getBoundingClientRect().top + window.scrollY;
@@ -99,7 +81,7 @@ export const Timeline = () => {
     const windowHeight = window.innerHeight;
     const scrollableHeight = containerHeight - windowHeight;
     const targetScroll =
-      containerTop + (index / timelineData.length) * scrollableHeight + 10;
+      containerTop + (index / items.length) * scrollableHeight + 10;
 
     window.scrollTo({
       top: targetScroll,
@@ -107,98 +89,113 @@ export const Timeline = () => {
     });
   };
 
-  const currentItem = timelineData[activeIndex] || timelineData[0];
+  // --- FIX: Usuwamy wczesny "return null", aby ref zawsze się zapiął ---
+  const hasItems = items.length > 0;
+  const currentItem = hasItems ? items[activeIndex] || items[0] : null;
+  const imageUrl = currentItem?.image ? urlFor(currentItem.image).url() : "";
 
   return (
-    <section ref={containerRef} className="relative h-[300vh] bg-raisinBlack">
-      <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center">
-        <div className="container mx-auto px-4 relative z-10 h-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
-          {/* --- LEWA STRONA --- */}
-          <div className="w-full md:w-1/2 flex flex-row gap-8 items-center md:items-start justify-center md:justify-start">
-            {/* Lista */}
-            <div className="hidden md:flex flex-col gap-12 py-4 border-l border-white/10 pl-8 relative">
-              {timelineData.map((item, idx) => {
-                const isActive = idx === activeIndex;
-                return (
-                  <div key={item.year} className="relative flex items-center">
-                    {isActive && (
-                      <motion.div
-                        layoutId="timeline-dot"
-                        className="absolute -left-[2.4rem] w-3 h-3 bg-arylideYellow rounded-full shadow-[0_0_10px_#EFCB6F]"
-                        transition={{
-                          type: "spring",
-                          stiffness: 300,
-                          damping: 30,
-                        }}
-                      />
-                    )}
-                    <button
-                      type="button"
-                      onClick={() => handleScrollTo(idx)}
-                      className={`text-lg font-youngest transition-colors duration-300 text-left cursor-pointer hover:text-arylideYellow/80 ${
-                        isActive
-                          ? "text-arylideYellow"
-                          : "text-philippineSilver/30"
-                      }`}
-                    >
-                      {item.year}
-                    </button>
-                  </div>
-                );
-              })}
+    <section
+      ref={containerRef}
+      className="relative bg-raisinBlack"
+      // Jeśli brak itemów, ustawiamy wysokość na 0 i ukrywamy, ale element istnieje w DOM
+      style={{
+        height: hasItems ? height : 0,
+        display: hasItems ? "block" : "none",
+      }}
+    >
+      {hasItems && currentItem && (
+        <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center">
+          <div className="container mx-auto px-4 relative z-10 h-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
+            {/* --- LEWA STRONA (Tekst) --- */}
+            <div className="w-full md:w-1/2 flex flex-row gap-8 items-center md:items-start justify-center md:justify-start">
+              {/* Lista roczników */}
+              <div className="hidden md:flex flex-col gap-12 py-4 border-l border-white/10 pl-8 relative">
+                {items.map((item, idx) => {
+                  const isActive = idx === activeIndex;
+                  return (
+                    <div key={item._key} className="relative flex items-center">
+                      {isActive && (
+                        <motion.div
+                          layoutId="timeline-dot"
+                          className="absolute -left-[2.4rem] w-3 h-3 bg-arylideYellow rounded-full shadow-[0_0_10px_#EFCB6F]"
+                          transition={{
+                            type: "spring",
+                            stiffness: 300,
+                            damping: 30,
+                          }}
+                        />
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => handleScrollTo(idx)}
+                        className={`text-lg font-youngest transition-colors duration-300 text-left cursor-pointer hover:text-arylideYellow/80 ${
+                          isActive
+                            ? "text-arylideYellow"
+                            : "text-philippineSilver/30"
+                        }`}
+                      >
+                        {item.year}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Treść aktywna */}
+              <div className="flex-1 max-w-md min-h-75 flex flex-col justify-center">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentItem._key}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                  >
+                    <span className="md:hidden text-arylideYellow font-youngest text-4xl mb-4 mt-20 block">
+                      {currentItem.year}
+                    </span>
+                    <h2 className="text-3xl md:text-5xl text-white font-montserrat font-bold mb-6">
+                      {currentItem.title}
+                    </h2>
+                    <p className="text-philippineSilver text-lg leading-relaxed">
+                      {currentItem.description}
+                    </p>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
             </div>
 
-            {/* Treść (Zabezpieczona minimalną wysokością) */}
-            <div className="flex-1 max-w-md min-h-75 flex flex-col justify-center">
+            {/* --- PRAWA STRONA (Zdjęcie) --- */}
+            <div className="w-full md:w-1/2 flex justify-center">
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={currentItem.year}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                  transition={{ duration: 0.3, ease: "easeOut" }} // Skrócony czas animacji
+                  key={currentItem._key}
+                  initial={{ opacity: 0, scale: 0.95, rotate: 2 }}
+                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                  exit={{ opacity: 0, scale: 1.05, rotate: -2 }}
+                  transition={{ duration: 0.4, ease: "circOut" }}
+                  className="relative w-full max-w-md aspect-4/5"
                 >
-                  <span className="md:hidden text-arylideYellow font-youngest text-4xl mb-4 mt-20 block">
-                    {currentItem.year}
-                  </span>
-                  <h2 className="text-3xl md:text-5xl text-white font-montserrat font-bold mb-6">
-                    {currentItem.title}
-                  </h2>
-                  <p className="text-philippineSilver text-lg leading-relaxed">
-                    {currentItem.description}
-                  </p>
+                  <div className="absolute inset-0 border border-white/20 translate-x-3 translate-y-3 md:translate-x-5 md:translate-y-5 z-0" />
+                  <div className="relative w-full h-full overflow-hidden bg-raisinBlack z-10 shadow-2xl">
+                    {imageUrl && (
+                      <Image
+                        src={imageUrl}
+                        alt={currentItem.title}
+                        fill
+                        className="object-cover"
+                        priority
+                      />
+                    )}
+                    <div className="absolute inset-0 bg-linear-to-t from-raisinBlack/60 to-transparent opacity-60" />
+                  </div>
                 </motion.div>
               </AnimatePresence>
             </div>
           </div>
-
-          {/* --- PRAWA STRONA --- */}
-          <div className="w-full md:w-1/2 flex justify-center">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentItem.year}
-                initial={{ opacity: 0, scale: 0.95, rotate: 2 }}
-                animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                exit={{ opacity: 0, scale: 1.05, rotate: -2 }}
-                transition={{ duration: 0.4, ease: "circOut" }}
-                className="relative w-full max-w-md aspect-4/5"
-              >
-                <div className="absolute inset-0 border border-white/20 translate-x-3 translate-y-3 md:translate-x-5 md:translate-y-5 z-0" />
-                <div className="relative w-full h-full overflow-hidden bg-raisinBlack z-10 shadow-2xl">
-                  <Image
-                    src={currentItem.image}
-                    alt={currentItem.title}
-                    fill
-                    className="object-cover"
-                    priority
-                  />
-                  <div className="absolute inset-0 bg-linear-to-t from-raisinBlack/60 to-transparent opacity-60" />
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
         </div>
-      </div>
+      )}
     </section>
   );
 };

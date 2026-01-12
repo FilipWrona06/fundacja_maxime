@@ -10,7 +10,7 @@ import { Timeline } from "@/components/home/Timeline";
 import { sanityFetch } from "@/sanity/lib/live";
 
 // --- GROQ QUERY ---
-// Pobieramy stronę główną i filtrujemy bloki w tablicy content
+// Jedno zapytanie pobierające całą strukturę strony Home
 const HOME_QUERY = defineQuery(`
   *[_type == "page" && slug.current == "home"][0]{
     content[]{
@@ -31,7 +31,7 @@ const HOME_QUERY = defineQuery(`
         }
       },
 
-      // 2. DANE DLA PARTNERS (z pobieraniem assetów logo)
+      // 2. DANE DLA PARTNERS (z pobieraniem logo)
       _type == "partners" => {
         eyebrow,
         title,
@@ -47,7 +47,7 @@ const HOME_QUERY = defineQuery(`
         }
       },
 
-      // 3. DANE DLA ABOUT (z pobieraniem zdjęcia i wartości)
+      // 3. DANE DLA ABOUT (z pobieraniem zdjęcia i ikon)
       _type == "about" => {
         eyebrow,
         headingLine1,
@@ -66,30 +66,52 @@ const HOME_QUERY = defineQuery(`
           description,
           icon
         }
+      },
+
+      // 4. DANE DLA TIMELINE (z pobieraniem zdjęć)
+      _type == "timeline" => {
+        settings,
+        items[]{
+          _key,
+          year,
+          title,
+          description,
+          image {
+            asset->,
+            hotspot,
+            crop
+          }
+        }
       }
     }
   }
 `);
 
 export default async function Home() {
-  // Pobieramy dane z Sanity (z obsługą Live Content)
+  // Pobieramy dane z Sanity (z obsługą Live Content dla podglądu na żywo)
   const { data } = await sanityFetch({ query: HOME_QUERY });
 
-  // --- WYCIĄGANIE DANYCH DLA KONKRETNYCH SEKCJI ---
+  // --- FILTROWANIE BLOKÓW ---
+  // Używamy typu { _type: string } aby uniknąć błędu 'no-explicit-any' w linterze
 
-  // Hero
+  // 1. Hero
   const heroData = data?.content?.find(
     (block: { _type: string }) => block._type === "hero",
   );
 
-  // Partners
+  // 2. Partners
   const partnersData = data?.content?.find(
     (block: { _type: string }) => block._type === "partners",
   );
 
-  // About
+  // 3. About
   const aboutData = data?.content?.find(
     (block: { _type: string }) => block._type === "about",
+  );
+
+  // 4. Timeline
+  const timelineData = data?.content?.find(
+    (block: { _type: string }) => block._type === "timeline",
   );
 
   return (
@@ -103,9 +125,11 @@ export default async function Home() {
       {/* Sekcja O Nas (Dynamiczna) */}
       <About data={aboutData} />
 
+      {/* Sekcja Oś Czasu (Dynamiczna) */}
+      <Timeline data={timelineData} />
+
       {/* --- PONIŻSZE SEKCJE SĄ JESZCZE STATYCZNE (HARDCODED) --- */}
       {/* Będziemy je przenosić do Sanity w kolejnych krokach */}
-      <Timeline />
       <Events />
       <Support />
     </main>
