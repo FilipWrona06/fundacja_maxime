@@ -1,8 +1,13 @@
 "use client";
 
-import { AnimatePresence, motion, useScroll } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  useMotionValueEvent,
+  useScroll,
+} from "framer-motion";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 const timelineData = [
   {
@@ -46,23 +51,45 @@ export const Timeline = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
+  // Przechowujemy timer do debouncingu
+  const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
   });
 
-  useEffect(() => {
-    const unsubscribe = scrollYProgress.on("change", (latest) => {
-      const newIndex = Math.min(
-        Math.floor(latest * timelineData.length),
-        timelineData.length - 1,
-      );
-      setActiveIndex(newIndex);
-    });
-    return () => unsubscribe();
-  }, [scrollYProgress]);
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    // 1. OBLICZ NOWY INDEKS (bezpiecznie)
+    const rawIndex = Math.floor(latest * timelineData.length);
+    const newIndex = Math.max(0, Math.min(rawIndex, timelineData.length - 1));
 
-  // Funkcja przewijania do roku po kliknięciu
+    // Jeśli indeks się nie zmienił, nie rób nic
+    if (newIndex === activeIndex) return;
+
+    // 2. LOGIKA PRZY SZYBKIM SCROLLU (Scroll to Top)
+    // Jeśli scrollujemy bardzo blisko góry (np. kliknięto "W górę"), wymuś natychmiastową aktualizację na 0
+    // i anuluj wszelkie opóźnienia.
+    if (latest <= 0.05) {
+      if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
+      setActiveIndex(0);
+      return;
+    }
+
+    // 3. DEBOUNCE (Stabilizacja)
+    // Zamiast aktualizować stan natychmiast, czekamy chwilę.
+    // Jeśli w międzyczasie przyjdzie nowa wartość (bo użytkownik szybko scrolluje),
+    // anulujemy poprzednią. To zapobiega renderowaniu stanów pośrednich.
+
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current);
+    }
+
+    debounceTimeout.current = setTimeout(() => {
+      setActiveIndex(newIndex);
+    }, 50); // 50ms opóźnienia - wystarczająco by pominąć klatki przy szybkim scrollu, ale płynnie przy wolnym
+  });
+
   const handleScrollTo = (index: number) => {
     if (!containerRef.current) return;
 
@@ -80,17 +107,18 @@ export const Timeline = () => {
     });
   };
 
+  const currentItem = timelineData[activeIndex] || timelineData[0];
+
   return (
     <section ref={containerRef} className="relative h-[300vh] bg-raisinBlack">
       <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center">
         <div className="container mx-auto px-4 relative z-10 h-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
           {/* --- LEWA STRONA --- */}
           <div className="w-full md:w-1/2 flex flex-row gap-8 items-center md:items-start justify-center md:justify-start">
-            {/* Oś czasu (Lista) */}
+            {/* Lista */}
             <div className="hidden md:flex flex-col gap-12 py-4 border-l border-white/10 pl-8 relative">
               {timelineData.map((item, idx) => {
                 const isActive = idx === activeIndex;
-
                 return (
                   <div key={item.year} className="relative flex items-center">
                     {isActive && (
@@ -104,7 +132,6 @@ export const Timeline = () => {
                         }}
                       />
                     )}
-
                     <button
                       type="button"
                       onClick={() => handleScrollTo(idx)}
@@ -121,25 +148,24 @@ export const Timeline = () => {
               })}
             </div>
 
-            {/* Treść */}
-            <div className="flex-1 max-w-md">
+            {/* Treść (Zabezpieczona minimalną wysokością) */}
+            <div className="flex-1 max-w-md min-h-75 flex flex-col justify-center">
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={timelineData[activeIndex].year}
+                  key={currentItem.year}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 20 }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  transition={{ duration: 0.3, ease: "easeOut" }} // Skrócony czas animacji
                 >
                   <span className="md:hidden text-arylideYellow font-youngest text-4xl mb-4 mt-20 block">
-                    {timelineData[activeIndex].year}
+                    {currentItem.year}
                   </span>
-
                   <h2 className="text-3xl md:text-5xl text-white font-montserrat font-bold mb-6">
-                    {timelineData[activeIndex].title}
+                    {currentItem.title}
                   </h2>
                   <p className="text-philippineSilver text-lg leading-relaxed">
-                    {timelineData[activeIndex].description}
+                    {currentItem.description}
                   </p>
                 </motion.div>
               </AnimatePresence>
@@ -150,19 +176,18 @@ export const Timeline = () => {
           <div className="w-full md:w-1/2 flex justify-center">
             <AnimatePresence mode="wait">
               <motion.div
-                key={timelineData[activeIndex].year}
+                key={currentItem.year}
                 initial={{ opacity: 0, scale: 0.95, rotate: 2 }}
                 animate={{ opacity: 1, scale: 1, rotate: 0 }}
                 exit={{ opacity: 0, scale: 1.05, rotate: -2 }}
-                transition={{ duration: 0.5, ease: "circOut" }}
+                transition={{ duration: 0.4, ease: "circOut" }}
                 className="relative w-full max-w-md aspect-4/5"
               >
                 <div className="absolute inset-0 border border-white/20 translate-x-3 translate-y-3 md:translate-x-5 md:translate-y-5 z-0" />
-
                 <div className="relative w-full h-full overflow-hidden bg-raisinBlack z-10 shadow-2xl">
                   <Image
-                    src={timelineData[activeIndex].image}
-                    alt={timelineData[activeIndex].title}
+                    src={currentItem.image}
+                    alt={currentItem.title}
                     fill
                     className="object-cover"
                     priority

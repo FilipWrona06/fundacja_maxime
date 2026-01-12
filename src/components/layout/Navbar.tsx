@@ -2,7 +2,7 @@
 
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Logo } from "@/components/ui/Logo";
 
 const navLinks = [
@@ -17,14 +17,41 @@ export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
-  // Obsługa scrolla
+  // Ref do śledzenia stanu bez re-renderów
+  const isScrolledRef = useRef(false);
+
   useEffect(() => {
+    let rafId: number | null = null;
+
     const handleScroll = () => {
-      // Przełączamy stan szybciej (już po 20px), żeby efekt pigułki był płynny
-      setIsScrolled(window.scrollY > 20);
+      // Jeśli już mamy zaplanowane sprawdzenie w tej klatce, nie robimy nic
+      if (rafId) return;
+
+      // Planujemy sprawdzenie w najbliższej klatce animacji
+      rafId = requestAnimationFrame(() => {
+        const currentScrollY = window.scrollY;
+
+        // Histereza: włączamy przy 20px, wyłączamy dopiero przy 10px
+        // To zapobiega migotaniu (pętli) na granicy 20px
+        const threshold = isScrolledRef.current ? 10 : 20;
+        const shouldBeScrolled = currentScrollY > threshold;
+
+        if (shouldBeScrolled !== isScrolledRef.current) {
+          isScrolledRef.current = shouldBeScrolled;
+          setIsScrolled(shouldBeScrolled);
+        }
+
+        rafId = null;
+      });
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll(); // Sprawdzenie początkowe
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   // Blokowanie scrollowania body przy otwartym menu mobilnym
@@ -38,14 +65,11 @@ export const Navbar = () => {
 
   return (
     <>
-      <header
-        // Padding górny stały (pt-6), żeby navbar nie skakał w pionie
-        className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 transition-all duration-500 ease-wabi"
-      >
+      <header className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 transition-all duration-500 ease-wabi">
         <div
           className={`
             flex items-center justify-between transition-all duration-700 ease-wabi
-            px-6 py-3  /* Stały padding wewnętrzny, żeby wysokość paska była identyczna */
+            px-6 py-3
             ${
               isScrolled
                 ? "w-[90%] max-w-6xl bg-raisinBlack/90 backdrop-blur-md rounded-full border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
@@ -53,8 +77,6 @@ export const Navbar = () => {
             }
           `}
         >
-          {/* --- LEWA STRONA: LOGO (Desktop) --- */}
-          {/* Stała wysokość (h-12) niezależnie od scrolla */}
           <Link
             href="/"
             className="relative z-10 group flex items-center h-12"
@@ -64,7 +86,6 @@ export const Navbar = () => {
             <Logo className="w-auto h-full" />
           </Link>
 
-          {/* --- ŚRODEK: LINKI (Desktop) --- */}
           <nav className="hidden lg:flex items-center gap-8">
             {navLinks.map((link) => (
               <Link
@@ -73,15 +94,12 @@ export const Navbar = () => {
                 className="relative text-sm font-medium tracking-wide text-white/90 hover:text-white transition-colors duration-300 group py-2"
               >
                 {link.name}
-                {/* Mikroanimacja Wabi-Sabi: Kropka */}
                 <span className="absolute bottom-0 left-1/2 w-1 h-1 bg-arylideYellow rounded-full opacity-0 -translate-x-1/2 transition-all duration-300 group-hover:opacity-100 group-hover:scale-125 shadow-[0_0_8px_#EFCB6F]" />
               </Link>
             ))}
           </nav>
 
-          {/* --- PRAWA STRONA: CTA & Mobile Toggle --- */}
           <div className="flex items-center gap-4">
-            {/* Przycisk CTA - Stała wielkość */}
             <a
               href="https://patronite.pl"
               target="_blank"
@@ -91,7 +109,6 @@ export const Navbar = () => {
               Wesprzyj nas
             </a>
 
-            {/* Hamburger (Mobile) */}
             <button
               type="button"
               className="lg:hidden text-white hover:text-arylideYellow transition-colors active:scale-90 duration-200 p-1"
@@ -104,7 +121,7 @@ export const Navbar = () => {
         </div>
       </header>
 
-      {/* --- MOBILE OVERLAY (Bez zmian) --- */}
+      {/* --- MOBILE OVERLAY --- */}
       <div
         className={`
           fixed inset-0 z-60 bg-raisinBlack/98 backdrop-blur-xl flex flex-col items-center justify-center gap-8 
