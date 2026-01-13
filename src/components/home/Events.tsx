@@ -1,33 +1,45 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Calendar, Camera, Newspaper } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Calendar,
+  Camera,
+  Newspaper,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-// --- DANE ---
+// --- DANE (Bez zmian) ---
 const eventsData = [
   {
     id: 1,
     day: "12",
-    month: "PAŹ",
+    month: "Październik",
+    shortMonth: "PAŹ",
     title: "Symfonia Jesienna",
     location: "Filharmonia Śląska",
+    image: "/images/hero-poster.jpg", // Dodano placeholder obrazka dla eventu
   },
   {
     id: 2,
     day: "05",
-    month: "LIS",
+    month: "Listopad",
+    shortMonth: "LIS",
     title: "Młodzi Mistrzowie",
     location: "Sala Koncertowa NOSPR",
+    image: "/images/timeline/2024.jpg",
   },
   {
     id: 3,
     day: "20",
-    month: "GRU",
+    month: "Grudzień",
+    shortMonth: "GRU",
     title: "Koncert Świąteczny",
     location: "Kościół św. Piotra i Pawła",
+    image: "/images/about.jpg",
   },
 ];
 
@@ -35,24 +47,27 @@ const newsData = [
   {
     id: 1,
     title: "Jak wspierać talent dziecka?",
-    excerpt: "Rozmowa z pedagogami o rozpoznawaniu predyspozycji muzycznych.",
-    date: "28 Wrz 2025",
+    excerpt:
+      "Rozmowa z pedagogami o rozpoznawaniu predyspozycji muzycznych u najmłodszych.",
+    date: "28.09.2025",
     image: "/images/news-thumb.jpg",
     slug: "jak-wspierac-talent",
   },
   {
     id: 2,
     title: "Sukces naszej stypendystki",
-    excerpt: "Anna Kowalska zdobyła I miejsce na konkursie w Wiedniu.",
-    date: "15 Wrz 2025",
+    excerpt:
+      "Anna Kowalska zdobyła I miejsce na prestiżowym konkursie w Wiedniu.",
+    date: "15.09.2025",
     image: "/images/about.jpg",
     slug: "sukces-stypendystki",
   },
   {
     id: 3,
     title: "Nowy nabór do orkiestry",
-    excerpt: "Ogłaszamy przesłuchania do sekcji smyczkowej na sezon 2026.",
-    date: "01 Wrz 2025",
+    excerpt:
+      "Ogłaszamy przesłuchania do sekcji smyczkowej na nadchodzący sezon 2026.",
+    date: "01.09.2025",
     image: "/images/hero-poster.jpg",
     slug: "nabor-do-orkiestry",
   },
@@ -61,7 +76,8 @@ const newsData = [
 const galleryData = [
   {
     id: 1,
-    title: "Warsztaty Letnie 2025",
+    title: "Warsztaty Letnie",
+    subtitle: "Zakopane 2025",
     count: 24,
     image: "/images/gallery-thumb.jpg",
     slug: "warsztaty-letnie",
@@ -69,57 +85,41 @@ const galleryData = [
   {
     id: 2,
     title: "Koncert Noworoczny",
+    subtitle: "Gala w NOSPR",
     count: 48,
     image: "/images/timeline/2024.jpg",
     slug: "koncert-noworoczny",
   },
   {
     id: 3,
-    title: "Za kulisami próby",
+    title: "Za kulisami",
+    subtitle: "Reportaż z prób",
     count: 12,
     image: "/images/timeline/2023.jpg",
     slug: "za-kulisami",
   },
 ];
 
-const EVENT_DURATION = 5;
+const EVENT_DURATION = 6;
 const NEWS_DURATION = 8;
-const GALLERY_DURATION = 6;
+const GALLERY_DURATION = 7;
 
-// Komponent pomocniczy do timera (Okrąg)
-const CircularTimer = ({
+// Pasek postępu (zamiast kółka - bardziej nowoczesny)
+const LinearTimer = ({
   duration,
   triggerKey,
 }: {
   duration: number;
   triggerKey: number;
 }) => (
-  <div className="relative w-6 h-6 flex items-center justify-center">
-    <svg className="absolute inset-0 w-full h-full -rotate-90">
-      <title>Timer</title>
-      <circle
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        strokeWidth="2"
-        fill="none"
-        className="opacity-20"
-      />
-      <motion.circle
-        key={triggerKey}
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        strokeWidth="2"
-        fill="none"
-        strokeDasharray="63"
-        strokeDashoffset="63"
-        animate={{ strokeDashoffset: 0 }}
-        transition={{ duration: duration, ease: "linear" }}
-      />
-    </svg>
+  <div className="absolute bottom-0 left-0 w-full h-1 bg-white/10 overflow-hidden z-20">
+    <motion.div
+      key={triggerKey}
+      className="h-full bg-arylideYellow"
+      initial={{ width: "0%" }}
+      animate={{ width: "100%" }}
+      transition={{ duration: duration, ease: "linear" }}
+    />
   </div>
 );
 
@@ -129,167 +129,170 @@ export const Events = () => {
   const [galleryIdx, setGalleryIdx] = useState(0);
 
   useEffect(() => {
-    const eventTimer = setInterval(
-      () => setEventIdx((p) => (p + 1) % eventsData.length),
-      EVENT_DURATION * 1000,
-    );
-    const newsTimer = setInterval(
-      () => setNewsIdx((p) => (p + 1) % newsData.length),
-      NEWS_DURATION * 1000,
-    );
-    const galleryTimer = setInterval(
-      () => setGalleryIdx((p) => (p + 1) % galleryData.length),
-      GALLERY_DURATION * 1000,
-    );
-
-    return () => {
-      clearInterval(eventTimer);
-      clearInterval(newsTimer);
-      clearInterval(galleryTimer);
-    };
+    const timers = [
+      setInterval(
+        () => setEventIdx((p) => (p + 1) % eventsData.length),
+        EVENT_DURATION * 1000,
+      ),
+      setInterval(
+        () => setNewsIdx((p) => (p + 1) % newsData.length),
+        NEWS_DURATION * 1000,
+      ),
+      setInterval(
+        () => setGalleryIdx((p) => (p + 1) % galleryData.length),
+        GALLERY_DURATION * 1000,
+      ),
+    ];
+    return () => timers.forEach(clearInterval);
   }, []);
 
   return (
     <section className="py-24 bg-raisinBlack overflow-hidden">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col items-center text-center mb-16">
-          <span className="text-arylideYellow text-xs font-bold tracking-[0.2em] uppercase mb-4 block">
-            Na bieżąco
-          </span>
-          <h2 className="font-youngest text-5xl md:text-7xl text-white leading-tight">
-            Puls fundacji
-          </h2>
+      <div className="container mx-auto px-4 max-w-350">
+        {/* NAGŁÓWEK */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 border-b border-white/10 pb-8">
+          <div>
+            <span className="text-arylideYellow text-xs font-bold tracking-[0.3em] uppercase mb-4 block animate-fade-up">
+              Aktualności
+            </span>
+            <h2 className="font-youngest text-5xl md:text-7xl text-white leading-[0.8] animate-fade-up [animation-delay:100ms]">
+              Puls Fundacji
+            </h2>
+          </div>
+          <Link
+            href="/aktualnosci"
+            className="group flex items-center gap-3 text-white text-sm font-bold uppercase tracking-widest hover:text-arylideYellow transition-colors animate-fade-up [animation-delay:200ms]"
+          >
+            Zobacz wszystko
+            <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:border-arylideYellow group-hover:bg-arylideYellow group-hover:text-raisinBlack transition-all">
+              <ArrowRight className="w-4 h-4" />
+            </div>
+          </Link>
         </div>
 
-        {/* --- GRID --- */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* 1. WYDARZENIA */}
-          <div className="flex flex-col h-full">
-            <div className="flex items-center gap-3 mb-6 text-arylideYellow opacity-80">
-              <div className="relative flex items-center justify-center">
-                <CircularTimer
-                  duration={EVENT_DURATION}
-                  triggerKey={eventIdx}
+        {/* --- BENTO GRID LAYOUT --- */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-auto lg:h-150">
+          {/* 1. DUŻY PLAKAT (WYDARZENIA) - LEWA STRONA (5 KOLUMN) */}
+          <div className="lg:col-span-5 relative group overflow-hidden rounded-sm bg-[#1a1a1a] h-125 lg:h-auto border border-white/10">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={eventsData[eventIdx].id}
+                initial={{ opacity: 0, scale: 1.05 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.7 }}
+                className="absolute inset-0 w-full h-full"
+              >
+                {/* Obrazek tła */}
+                <Image
+                  src={eventsData[eventIdx].image}
+                  alt={eventsData[eventIdx].title}
+                  fill
+                  className="object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-500"
                 />
-                <Calendar className="absolute w-3 h-3" strokeWidth={2} />
-              </div>
-              <h3 className="text-xs font-bold tracking-widest uppercase">
-                Kalendarz
-              </h3>
-            </div>
 
-            <div className="relative bg-white/5 border border-white/10 rounded-sm p-8 flex-1 min-h-87.5 flex flex-col justify-center overflow-hidden group">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={eventsData[eventIdx].id}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.05 }}
-                  transition={{ duration: 0.5 }}
-                  className="flex flex-col items-center text-center w-full absolute inset-0 justify-center p-8"
-                >
-                  <div className="mb-6 border border-white/20 p-4 rounded-sm w-24 h-24 flex flex-col items-center justify-center bg-white/5 group-hover:border-arylideYellow transition-colors">
-                    <span className="font-youngest text-4xl text-arylideYellow">
-                      {eventsData[eventIdx].day}
-                    </span>
-                    <span className="text-xs font-bold uppercase text-white tracking-widest">
-                      {eventsData[eventIdx].month}
-                    </span>
+                {/* Gradient */}
+                <div className="absolute inset-0 bg-linear-to-t from-raisinBlack via-raisinBlack/40 to-transparent" />
+
+                {/* Content */}
+                <div className="absolute inset-0 p-8 flex flex-col justify-between z-10">
+                  {/* Top: Badge */}
+                  <div className="flex justify-between items-start">
+                    <div className="bg-arylideYellow text-raisinBlack px-4 py-2 font-bold uppercase tracking-widest text-xs rounded-sm">
+                      Najbliższy Koncert
+                    </div>
+                    <div className="text-white/20 group-hover:text-white transition-colors">
+                      <ArrowUpRight className="w-8 h-8" />
+                    </div>
                   </div>
-                  <h4 className="text-2xl text-white font-bold mb-3 group-hover:text-arylideYellow transition-colors">
-                    {eventsData[eventIdx].title}
-                  </h4>
-                  <p className="text-philippineSilver text-sm">
-                    {eventsData[eventIdx].location}
-                  </p>
-                  <Link
-                    href={`/wydarzenia/${eventsData[eventIdx].id}`}
-                    className="mt-8 text-xs font-bold text-white border-b border-white/20 pb-1 hover:border-arylideYellow hover:text-arylideYellow transition-all"
-                  >
-                    SZCZEGÓŁY
-                  </Link>
-                </motion.div>
-              </AnimatePresence>
-            </div>
+
+                  {/* Bottom: Info */}
+                  <div>
+                    <div className="flex items-baseline gap-2 mb-2 text-arylideYellow">
+                      <span className="text-6xl font-youngest">
+                        {eventsData[eventIdx].day}
+                      </span>
+                      <span className="text-xl font-bold uppercase tracking-widest">
+                        {eventsData[eventIdx].month}
+                      </span>
+                    </div>
+                    <h3 className="text-3xl md:text-4xl font-bold text-white mb-2 leading-tight group-hover:text-arylideYellow transition-colors">
+                      {eventsData[eventIdx].title}
+                    </h3>
+                    <div className="flex items-center gap-2 text-philippineSilver text-sm">
+                      <Calendar className="w-4 h-4" />
+                      {eventsData[eventIdx].location}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Link nakładka */}
+            <Link
+              href={`/wydarzenia/${eventsData[eventIdx].id}`}
+              className="absolute inset-0 z-20"
+              aria-label="Zobacz wydarzenie"
+            />
+            <LinearTimer duration={EVENT_DURATION} triggerKey={eventIdx} />
           </div>
 
-          {/* 2. AKTUALNOŚCI */}
-          <div className="flex flex-col h-full">
-            <div className="flex items-center gap-3 mb-6 text-arylideYellow opacity-80">
-              <div className="relative flex items-center justify-center">
-                <CircularTimer duration={NEWS_DURATION} triggerKey={newsIdx} />
-                <Newspaper className="absolute w-3 h-3" strokeWidth={2} />
-              </div>
-              <h3 className="text-xs font-bold tracking-widest uppercase">
-                Aktualności
-              </h3>
-            </div>
-
-            <div className="relative rounded-sm border border-white/10 flex-1 min-h-87.5 overflow-hidden group bg-raisinBlack">
+          {/* PRAWA KOLUMNA (NEWSY I GALERIA) (7 KOLUMN) */}
+          <div className="lg:col-span-7 flex flex-col gap-6">
+            {/* 2. AKTUALNOŚCI - GÓRA (POZIOMY KAFILEK) */}
+            <div className="relative flex-1 bg-white/5 border border-white/10 rounded-sm overflow-hidden group min-h-62.5">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={newsData[newsIdx].id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.8 }}
-                  className="absolute inset-0 w-full h-full bg-raisinBlack"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.5 }}
+                  className="absolute inset-0 flex flex-col md:flex-row h-full"
                 >
-                  {/* Obrazek z zoomem */}
-                  <motion.div
-                    className="absolute inset-0 w-full h-full"
-                    initial={{ scale: 1 }}
-                    animate={{ scale: 1.1 }}
-                    transition={{ duration: NEWS_DURATION, ease: "linear" }}
-                  >
+                  {/* Zdjęcie po lewej (Mobile: góra) */}
+                  <div className="relative w-full md:w-2/5 h-40 md:h-full overflow-hidden">
                     <Image
                       src={newsData[newsIdx].image}
                       alt={newsData[newsIdx].title}
                       fill
-                      className="object-cover"
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
                     />
-                  </motion.div>
+                  </div>
 
-                  <div className="absolute inset-0 bg-linear-to-t from-raisinBlack/95 via-raisinBlack/50 to-transparent" />
-
-                  <div className="absolute inset-0 p-8 flex flex-col justify-end">
-                    <span className="text-xs text-arylideYellow mb-2 block">
-                      {newsData[newsIdx].date}
-                    </span>
-                    <h4 className="text-xl text-white font-bold mb-3 leading-tight group-hover:text-arylideYellow transition-colors">
+                  {/* Treść po prawej */}
+                  <div className="p-6 md:p-8 flex flex-col justify-center w-full md:w-3/5 bg-raisinBlack md:bg-transparent">
+                    <div className="flex items-center gap-3 mb-3">
+                      <Newspaper className="w-4 h-4 text-arylideYellow" />
+                      <span className="text-xs font-bold text-white/40 uppercase tracking-widest">
+                        Aktualności
+                      </span>
+                      <span className="w-1 h-1 bg-white/20 rounded-full" />
+                      <span className="text-xs text-white/40">
+                        {newsData[newsIdx].date}
+                      </span>
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-3 leading-snug group-hover:text-arylideYellow transition-colors line-clamp-2">
                       {newsData[newsIdx].title}
-                    </h4>
-                    <p className="text-philippineSilver text-sm line-clamp-3 mb-6">
+                    </h3>
+                    <p className="text-philippineSilver text-sm line-clamp-2 mb-6">
                       {newsData[newsIdx].excerpt}
                     </p>
-                    <Link
-                      href={`/aktualnosci/${newsData[newsIdx].slug}`}
-                      className="inline-flex items-center gap-2 text-xs font-bold text-white uppercase tracking-widest hover:text-arylideYellow transition-colors"
-                    >
-                      Czytaj dalej <ArrowRight className="w-4 h-4" />
-                    </Link>
+                    <div className="text-xs font-bold uppercase tracking-widest text-white border-b border-white/20 pb-1 self-start group-hover:border-arylideYellow transition-colors">
+                      Czytaj Więcej
+                    </div>
                   </div>
                 </motion.div>
               </AnimatePresence>
-            </div>
-          </div>
-
-          {/* 3. GALERIA */}
-          <div className="flex flex-col h-full">
-            <div className="flex items-center gap-3 mb-6 text-arylideYellow opacity-80">
-              <div className="relative flex items-center justify-center">
-                <CircularTimer
-                  duration={GALLERY_DURATION}
-                  triggerKey={galleryIdx}
-                />
-                <Camera className="absolute w-3 h-3" strokeWidth={2} />
-              </div>
-              <h3 className="text-xs font-bold tracking-widest uppercase">
-                Galeria
-              </h3>
+              <Link
+                href={`/aktualnosci/${newsData[newsIdx].slug}`}
+                className="absolute inset-0 z-20"
+              />
+              <LinearTimer duration={NEWS_DURATION} triggerKey={newsIdx} />
             </div>
 
-            <div className="relative rounded-sm border border-white/10 flex-1 min-h-87.5 overflow-hidden group bg-white/5">
+            {/* 3. GALERIA - DÓŁ (SZEROKI KAFILEK) */}
+            <div className="relative flex-1 bg-white/5 border border-white/10 rounded-sm overflow-hidden group min-h-62.5">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={galleryData[galleryIdx].id}
@@ -297,47 +300,49 @@ export const Events = () => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.8 }}
-                  className="absolute inset-0 w-full h-full bg-raisinBlack"
+                  className="absolute inset-0 w-full h-full"
                 >
-                  <div className="absolute inset-4 overflow-hidden rounded-sm border border-white/5">
-                    <motion.div
-                      className="absolute inset-0 w-full h-full"
-                      initial={{ scale: 1 }}
-                      animate={{ scale: 1.15 }}
-                      transition={{
-                        duration: GALLERY_DURATION,
-                        ease: "linear",
-                      }}
-                    >
-                      <Image
-                        src={galleryData[galleryIdx].image}
-                        alt={galleryData[galleryIdx].title}
-                        fill
-                        className="object-cover"
-                      />
-                    </motion.div>
+                  {/* Tło full size */}
+                  <Image
+                    src={galleryData[galleryIdx].image}
+                    alt={galleryData[galleryIdx].title}
+                    fill
+                    className="object-cover transition-transform duration-1000 group-hover:scale-105 opacity-50 group-hover:opacity-40"
+                  />
+                  <div className="absolute inset-0 bg-linear-to-r from-raisinBlack via-raisinBlack/60 to-transparent" />
 
-                    <div className="absolute inset-0 bg-raisinBlack/20 group-hover:bg-transparent transition-colors" />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-14 h-14 rounded-full bg-raisinBlack/60 backdrop-blur-sm flex items-center justify-center text-white border border-white/20 shadow-xl group-hover:scale-110 group-hover:bg-arylideYellow group-hover:text-raisinBlack transition-all duration-300">
-                        <Camera className="w-6 h-6" strokeWidth={1.5} />
+                  {/* Content - wyśrodkowany pionowo po lewej */}
+                  <div className="absolute inset-0 p-8 flex flex-col justify-center items-start z-10">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-arylideYellow border border-white/10">
+                        <Camera className="w-5 h-5" />
                       </div>
+                      <span className="text-xs font-bold text-white uppercase tracking-widest">
+                        Ostatnie albumy
+                      </span>
                     </div>
-                  </div>
 
-                  <div className="absolute bottom-6 left-0 w-full text-center z-20 px-4">
-                    <h4 className="text-white font-bold text-lg mb-1">
+                    <h3 className="text-3xl md:text-4xl font-youngest text-white mb-1">
                       {galleryData[galleryIdx].title}
-                    </h4>
-                    <Link
-                      href={`/galeria/${galleryData[galleryIdx].slug}`}
-                      className="text-xs text-philippineSilver uppercase tracking-wider hover:text-arylideYellow transition-colors"
-                    >
+                    </h3>
+                    <p className="text-philippineSilver text-sm uppercase tracking-widest mb-6">
+                      {galleryData[galleryIdx].subtitle}
+                    </p>
+
+                    <div className="px-4 py-2 border border-white/20 rounded-full text-xs font-bold text-white hover:bg-white hover:text-raisinBlack transition-all">
                       Zobacz {galleryData[galleryIdx].count} zdjęć
-                    </Link>
+                    </div>
                   </div>
                 </motion.div>
               </AnimatePresence>
+              <Link
+                href={`/galeria/${galleryData[galleryIdx].slug}`}
+                className="absolute inset-0 z-20"
+              />
+              <LinearTimer
+                duration={GALLERY_DURATION}
+                triggerKey={galleryIdx}
+              />
             </div>
           </div>
         </div>
