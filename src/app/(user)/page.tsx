@@ -31,7 +31,7 @@ const HOME_QUERY = defineQuery(`
         }
       },
 
-      // 2. DANE DLA PARTNERS (z pobieraniem logo)
+      // 2. DANE DLA PARTNERS
       _type == "partners" => {
         eyebrow,
         title,
@@ -47,7 +47,7 @@ const HOME_QUERY = defineQuery(`
         }
       },
 
-      // 3. DANE DLA ABOUT (z pobieraniem zdjęcia i ikon)
+      // 3. DANE DLA ABOUT
       _type == "about" => {
         eyebrow,
         headingLine1,
@@ -68,7 +68,7 @@ const HOME_QUERY = defineQuery(`
         }
       },
 
-      // 4. DANE DLA TIMELINE (z pobieraniem zdjęć)
+      // 4. DANE DLA TIMELINE
       _type == "timeline" => {
         settings,
         items[]{
@@ -81,6 +81,34 @@ const HOME_QUERY = defineQuery(`
             hotspot,
             crop
           }
+        }
+      },
+
+      // 5. DANE DLA SEKCJI WSPARCIE (SUPPORT)
+      _type == "support" => {
+        eyebrow,
+        heading, // Tablica Portable Text (z highlightem)
+        description,
+        mainImage {
+          asset->,
+          hotspot,
+          crop
+        },
+        accentImage {
+          asset->,
+          hotspot,
+          crop
+        },
+        options[]{
+          _key,
+          number,
+          title, // Tablica Portable Text
+          text,
+          actionType,
+          copyValue,
+          copyLabel,
+          linkUrl,
+          linkLabel
         }
       }
     }
@@ -114,6 +142,11 @@ export default async function Home() {
     (block: { _type: string }) => block._type === "timeline",
   );
 
+  // 5. Support (Wsparcie)
+  const supportData = data?.content?.find(
+    (block: { _type: string }) => block._type === "support",
+  );
+
   return (
     <main className="bg-raisinBlack min-h-screen">
       {/* Sekcja Hero (Dynamiczna) */}
@@ -128,10 +161,12 @@ export default async function Home() {
       {/* Sekcja Oś Czasu (Dynamiczna) */}
       <Timeline data={timelineData} />
 
-      {/* --- PONIŻSZE SEKCJE SĄ JESZCZE STATYCZNE (HARDCODED) --- */}
-      {/* Będziemy je przenosić do Sanity w kolejnych krokach */}
+      {/* Sekcja Wydarzeń (Statyczna - placeholder do czasu wdrożenia modułu Eventów) */}
+      {/* Jeśli w przyszłości włączymy blok 'eventsSection' w Sanity, pobierzemy tu dane */}
       <Events />
-      <Support />
+
+      {/* Sekcja Wsparcie (Dynamiczna) */}
+      <Support data={supportData} />
     </main>
   );
 }

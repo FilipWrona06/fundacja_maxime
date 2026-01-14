@@ -26,6 +26,7 @@ export const page = defineType({
         { type: "partners" },
         { type: "about" },
         { type: "timeline" },
+        { type: "support" },
       ],
     }),
   ],
