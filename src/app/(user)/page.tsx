@@ -1,37 +1,58 @@
+import type { Metadata } from "next";
+import dynamic from "next/dynamic"; // <--- 1. IMPORT DYNAMICZNY
+import Script from "next/script";
 import { defineQuery } from "next-sanity";
 
-// Importy komponentów
-import { About } from "@/components/home/About";
-import { Events } from "@/components/home/Events";
+// --- IMPORTY KOMPONENTÓW ---
+
+// 1. KRYTYCZNE (Above the Fold) - Importujemy normalnie, żeby były natychmiast
 import { Hero } from "@/components/home/Hero";
-import { Partners } from "@/components/home/Partners";
-import { Support } from "@/components/home/Support";
-import { Timeline } from "@/components/home/Timeline";
+import { Partners } from "@/components/home/Partners"; // Partners są zaraz pod Hero, warto je mieć od razu
+
+// 2. NIEKRYTYCZNE (Below the Fold) - Importujemy dynamicznie (Lazy Load)
+// Next.js podzieli te komponenty na osobne pliki JS i załaduje je dopiero, gdy będą potrzebne
+const About = dynamic(() =>
+  import("@/components/home/About").then((mod) => mod.About),
+);
+const Timeline = dynamic(() =>
+  import("@/components/home/Timeline").then((mod) => mod.Timeline),
+);
+const Events = dynamic(() =>
+  import("@/components/home/Events").then((mod) => mod.Events),
+);
+const Support = dynamic(() =>
+  import("@/components/home/Support").then((mod) => mod.Support),
+);
+
 import { sanityFetch } from "@/sanity/lib/live";
 
-// --- GROQ QUERY ---
-// Jedno zapytanie pobierające całą strukturę strony Home
+// --- TYPY ---
+interface SanityBlock {
+  _type: string;
+  _key: string;
+  // biome-ignore lint/suspicious/noExplicitAny: Dane z CMS są dynamiczne
+  [key: string]: any;
+}
+
+// --- GROQ QUERY (Bez zmian - jest już perfekcyjne) ---
 const HOME_QUERY = defineQuery(`
   *[_type == "page" && slug.current == "home"][0]{
+    title,
+    "description": description,
+    "ogImage": content[_type == "about"][0].image.asset->url,
+
     content[]{
       _type,
       _key,
       
-      // 1. DANE DLA HERO
       _type == "hero" => {
         badge,
         headingLine1,
         headingLine2,
         description,
-        buttons[]{
-          _key,
-          title,
-          link,
-          style
-        }
+        buttons[]{ _key, title, link, style }
       },
 
-      // 2. DANE DLA PARTNERS
       _type == "partners" => {
         eyebrow,
         title,
@@ -39,36 +60,21 @@ const HOME_QUERY = defineQuery(`
         items[]{
           _key,
           name,
-          logo {
-            asset->,
-            hotspot,
-            crop
-          }
+          logo { asset->{ _id, url, metadata { lqip, dimensions } }, hotspot, crop }
         }
       },
 
-      // 3. DANE DLA ABOUT
       _type == "about" => {
         eyebrow,
         headingLine1,
         headingLine2,
         description,
-        image {
-          asset->,
-          hotspot,
-          crop
-        },
+        image { asset->{ _id, url, metadata { lqip, dimensions } }, hotspot, crop },
         ctaLink,
         ctaText,
-        values[]{
-          _key,
-          title,
-          description,
-          icon
-        }
+        values[]{ _key, title, description, icon }
       },
 
-      // 4. DANE DLA TIMELINE
       _type == "timeline" => {
         settings,
         items[]{
@@ -76,33 +82,20 @@ const HOME_QUERY = defineQuery(`
           year,
           title,
           description,
-          image {
-            asset->,
-            hotspot,
-            crop
-          }
+          image { asset->{ _id, url, metadata { lqip, dimensions } }, hotspot, crop }
         }
       },
 
-      // 5. DANE DLA SEKCJI WSPARCIE (SUPPORT)
-      _type == "support" => {
+      _type == "supportSection" => {
         eyebrow,
-        heading, // Tablica Portable Text (z highlightem)
+        heading,
         description,
-        mainImage {
-          asset->,
-          hotspot,
-          crop
-        },
-        accentImage {
-          asset->,
-          hotspot,
-          crop
-        },
+        mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, hotspot, crop },
+        accentImage { asset->{ _id, url, metadata { lqip, dimensions } }, hotspot, crop },
         options[]{
           _key,
           number,
-          title, // Tablica Portable Text
+          title,
           text,
           actionType,
           copyValue,
@@ -115,58 +108,108 @@ const HOME_QUERY = defineQuery(`
   }
 `);
 
-export default async function Home() {
-  // Pobieramy dane z Sanity (z obsługą Live Content dla podglądu na żywo)
+// --- METADATA ---
+export async function generateMetadata(): Promise<Metadata> {
   const { data } = await sanityFetch({ query: HOME_QUERY });
 
-  // --- FILTROWANIE BLOKÓW ---
-  // Używamy typu { _type: string } aby uniknąć błędu 'no-explicit-any' w linterze
+  const title = data?.title || "Fundacja Maxime - Z pasji do muzyki";
+  const description =
+    data?.description ||
+    "Wspieramy młode talenty, organizujemy koncerty i łączymy pokolenia poprzez piękno dźwięku. Dołącz do nas!";
+  const ogImage = data?.ogImage || "/wideo-poster.webp";
 
-  // 1. Hero
-  const heroData = data?.content?.find(
-    (block: { _type: string }) => block._type === "hero",
+  return {
+    title: title,
+    description: description,
+    openGraph: {
+      title: title,
+      description: description,
+      type: "website",
+      locale: "pl_PL",
+      url: "https://fundacjamaxime.pl",
+      siteName: "Fundacja Maxime",
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: title,
+      description: description,
+      images: [ogImage],
+    },
+  };
+}
+
+// --- GŁÓWNY KOMPONENT ---
+export default async function Home() {
+  const { data } = await sanityFetch({ query: HOME_QUERY });
+
+  if (!data?.content) {
+    return <main className="bg-raisinBlack min-h-screen" />;
+  }
+
+  // Mapa sekcji (O(n))
+  const sections = data.content.reduce(
+    (acc: Record<string, SanityBlock>, block: SanityBlock) => {
+      acc[block._type] = block;
+      return acc;
+    },
+    {},
   );
 
-  // 2. Partners
-  const partnersData = data?.content?.find(
-    (block: { _type: string }) => block._type === "partners",
-  );
-
-  // 3. About
-  const aboutData = data?.content?.find(
-    (block: { _type: string }) => block._type === "about",
-  );
-
-  // 4. Timeline
-  const timelineData = data?.content?.find(
-    (block: { _type: string }) => block._type === "timeline",
-  );
-
-  // 5. Support (Wsparcie)
-  const supportData = data?.content?.find(
-    (block: { _type: string }) => block._type === "support",
-  );
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NGO",
+    name: "Fundacja Maxime",
+    url: "https://fundacjamaxime.pl",
+    logo: "https://fundacjamaxime.pl/logo.png",
+    description:
+      "Wspieramy młode talenty, organizujemy koncerty i łączymy pokolenia poprzez piękno dźwięku.",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "ul. Muzyczna 14/3",
+      addressLocality: "Katowice",
+      postalCode: "40-001",
+      addressCountry: "PL",
+    },
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: "+48 123 456 789",
+      contactType: "customer service",
+      areaServed: "PL",
+      availableLanguage: "Polish",
+    },
+    sameAs: [
+      "https://facebook.com/fundacjamaxime",
+      "https://instagram.com/fundacjamaxime",
+    ],
+  };
 
   return (
-    <main className="bg-raisinBlack min-h-screen">
-      {/* Sekcja Hero (Dynamiczna) */}
-      <Hero data={heroData} />
+    <>
+      <Script
+        id="json-ld"
+        type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD standard
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
-      {/* Sekcja Partnerzy (Dynamiczna) */}
-      <Partners data={partnersData} />
-
-      {/* Sekcja O Nas (Dynamiczna) */}
-      <About data={aboutData} />
-
-      {/* Sekcja Oś Czasu (Dynamiczna) */}
-      <Timeline data={timelineData} />
-
-      {/* Sekcja Wydarzeń (Statyczna - placeholder do czasu wdrożenia modułu Eventów) */}
-      {/* Jeśli w przyszłości włączymy blok 'eventsSection' w Sanity, pobierzemy tu dane */}
-      <Events />
-
-      {/* Sekcja Wsparcie (Dynamiczna) */}
-      <Support data={supportData} />
-    </main>
+      <main className="bg-raisinBlack min-h-screen">
+        {/* HERO i PARTNERS są ładowane natychmiast (Critical CSS/JS) */}
+        {sections.hero && <Hero data={sections.hero} />}
+        {sections.partners && <Partners data={sections.partners} />}
+        {/* Reszta sekcji ładuje się asynchronicznie (Lazy Loading) */}
+        {sections.about && <About data={sections.about} />}
+        {sections.timeline && <Timeline data={sections.timeline} />}
+        <Events /> {/* Statyczne */}
+        {sections.supportSection && <Support data={sections.supportSection} />}
+      </main>
+    </>
   );
 }
