@@ -79,4 +79,31 @@
   .delay-500 {
     animation-delay: 500ms;
   }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-out forwards;
+  }
+
+  /* Progress Bar Fill */
+  @keyframes progress-fill {
+    from {
+      width: 0%;
+    }
+    to {
+      width: 100%;
+    }
+  }
+  .animate-progress-fill {
+    animation: progress-fill 5s linear forwards; /* 5s = czas trwania slajdu */
+  }
 }
