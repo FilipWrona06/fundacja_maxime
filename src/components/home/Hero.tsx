@@ -1,13 +1,6 @@
-"use client";
-
-import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
-import BackgroundVideo from "next-video/background-video";
-import { useRef } from "react";
-
-// Import wideo na sztywno
-import backgroundVideo from "../../../videos/background-video.mp4";
+import { HeroVideo } from "./HeroVideo"; // <--- Importujemy komponent kliencki
 
 // Typy danych z Sanity
 interface HeroProps {
@@ -26,8 +19,6 @@ interface HeroProps {
 }
 
 export const Hero = ({ data }: HeroProps) => {
-  const ref = useRef<HTMLDivElement>(null);
-
   const {
     badge = "Fundacja Maxime",
     headingLine1 = "Z pasji",
@@ -36,74 +27,46 @@ export const Hero = ({ data }: HeroProps) => {
     buttons = [],
   } = data || {};
 
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"],
-  });
-
-  const smoothProgress = useSpring(scrollYProgress, {
-    mass: 0.1,
-    stiffness: 80,
-    damping: 20,
-    restDelta: 0.001,
-  });
-
-  const backgroundY = useTransform(smoothProgress, [0, 1], ["0%", "15%"]);
-  const textY = useTransform(smoothProgress, [0, 1], ["0%", "25%"]);
-  const opacity = useTransform(smoothProgress, [0, 0.9], [1, 0.4]);
-
   return (
     <section
-      ref={ref}
+      aria-label="Sekcja powitalna"
       className="relative h-screen w-full overflow-hidden flex items-center justify-center bg-raisinBlack"
     >
-      {/* --- VIDEO --- */}
-      <motion.div
-        className="absolute inset-0 z-0 will-change-transform"
-        style={{
-          y: backgroundY,
-          opacity: useTransform(smoothProgress, [0, 0.9], [1, 0.3]),
-        }}
-      >
+      {/* --- VIDEO TŁO --- */}
+      {/* Wrapper jest na serwerze, ale środek (Wideo) ładuje się po stronie klienta */}
+      <div className="absolute inset-0 z-0" aria-hidden="true">
+        {/* Overlay dla kontrastu (Renderowany na serwerze!) */}
         <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,rgba(38,38,38,0.4)_0%,rgba(38,38,38,0.75)_100%)]" />
-        <BackgroundVideo
-          src={backgroundVideo}
-          className="w-full h-full object-cover"
-          style={{
-            position: "absolute",
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            border: "none",
-            zIndex: -1,
-          }}
-        />
-      </motion.div>
 
-      {/* --- TREŚĆ --- */}
-      <motion.div
-        className="relative z-20 container mx-auto px-4 text-center flex flex-col items-center will-change-transform"
-        style={{ y: textY, opacity: opacity }}
-      >
-        <div className="animate-fade-up">
-          <span className="inline-block py-1.5 px-3 rounded-full border border-philippineSilver/30 bg-white/5 backdrop-blur-sm text-philippineSilver text-xs sm:text-[0.8rem] md:text-[0.9rem] font-montserrat tracking-[0.2em]">
+        {/* Wyspa Kliencka */}
+        <HeroVideo />
+      </div>
+
+      {/* --- TREŚĆ (Server Side Rendered) --- */}
+      {/* Wszystko poniżej to czysty HTML z serwera = Idealne SEO i LCP */}
+      <div className="relative z-20 container mx-auto px-4 text-center flex flex-col items-center">
+        {/* Badge */}
+        <div className="animate-fade-in-up">
+          <span className="inline-block py-1.5 px-3 rounded-full border border-philippineSilver/30 bg-white/5 backdrop-blur-sm text-philippineSilver text-xs sm:text-[0.8rem] md:text-[0.9rem] font-montserrat tracking-[0.2em] uppercase">
             {badge}
           </span>
         </div>
 
-        <h1 className="animate-fade-up delay-200 font-youngest text-[4.78rem] sm:text-[8rem] md:text-[10rem] text-arylideYellow mb-2 drop-shadow-lg leading-tight">
+        {/* Nagłówek H1 */}
+        <h1 className="animate-fade-in-up delay-200 font-youngest text-[4.78rem] sm:text-[8rem] md:text-[10rem] text-arylideYellow mb-2 drop-shadow-lg leading-tight select-none">
           <span className="block">{headingLine1}</span>
           <span className="block -mt-2 md:-mt-6">{headingLine2}</span>
         </h1>
 
-        <p className="animate-fade-up delay-300 font-montserrat text-[0.97rem] sm:text-[1.05rem] md:text-[1.15rem] max-w-lg leading-relaxed mt-10 mb-10 text-white/90">
+        {/* Opis */}
+        <p className="animate-fade-in-up delay-300 font-montserrat text-[0.97rem] sm:text-[1.05rem] md:text-[1.15rem] max-w-lg leading-relaxed mt-10 mb-10 text-white/90">
           {description}
         </p>
 
-        <div className="animate-fade-up delay-500 flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
+        {/* Przyciski */}
+        <div className="animate-fade-in-up delay-500 flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
           {buttons.length > 0 ? (
             buttons.map((btn) => {
-              // POPRAWKA: Używamy startsWith, aby obsłużyć "brudne" stringi w trybie Visual Editing (Stega)
               const isPrimary = btn.style?.startsWith("primary");
 
               return (
@@ -112,8 +75,8 @@ export const Hero = ({ data }: HeroProps) => {
                   href={btn.link || "#"}
                   className={
                     isPrimary
-                      ? "group relative px-8 py-4 rounded-full bg-arylideYellow text-raisinBlack font-bold text-sm tracking-wide overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(239,203,111,0.4)] w-auto min-w-55 text-center"
-                      : "group px-8 py-4 rounded-full border border-white/20 bg-white/5 text-white font-medium text-sm tracking-wide backdrop-blur-md transition-all duration-300 hover:bg-white hover:text-raisinBlack hover:border-white w-auto min-w-55 text-center"
+                      ? "group relative px-8 py-4 rounded-full bg-arylideYellow text-raisinBlack font-bold text-sm tracking-wide overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(239,203,111,0.4)] w-auto min-w-55 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-raisinBlack"
+                      : "group px-8 py-4 rounded-full border border-white/20 bg-white/5 text-white font-medium text-sm tracking-wide backdrop-blur-md transition-all duration-300 hover:bg-white hover:text-raisinBlack hover:border-white w-auto min-w-55 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arylideYellow focus-visible:ring-offset-2 focus-visible:ring-offset-raisinBlack"
                   }
                 >
                   {isPrimary ? (
@@ -128,7 +91,7 @@ export const Hero = ({ data }: HeroProps) => {
               );
             })
           ) : (
-            // Domyślne przyciski
+            // Fallback
             <>
               <Link
                 href="/wydarzenia"
@@ -145,15 +108,17 @@ export const Hero = ({ data }: HeroProps) => {
             </>
           )}
         </div>
-      </motion.div>
+      </div>
 
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce"
-        style={{ opacity: useTransform(smoothProgress, [0, 0.2], [1, 0]) }}
+      {/* Scroll Indicator */}
+      <div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce pointer-events-none animate-fade-in-up delay-500"
+        aria-hidden="true"
       >
         <ChevronDown className="w-10 h-10 text-white/75" strokeWidth={1} />
-      </motion.div>
+      </div>
 
+      {/* Gradient dolny */}
       <div className="absolute bottom-0 left-0 w-full h-100 bg-linear-to-t from-raisinBlack via-raisinBlack/50 to-transparent z-10 pointer-events-none" />
     </section>
   );

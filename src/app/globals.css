@@ -15,7 +15,7 @@
   /* --- Easing --- */
   --ease-wabi: cubic-bezier(0.25, 1, 0.5, 1); /* Płynne, naturalne wyhamowanie */
 
-  /* --- ANIMACJE --- */
+  /* --- ANIMACJE (Tailwind Utilities) --- */
 
   /* 1. Shine (Lśnienie tekstu w CTA) */
   --animate-shine: shine 8s linear infinite;
@@ -28,20 +28,6 @@
       background-position: -200% center;
     }
   }
-
-  /* 2. Fade Up (Używane w Hero do wjazdu napisów) */
-  --animate-fade-up: fade-up 0.8s var(--ease-wabi) forwards;
-
-  @keyframes fade-up {
-    0% {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
 }
 
 @layer base {
@@ -49,13 +35,48 @@
     @apply bg-raisinBlack text-white font-montserrat antialiased selection:bg-arylideYellow selection:text-raisinBlack;
   }
 
-  /* Opcjonalne: Poprawa renderowania fontów na ciemnym tle */
+  /* Poprawa renderowania fontów na ciemnym tle */
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    @apply text-balance; /* Lepsze łamanie linii w nagłówkach */
+    @apply text-balance;
+  }
+}
+
+/* --- ANIMACJE DLA SERVER COMPONENTS (Hero) --- */
+/* Dodajemy to w layer utilities, aby współpracowało z Tailwindem */
+@layer utilities {
+  @keyframes fade-in-up {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-up {
+    /* Używamy forwards, aby element został widoczny po zakończeniu animacji */
+    animation: fade-in-up 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    opacity: 0; /* Startujemy z ukrytym elementem (zapobiega mignięciu) */
+  }
+
+  /* Precyzyjne opóźnienia */
+  .delay-100 {
+    animation-delay: 100ms;
+  }
+  .delay-200 {
+    animation-delay: 200ms;
+  }
+  .delay-300 {
+    animation-delay: 300ms;
+  }
+  .delay-500 {
+    animation-delay: 500ms;
   }
 }

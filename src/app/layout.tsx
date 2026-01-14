@@ -1,5 +1,3 @@
-// --- START OF FILE src/app/layout.tsx ---
-
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import localFont from "next/font/local";
@@ -11,16 +9,14 @@ export const metadata: Metadata = {
     "Wspieramy młode talenty, organizujemy koncerty i łączymy pokolenia poprzez piękno dźwięku.",
 };
 
-// Konfiguracja fontu Google
 const montserrat = Montserrat({
   subsets: ["latin-ext"],
   variable: "--font-montserrat",
   display: "swap",
 });
 
-// Konfiguracja fontu lokalnego
 const fontYoungest = localFont({
-  src: "../fonts/the-youngest-script.woff2", // Upewnij się, że ścieżka do pliku jest poprawna
+  src: "../fonts/the-youngest-script.woff2",
   variable: "--font-youngest",
   display: "swap",
 });
@@ -33,17 +29,9 @@ export default function RootLayout({
   return (
     <html lang="pl">
       <body
-        className={`${montserrat.variable} ${fontYoungest.variable} bg-raisinBlack text-white antialiased`}
+        // Dodajemy w-full i overflow-x-hidden, aby zapobiec problemom z paskiem przewijania
+        className={`${montserrat.variable} ${fontYoungest.variable} bg-raisinBlack text-white antialiased w-full overflow-x-hidden`}
       >
-        {/* 
-          Tutaj renderujemy {children}. 
-          
-          Jeśli wejdziesz na stronę główną: 
-          Next.js wstawi tu Layout z folderu (user), który ma Navbar i Footer.
-          
-          Jeśli wejdziesz do Sanity Studio:
-          Next.js wstawi tu stronę Studia, bez Navbara i Footera.
-        */}
         {children}
       </body>
     </html>

@@ -1,5 +1,5 @@
 import { draftMode } from "next/headers";
-import { VisualEditing } from "next-sanity/visual-editing"; // <--- ZMIANA TUTAJ
+import { VisualEditing } from "next-sanity/visual-editing";
 
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
@@ -10,31 +10,27 @@ export default async function UserLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Sprawdzamy, czy tryb Draft (edycji) jest włączony
   const { isEnabled: isDraftMode } = await draftMode();
 
   return (
-    <div className="flex min-h-screen flex-col">
-      {/* Navbar na samej górze */}
+    // DODANO: w-full, aby kontener zajmował 100% szerokości
+    <div className="flex min-h-screen flex-col w-full relative">
+      {/* Navbar */}
       <Navbar />
 
-      {/* Treść strony */}
-      <main className="grow">{children}</main>
+      {/* Main - treść strony */}
+      {/* DODANO: w-full */}
+      <main className="grow w-full">{children}</main>
 
-      {/* Footer na samym dole */}
+      {/* Footer */}
       <Footer />
 
-      {/* --- INTEGRACJA Z SANITY --- */}
-
-      {/* Live Content - odświeżanie danych w czasie rzeczywistym */}
+      {/* --- NARZĘDZIA SANITY --- */}
       <SanityLive />
 
-      {/* Visual Editing - widoczny TYLKO dla admina w trybie Draft */}
       {isDraftMode && (
         <>
           <VisualEditing />
-
-          {/* Przycisk pomocniczy do wyjścia z trybu podglądu */}
           <a
             href="/api/draft-mode/disable"
             className="fixed bottom-4 right-4 z-50 rounded bg-red-600 px-4 py-2 text-xs font-bold text-white shadow-lg hover:bg-red-700 transition-colors"
