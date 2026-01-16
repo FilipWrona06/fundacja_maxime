@@ -1,15 +1,4 @@
-"use client";
-
-import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
-import {
-  AnimatePresence,
-  motion,
-  useMotionValueEvent,
-  useScroll,
-} from "framer-motion";
 import Image from "next/image";
-import { useRef, useState } from "react";
-import { urlFor } from "@/sanity/lib/image";
 
 // --- TYPY ---
 interface TimelineItem {
@@ -17,182 +6,109 @@ interface TimelineItem {
   year: string;
   title: string;
   description: string;
-  image: SanityImageSource;
+  image: {
+    asset: {
+      url: string;
+      metadata: {
+        lqip: string;
+      };
+    };
+  };
 }
 
 interface TimelineProps {
   data?: {
     items?: TimelineItem[];
-    settings?: {
-      height?: string;
-    };
   };
 }
 
 export const Timeline = ({ data }: TimelineProps) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  // Fallback data
   const items = data?.items || [];
-  // Domyślna wysokość jeśli brak ustawień
-  const height = data?.settings?.height || "300vh";
 
-  // Przechowujemy timer do debouncingu
-  const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
-
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    // Jeśli nie ma elementów, nie robimy nic
-    if (items.length === 0) return;
-
-    // 1. OBLICZ NOWY INDEKS (bezpiecznie)
-    const rawIndex = Math.floor(latest * items.length);
-    const newIndex = Math.max(0, Math.min(rawIndex, items.length - 1));
-
-    if (newIndex === activeIndex) return;
-
-    // 2. LOGIKA PRZY SZYBKIM SCROLLU
-    if (latest <= 0.05) {
-      if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
-      setActiveIndex(0);
-      return;
-    }
-
-    // 3. DEBOUNCE
-    if (debounceTimeout.current) {
-      clearTimeout(debounceTimeout.current);
-    }
-
-    debounceTimeout.current = setTimeout(() => {
-      setActiveIndex(newIndex);
-    }, 50);
-  });
-
-  const handleScrollTo = (index: number) => {
-    if (!containerRef.current || items.length === 0) return;
-
-    const containerTop =
-      containerRef.current.getBoundingClientRect().top + window.scrollY;
-    const containerHeight = containerRef.current.offsetHeight;
-    const windowHeight = window.innerHeight;
-    const scrollableHeight = containerHeight - windowHeight;
-    const targetScroll =
-      containerTop + (index / items.length) * scrollableHeight + 10;
-
-    window.scrollTo({
-      top: targetScroll,
-      behavior: "smooth",
-    });
-  };
-
-  const hasItems = items.length > 0;
-  const currentItem = hasItems ? items[activeIndex] || items[0] : null;
-  const imageUrl = currentItem?.image ? urlFor(currentItem.image).url() : "";
-
-  // Jeśli brak danych, renderujemy pusty, ukryty kontener, aby nie psuć refa
-  if (!hasItems || !currentItem) {
-    return <section ref={containerRef} className="hidden" />;
-  }
+  if (items.length === 0) return null;
 
   return (
+    // DODANO: 'relative' - kluczowe, żeby elementy absolute nie uciekały
     <section
-      ref={containerRef}
-      className="relative bg-raisinBlack"
-      style={{ height: height }}
+      className="relative bg-raisinBlack py-32 overflow-hidden"
+      aria-label="Historia fundacji"
     >
-      <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center">
-        <div className="container mx-auto px-4 relative z-10 h-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
-          {/* --- LEWA STRONA (Tekst) --- */}
-          <div className="w-full md:w-1/2 flex flex-row gap-8 items-center md:items-start justify-center md:justify-start">
-            {/* Lista roczników */}
-            <div className="hidden md:flex flex-col gap-12 py-4 border-l border-white/10 pl-8 relative">
-              {items.map((item, idx) => {
-                const isActive = idx === activeIndex;
-                return (
-                  <div key={item._key} className="relative flex items-center">
-                    {isActive && (
-                      <motion.div
-                        layoutId="timeline-dot"
-                        className="absolute -left-[2.4rem] w-3 h-3 bg-arylideYellow rounded-full shadow-[0_0_10px_#EFCB6F]"
-                        transition={{
-                          type: "spring",
-                          stiffness: 300,
-                          damping: 30,
-                        }}
-                      />
-                    )}
-                    <button
-                      type="button"
-                      onClick={() => handleScrollTo(idx)}
-                      className={`text-lg font-youngest transition-colors duration-300 text-left cursor-pointer hover:text-arylideYellow/80 ${
-                        isActive
-                          ? "text-arylideYellow"
-                          : "text-philippineSilver/30"
-                      }`}
-                    >
-                      {item.year}
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
+      <div className="container mx-auto px-6 max-w-300 relative z-10">
+        {/* Nagłówek */}
+        <div className="text-center mb-32">
+          <span className="text-arylideYellow text-xs font-bold tracking-[0.4em] uppercase block mb-6">
+            Ewolucja
+          </span>
+          <h2 className="font-youngest text-6xl md:text-8xl text-white">
+            Nasza historia
+          </h2>
+        </div>
 
-            {/* Treść aktywna */}
-            <div className="flex-1 max-w-md min-h-75 flex flex-col justify-center">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentItem._key}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                >
-                  <span className="md:hidden text-arylideYellow font-youngest text-4xl mb-4 mt-20 block">
-                    {currentItem.year}
-                  </span>
-                  <h2 className="text-3xl md:text-5xl text-white font-montserrat font-bold mb-6">
-                    {currentItem.title}
-                  </h2>
-                  <p className="text-philippineSilver text-lg leading-relaxed">
-                    {currentItem.description}
-                  </p>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          </div>
+        <div className="flex flex-col gap-24 lg:gap-40">
+          {items.map((item, index) => {
+            const imageUrl = item.image?.asset?.url;
+            const blurUrl = item.image?.asset?.metadata?.lqip;
+            const isEven = index % 2 === 0;
 
-          {/* --- PRAWA STRONA (Zdjęcie) --- */}
-          <div className="w-full md:w-1/2 flex justify-center">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentItem._key}
-                initial={{ opacity: 0, scale: 0.95, rotate: 2 }}
-                animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                exit={{ opacity: 0, scale: 1.05, rotate: -2 }}
-                transition={{ duration: 0.4, ease: "circOut" }}
-                className="relative w-full max-w-md aspect-4/5"
+            return (
+              <article
+                key={item._key}
+                className={`flex flex-col lg:flex-row items-center group ${isEven ? "" : "lg:flex-row-reverse"}`}
               >
-                <div className="absolute inset-0 border border-white/20 translate-x-3 translate-y-3 md:translate-x-5 md:translate-y-5 z-0" />
-                <div className="relative w-full h-full overflow-hidden bg-raisinBlack z-10 shadow-2xl">
-                  {imageUrl && (
-                    <Image
-                      src={imageUrl}
-                      alt={currentItem.title}
-                      fill
-                      className="object-cover"
-                      priority
-                    />
-                  )}
-                  <div className="absolute inset-0 bg-linear-to-t from-raisinBlack/60 to-transparent opacity-60" />
+                {/* --- ZDJĘCIE (60% szerokości) --- */}
+                <div className="w-full lg:w-7/12 relative">
+                  <div className="relative aspect-4/3 overflow-hidden rounded-sm bg-[#111]">
+                    {imageUrl ? (
+                      <Image
+                        src={imageUrl}
+                        alt={item.title}
+                        fill
+                        className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105 filter grayscale group-hover:grayscale-0"
+                        placeholder={blurUrl ? "blur" : "empty"}
+                        blurDataURL={blurUrl}
+                        sizes="(max-width: 768px) 100vw, 60vw"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-white/10">
+                        Brak zdjęcia
+                      </div>
+                    )}
+                    {/* Overlay winieta */}
+                    <div className="absolute inset-0 bg-raisinBlack/10 mix-blend-multiply transition-opacity duration-500 group-hover:opacity-0" />
+                  </div>
+
+                  {/* Dekoracyjny rok (W tle - za zdjęciem) */}
+                  <span
+                    className={`absolute -top-12 ${isEven ? "-right-12" : "-left-12"} font-youngest text-[8rem] md:text-[10rem] text-white/5 select-none z-0 pointer-events-none transition-transform duration-700 group-hover:translate-x-4`}
+                  >
+                    {item.year}
+                  </span>
                 </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
+
+                {/* --- TREŚĆ (Nakładająca się) --- */}
+                <div
+                  className={`w-full lg:w-5/12 relative z-10 -mt-16 lg:mt-0 ${isEven ? "lg:-ml-24" : "lg:-mr-24"}`}
+                >
+                  <div className="bg-raisinBlack/95 border border-white/10 backdrop-blur-md p-8 md:p-12 shadow-2xl rounded-sm group-hover:border-arylideYellow/30 transition-colors duration-500">
+                    <div className="flex items-center gap-4 mb-6">
+                      <span className="w-8 h-px bg-arylideYellow" />
+                      <span className="text-arylideYellow font-mono text-sm tracking-widest">
+                        {item.year}
+                      </span>
+                    </div>
+
+                    <h3 className="text-3xl md:text-4xl font-montserrat font-bold text-white mb-6 leading-tight">
+                      {item.title}
+                    </h3>
+
+                    <p className="text-philippineSilver text-base leading-relaxed font-light">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>

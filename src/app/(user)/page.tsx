@@ -1,16 +1,13 @@
 import type { Metadata } from "next";
-import dynamic from "next/dynamic"; // <--- 1. IMPORT DYNAMICZNY
+import dynamic from "next/dynamic";
 import Script from "next/script";
 import { defineQuery } from "next-sanity";
 
-// --- IMPORTY KOMPONENTÓW ---
-
-// 1. KRYTYCZNE (Above the Fold) - Importujemy normalnie, żeby były natychmiast
+// --- IMPORTY ---
 import { Hero } from "@/components/home/Hero";
-import { Partners } from "@/components/home/Partners"; // Partners są zaraz pod Hero, warto je mieć od razu
+import { Partners } from "@/components/home/Partners"; // Partners są wysoko, więc import statyczny
 
-// 2. NIEKRYTYCZNE (Below the Fold) - Importujemy dynamicznie (Lazy Load)
-// Next.js podzieli te komponenty na osobne pliki JS i załaduje je dopiero, gdy będą potrzebne
+// Dynamiczne importy (Lazy Loading) dla reszty
 const About = dynamic(() =>
   import("@/components/home/About").then((mod) => mod.About),
 );
@@ -30,11 +27,11 @@ import { sanityFetch } from "@/sanity/lib/live";
 interface SanityBlock {
   _type: string;
   _key: string;
-  // biome-ignore lint/suspicious/noExplicitAny: Dane z CMS są dynamiczne
+  // biome-ignore lint/suspicious/noExplicitAny: CMS data is dynamic
   [key: string]: any;
 }
 
-// --- GROQ QUERY (Bez zmian - jest już perfekcyjne) ---
+// --- GROQ QUERY ---
 const HOME_QUERY = defineQuery(`
   *[_type == "page" && slug.current == "home"][0]{
     title,
@@ -86,7 +83,8 @@ const HOME_QUERY = defineQuery(`
         }
       },
 
-      _type == "supportSection" => {
+      // 5. DANE DLA SEKCJI WSPARCIE (ZMIANA NAZWY NA: support)
+      _type == "support" => {
         eyebrow,
         heading,
         description,
@@ -154,7 +152,7 @@ export default async function Home() {
     return <main className="bg-raisinBlack min-h-screen" />;
   }
 
-  // Mapa sekcji (O(n))
+  // Mapa sekcji
   const sections = data.content.reduce(
     (acc: Record<string, SanityBlock>, block: SanityBlock) => {
       acc[block._type] = block;
@@ -201,14 +199,15 @@ export default async function Home() {
       />
 
       <main className="bg-raisinBlack min-h-screen">
-        {/* HERO i PARTNERS są ładowane natychmiast (Critical CSS/JS) */}
         {sections.hero && <Hero data={sections.hero} />}
         {sections.partners && <Partners data={sections.partners} />}
-        {/* Reszta sekcji ładuje się asynchronicznie (Lazy Loading) */}
         {sections.about && <About data={sections.about} />}
         {sections.timeline && <Timeline data={sections.timeline} />}
-        <Events /> {/* Statyczne */}
-        {sections.supportSection && <Support data={sections.supportSection} />}
+
+        <Events />
+
+        {/* ZMIANA NAZWY KLUCZA NA: support */}
+        {sections.support && <Support data={sections.support} />}
       </main>
     </>
   );
