@@ -34,8 +34,7 @@ export const Partners = ({ data }: PartnersProps) => {
 
   if (!items || items.length === 0) return null;
 
-  // TWÓRZENIE LISTY (Oryginał + Kopia dla płynnej pętli)
-  // Wystarczy zduplikować raz, jeśli CSS przesuwa o -50%
+  // Dublujemy listę, żeby pętla była płynna
   const marqueeItems = [...items, ...items];
 
   return (
@@ -58,8 +57,8 @@ export const Partners = ({ data }: PartnersProps) => {
       </div>
 
       {/* --- Gradienty (Fade Effect) --- */}
-      {/* aria-hidden, bo to tylko dekoracja */}
-      <div className="relative w-full max-w-480 mx-auto" aria-hidden="true">
+      {/* ZMIANA: max-w-full zamiast max-w-480 dla bezpieczeństwa */}
+      <div className="relative w-full max-w-full mx-auto" aria-hidden="true">
         <div className="absolute top-0 left-0 w-24 md:w-48 h-full bg-linear-to-r from-raisinBlack to-transparent z-10 pointer-events-none" />
         <div className="absolute top-0 right-0 w-24 md:w-48 h-full bg-linear-to-l from-raisinBlack to-transparent z-10 pointer-events-none" />
 
@@ -70,39 +69,35 @@ export const Partners = ({ data }: PartnersProps) => {
               flex gap-12 md:gap-24 items-center whitespace-nowrap min-w-full 
               animate-marquee ${direction === "right" ? "animate-marquee-reverse" : ""}
             `}
-            // Przekazujemy szybkość jako zmienną CSS (Server-side style)
             style={{ "--marquee-duration": `${speed}s` } as React.CSSProperties}
           >
             {marqueeItems.map((item, index) => {
-              // Sprawdzamy czy to element z duplikowanej części
               const isDuplicate = index >= items.length;
-              // Generujemy unikalny klucz: ID + index (bo ID się powtarza w duplikacie)
               const uniqueKey = `${item._key}-${index}`;
 
               return (
                 <div
                   key={uniqueKey}
                   className="relative flex items-center justify-center shrink-0"
-                  // Kluczowe dla dostępności: czytnik ignoruje duplikaty
                   aria-hidden={isDuplicate}
                 >
                   {item.logo ? (
                     // Wariant: LOGO
-                    <div className="relative h-12 w-auto min-w-25 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300">
+                    <div className="relative h-12 w-auto min-w-25 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300">
                       <Image
                         src={urlFor(item.logo).url()}
                         alt={item.name}
                         width={200}
                         height={100}
                         className="h-full w-auto object-contain"
-                        // Optymalizacja wydajności
                         loading="lazy"
                         sizes="(max-width: 768px) 150px, 200px"
                       />
                     </div>
                   ) : (
                     // Wariant: TEKST
-                    <span className="text-xl md:text-2xl font-youngest text-white/30 hover:text-arylideYellow transition-colors duration-300 cursor-default">
+                    // ZMIANA: Zwiększono jasność tekstu (text-white/50 zamiast /30)
+                    <span className="text-2xl md:text-3xl font-youngest text-white/50 hover:text-arylideYellow transition-colors duration-300 cursor-default">
                       {item.name}
                     </span>
                   )}

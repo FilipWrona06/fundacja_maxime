@@ -2,10 +2,10 @@
 
 @theme {
   /* --- Kolory z Brandbooka --- */
-  --color-raisinBlack: #262626; /* Główne tło */
-  --color-philippineSilver: #b2b2b2; /* Tekst poboczny */
-  --color-arylideYellow: #efcb6f; /* Akcent / CTA */
-  --color-oxfordBlue: #001c48; /* Ciemny akcent */
+  --color-raisinBlack: #262626;
+  --color-philippineSilver: #b2b2b2;
+  --color-arylideYellow: #efcb6f;
+  --color-oxfordBlue: #001c48;
   --color-white: #ffffff;
 
   /* --- Fonty --- */
@@ -13,11 +13,10 @@
   --font-youngest: var(--font-youngest);
 
   /* --- Easing --- */
-  --ease-wabi: cubic-bezier(0.25, 1, 0.5, 1); /* Płynne, naturalne wyhamowanie */
+  --ease-wabi: cubic-bezier(0.25, 1, 0.5, 1);
 
-  /* --- ANIMACJE (Tailwind Utilities) --- */
-
-  /* 1. Shine (Lśnienie tekstu w CTA) */
+  /* --- ANIMACJE TAILWIND --- */
+  /* Shine (Lśnienie tekstu w CTA) */
   --animate-shine: shine 8s linear infinite;
 
   @keyframes shine {
@@ -30,12 +29,42 @@
   }
 }
 
+/* --- WARSTWA BAZOWA --- */
 @layer base {
-  body {
-    @apply bg-raisinBlack text-white font-montserrat antialiased selection:bg-arylideYellow selection:text-raisinBlack;
+  /* 1. Stylowanie paska przewijania (Chrome/Safari/Edge) */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-raisinBlack);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 5px;
+    border: 2px solid var(--color-raisinBlack);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-arylideYellow); /* Złoty akcent po najechaniu */
   }
 
-  /* Poprawa renderowania fontów na ciemnym tle */
+  /* 2. Globalne ustawienia tekstu i tła */
+  html {
+    scroll-behavior: smooth; /* Płynne kotwice */
+  }
+
+  body {
+    @apply bg-raisinBlack text-white font-montserrat antialiased;
+    /* Lepsze renderowanie czcionek na MacOS/iOS */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Kolor zaznaczenia tekstu */
+  ::selection {
+    @apply bg-arylideYellow text-raisinBlack;
+  }
+
+  /* Poprawa typografii nagłówków */
   h1,
   h2,
   h3,
@@ -46,9 +75,9 @@
   }
 }
 
-/* --- ANIMACJE DLA SERVER COMPONENTS (Hero) --- */
-/* Dodajemy to w layer utilities, aby współpracowało z Tailwindem */
+/* --- WARSTWA NARZĘDZI (ANIMACJE CSS) --- */
 @layer utilities {
+  /* --- 1. Fade In Up (Hero, Sekcje) --- */
   @keyframes fade-in-up {
     0% {
       opacity: 0;
@@ -61,12 +90,64 @@
   }
 
   .animate-fade-in-up {
-    /* Używamy forwards, aby element został widoczny po zakończeniu animacji */
     animation: fade-in-up 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-    opacity: 0; /* Startujemy z ukrytym elementem (zapobiega mignięciu) */
+    opacity: 0; /* Startujemy ukryci */
   }
 
-  /* Precyzyjne opóźnienia */
+  /* --- 2. Fade In (Proste pojawianie się) --- */
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-out forwards;
+  }
+
+  /* --- 3. Progress Bar (About Slider) --- */
+  @keyframes progress-fill {
+    from {
+      width: 0%;
+    }
+    to {
+      width: 100%;
+    }
+  }
+
+  .animate-progress-fill {
+    animation: progress-fill 5s linear forwards;
+  }
+
+  /* --- 4. Marquee (Partnerzy) --- */
+  @keyframes marquee {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-marquee {
+    animation: marquee var(--marquee-duration, 60s) linear infinite;
+  }
+
+  /* Pauza po najechaniu myszką - Dobre UX */
+  .animate-marquee:hover {
+    animation-play-state: paused;
+  }
+
+  .animate-marquee-reverse {
+    animation-direction: reverse;
+  }
+
+  /* --- Opóźnienia (Delays) --- */
   .delay-100 {
     animation-delay: 100ms;
   }
@@ -78,51 +159,5 @@
   }
   .delay-500 {
     animation-delay: 500ms;
-  }
-
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-      transform: translateY(5px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  .animate-fade-in {
-    animation: fade-in 0.5s ease-out forwards;
-  }
-
-  /* Progress Bar Fill */
-  @keyframes progress-fill {
-    from {
-      width: 0%;
-    }
-    to {
-      width: 100%;
-    }
-  }
-  .animate-progress-fill {
-    animation: progress-fill 5s linear forwards; /* 5s = czas trwania slajdu */
-  }
-
-  @keyframes marquee {
-    0% {
-      transform: translateX(0%);
-    }
-    100% {
-      transform: translateX(-50%); /* Przesuwamy o 50%, bo duplikujemy listę raz */
-    }
-  }
-
-  .animate-marquee {
-    animation: marquee var(--marquee-duration) linear infinite;
-    /* Pauza po najechaniu - dobre dla UX/Dostępności */
-  }
-
-  /* Obsługa kierunku w prawo */
-  .animate-marquee-reverse {
-    animation-direction: reverse;
   }
 }
