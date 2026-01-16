@@ -3,11 +3,10 @@ import dynamic from "next/dynamic";
 import Script from "next/script";
 import { defineQuery } from "next-sanity";
 
-// --- IMPORTY ---
+// --- IMPORTY KOMPONENTÓW ---
 import { Hero } from "@/components/home/Hero";
-import { Partners } from "@/components/home/Partners"; // Partners są wysoko, więc import statyczny
+import { Partners } from "@/components/home/Partners";
 
-// Dynamiczne importy (Lazy Loading) dla reszty
 const About = dynamic(() =>
   import("@/components/home/About").then((mod) => mod.About),
 );
@@ -34,9 +33,11 @@ interface SanityBlock {
 // --- GROQ QUERY ---
 const HOME_QUERY = defineQuery(`
   *[_type == "page" && slug.current == "home"][0]{
+    // 1. DANE SEO (Pobieramy pola z zakładki SEO)
     title,
-    "description": description,
-    "ogImage": content[_type == "about"][0].image.asset->url,
+    seoTitle,
+    seoDescription,
+    "seoImage": ogImage.asset->url,
 
     content[]{
       _type,
@@ -83,7 +84,6 @@ const HOME_QUERY = defineQuery(`
         }
       },
 
-      // 5. DANE DLA SEKCJI WSPARCIE (ZMIANA NAZWY NA: support)
       _type == "support" => {
         eyebrow,
         heading,
@@ -106,15 +106,21 @@ const HOME_QUERY = defineQuery(`
   }
 `);
 
-// --- METADATA ---
+// --- 1. METADATA (SEO Z SANITY) ---
 export async function generateMetadata(): Promise<Metadata> {
   const { data } = await sanityFetch({ query: HOME_QUERY });
 
-  const title = data?.title || "Fundacja Maxime - Z pasji do muzyki";
+  // LOGIKA PRIORYTETÓW:
+  // 1. Jeśli wpisałeś coś w zakładce "SEO" w Sanity -> Użyj tego.
+  // 2. Jeśli nie, użyj tytułu strony / domyślnego opisu.
+
+  const title = data?.seoTitle || data?.title || "Fundacja Maxime";
   const description =
-    data?.description ||
-    "Wspieramy młode talenty, organizujemy koncerty i łączymy pokolenia poprzez piękno dźwięku. Dołącz do nas!";
-  const ogImage = data?.ogImage || "/wideo-poster.webp";
+    data?.seoDescription ||
+    "Wspieramy młode talenty, organizujemy koncerty i łączymy pokolenia poprzez piękno dźwięku.";
+
+  // Obrazek: 1. Z zakładki SEO, 2. Plik lokalny
+  const ogImage = data?.seoImage || "/video-poster.webp";
 
   return {
     title: title,
@@ -144,7 +150,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-// --- GŁÓWNY KOMPONENT ---
+// --- 2. GŁÓWNY KOMPONENT STRONY ---
 export default async function Home() {
   const { data } = await sanityFetch({ query: HOME_QUERY });
 
@@ -152,7 +158,7 @@ export default async function Home() {
     return <main className="bg-raisinBlack min-h-screen" />;
   }
 
-  // Mapa sekcji
+  // --- 3. OPTYMALIZACJA (REDUCE) ---
   const sections = data.content.reduce(
     (acc: Record<string, SanityBlock>, block: SanityBlock) => {
       acc[block._type] = block;
@@ -161,6 +167,7 @@ export default async function Home() {
     {},
   );
 
+  // --- 4. JSON-LD (DANE STRUKTURALNE) ---
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "NGO",
@@ -206,7 +213,6 @@ export default async function Home() {
 
         <Events />
 
-        {/* ZMIANA NAZWY KLUCZA NA: support */}
         {sections.support && <Support data={sections.support} />}
       </main>
     </>
