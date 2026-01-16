@@ -7,6 +7,7 @@ import { defineQuery } from "next-sanity";
 import { Hero } from "@/components/home/Hero";
 import { Partners } from "@/components/home/Partners";
 
+// Dynamiczne importy (Lazy Loading)
 const About = dynamic(() =>
   import("@/components/home/About").then((mod) => mod.About),
 );
@@ -33,7 +34,7 @@ interface SanityBlock {
 // --- GROQ QUERY ---
 const HOME_QUERY = defineQuery(`
   *[_type == "page" && slug.current == "home"][0]{
-    // 1. DANE SEO (Pobieramy pola z zakładki SEO)
+    // 1. DANE SEO
     title,
     seoTitle,
     seoDescription,
@@ -43,14 +44,26 @@ const HOME_QUERY = defineQuery(`
       _type,
       _key,
       
+      // --- HERO (Zaktualizowane o Smart CTA) ---
       _type == "hero" => {
         badge,
         headingLine1,
         headingLine2,
         description,
-        buttons[]{ _key, title, link, style }
+        buttons[]{ 
+          _key, 
+          title, 
+          style,
+          // Nowe pola CTA:
+          linkType,
+          externalLink,
+          "internalLink": internalLink->slug.current, // Dereferencja: pobieramy slug z linkowanej strony
+          openInNewTab,
+          ariaLabel
+        }
       },
 
+      // --- PARTNERS ---
       _type == "partners" => {
         eyebrow,
         title,
@@ -62,6 +75,7 @@ const HOME_QUERY = defineQuery(`
         }
       },
 
+      // --- ABOUT ---
       _type == "about" => {
         eyebrow,
         headingLine1,
@@ -73,6 +87,7 @@ const HOME_QUERY = defineQuery(`
         values[]{ _key, title, description, icon }
       },
 
+      // --- TIMELINE ---
       _type == "timeline" => {
         settings,
         items[]{
@@ -84,6 +99,7 @@ const HOME_QUERY = defineQuery(`
         }
       },
 
+      // --- SUPPORT ---
       _type == "support" => {
         eyebrow,
         heading,
@@ -106,21 +122,17 @@ const HOME_QUERY = defineQuery(`
   }
 `);
 
-// --- 1. METADATA (SEO Z SANITY) ---
+// --- 1. METADATA (SEO) ---
 export async function generateMetadata(): Promise<Metadata> {
   const { data } = await sanityFetch({ query: HOME_QUERY });
-
-  // LOGIKA PRIORYTETÓW:
-  // 1. Jeśli wpisałeś coś w zakładce "SEO" w Sanity -> Użyj tego.
-  // 2. Jeśli nie, użyj tytułu strony / domyślnego opisu.
 
   const title = data?.seoTitle || data?.title || "Fundacja Maxime";
   const description =
     data?.seoDescription ||
     "Wspieramy młode talenty, organizujemy koncerty i łączymy pokolenia poprzez piękno dźwięku.";
 
-  // Obrazek: 1. Z zakładki SEO, 2. Plik lokalny
-  const ogImage = data?.seoImage || "/video-poster.webp";
+  // Fallback do bezpiecznego pliku w public/images
+  const ogImage = data?.seoImage || "/images/hero-poster.jpg";
 
   return {
     title: title,
@@ -150,7 +162,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-// --- 2. GŁÓWNY KOMPONENT STRONY ---
+// --- 2. GŁÓWNY KOMPONENT ---
 export default async function Home() {
   const { data } = await sanityFetch({ query: HOME_QUERY });
 
@@ -158,7 +170,7 @@ export default async function Home() {
     return <main className="bg-raisinBlack min-h-screen" />;
   }
 
-  // --- 3. OPTYMALIZACJA (REDUCE) ---
+  // --- 3. MAPOWANIE SEKCJI ---
   const sections = data.content.reduce(
     (acc: Record<string, SanityBlock>, block: SanityBlock) => {
       acc[block._type] = block;
@@ -167,7 +179,7 @@ export default async function Home() {
     {},
   );
 
-  // --- 4. JSON-LD (DANE STRUKTURALNE) ---
+  // --- 4. JSON-LD ---
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "NGO",
@@ -206,13 +218,18 @@ export default async function Home() {
       />
 
       <main className="bg-raisinBlack min-h-screen">
+        {/* Sekcje ładowane natychmiast */}
         {sections.hero && <Hero data={sections.hero} />}
         {sections.partners && <Partners data={sections.partners} />}
+
+        {/* Sekcje ładowane lazy */}
         {sections.about && <About data={sections.about} />}
         {sections.timeline && <Timeline data={sections.timeline} />}
 
+        {/* Placeholder Eventów */}
         <Events />
 
+        {/* Sekcja Support */}
         {sections.support && <Support data={sections.support} />}
       </main>
     </>

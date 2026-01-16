@@ -1,22 +1,50 @@
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ExternalLink } from "lucide-react";
 import Link from "next/link";
-import { HeroVideo } from "./HeroVideo"; // <--- Importujemy komponent kliencki
+import { HeroVideo } from "./HeroVideo";
 
-// Typy danych z Sanity
+// --- TYPY (Zgodne z nowym Smart CTA) ---
+interface HeroButton {
+  _key: string;
+  title: string;
+  style: "primary" | "secondary";
+  // Nowe pola z Sanity
+  linkType?: "internal" | "external";
+  internalLink?: string; // Slug
+  externalLink?: string; // URL
+  openInNewTab?: boolean;
+  ariaLabel?: string;
+}
+
 interface HeroProps {
   data?: {
     badge?: string;
     headingLine1?: string;
     headingLine2?: string;
     description?: string;
-    buttons?: Array<{
-      _key: string;
-      title: string;
-      link: string;
-      style: "primary" | "secondary";
-    }>;
+    buttons?: HeroButton[];
   };
 }
+
+// --- HELPERY STYLÓW ---
+const btnBase =
+  "relative flex items-center justify-center gap-2 rounded-full px-8 py-4 text-sm font-bold tracking-wide transition-all duration-300 w-auto min-w-55 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-raisinBlack";
+
+const btnPrimary =
+  "group bg-arylideYellow text-raisinBlack hover:scale-105 hover:shadow-[0_0_20px_rgba(239,203,111,0.4)] focus-visible:ring-white overflow-hidden";
+
+const btnSecondary =
+  "group border border-white/20 bg-white/5 text-white backdrop-blur-md hover:bg-white hover:text-raisinBlack hover:border-white focus-visible:ring-arylideYellow";
+
+// --- HELPER LINKÓW ---
+const getHref = (btn: HeroButton) => {
+  if (btn.linkType === "internal" && btn.internalLink) {
+    return `/${btn.internalLink}`;
+  }
+  if (btn.linkType === "external" && btn.externalLink) {
+    return btn.externalLink;
+  }
+  return "#";
+};
 
 export const Hero = ({ data }: HeroProps) => {
   const {
@@ -33,17 +61,12 @@ export const Hero = ({ data }: HeroProps) => {
       className="relative h-screen w-full overflow-hidden flex items-center justify-center bg-raisinBlack"
     >
       {/* --- VIDEO TŁO --- */}
-      {/* Wrapper jest na serwerze, ale środek (Wideo) ładuje się po stronie klienta */}
       <div className="absolute inset-0 z-0" aria-hidden="true">
-        {/* Overlay dla kontrastu (Renderowany na serwerze!) */}
         <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,rgba(38,38,38,0.4)_0%,rgba(38,38,38,0.75)_100%)]" />
-
-        {/* Wyspa Kliencka */}
         <HeroVideo />
       </div>
 
-      {/* --- TREŚĆ (Server Side Rendered) --- */}
-      {/* Wszystko poniżej to czysty HTML z serwera = Idealne SEO i LCP */}
+      {/* --- TREŚĆ --- */}
       <div className="relative z-20 container mx-auto px-4 text-center flex flex-col items-center">
         {/* Badge */}
         <div className="animate-fade-in-up">
@@ -68,41 +91,44 @@ export const Hero = ({ data }: HeroProps) => {
           {buttons.length > 0 ? (
             buttons.map((btn) => {
               const isPrimary = btn.style?.startsWith("primary");
+              const href = getHref(btn);
+              const isExternal = btn.linkType === "external";
 
               return (
                 <Link
                   key={btn._key}
-                  href={btn.link || "#"}
-                  className={
-                    isPrimary
-                      ? "group relative px-8 py-4 rounded-full bg-arylideYellow text-raisinBlack font-bold text-sm tracking-wide overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(239,203,111,0.4)] w-auto min-w-55 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-raisinBlack"
-                      : "group px-8 py-4 rounded-full border border-white/20 bg-white/5 text-white font-medium text-sm tracking-wide backdrop-blur-md transition-all duration-300 hover:bg-white hover:text-raisinBlack hover:border-white w-auto min-w-55 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arylideYellow focus-visible:ring-offset-2 focus-visible:ring-offset-raisinBlack"
-                  }
+                  href={href}
+                  target={btn.openInNewTab ? "_blank" : undefined}
+                  rel={btn.openInNewTab ? "noopener noreferrer" : undefined}
+                  aria-label={btn.ariaLabel || undefined}
+                  className={`${btnBase} ${isPrimary ? btnPrimary : btnSecondary}`}
                 >
                   {isPrimary ? (
                     <>
-                      <span className="relative z-10">{btn.title}</span>
+                      <span className="relative z-10 flex items-center gap-2">
+                        {btn.title}
+                        {isExternal && <ExternalLink className="w-4 h-4" />}
+                      </span>
+                      {/* Efekt Flash */}
                       <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
                     </>
                   ) : (
-                    btn.title
+                    <span className="flex items-center gap-2">
+                      {btn.title}
+                      {isExternal && <ExternalLink className="w-4 h-4" />}
+                    </span>
                   )}
                 </Link>
               );
             })
           ) : (
-            // Fallback
+            // Fallback (Gdy brak danych w Sanity)
             <>
-              <Link
-                href="/wydarzenia"
-                className="group relative px-8 py-4 rounded-full bg-arylideYellow text-raisinBlack font-bold text-sm tracking-wide overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(239,203,111,0.4)] w-auto min-w-55 text-center"
-              >
+              <Link href="/wydarzenia" className={`${btnBase} ${btnPrimary}`}>
                 <span className="relative z-10">Zobacz wydarzenia</span>
+                <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
               </Link>
-              <Link
-                href="/kontakt"
-                className="group px-8 py-4 rounded-full border border-white/20 bg-white/5 text-white font-medium text-sm tracking-wide backdrop-blur-md transition-all duration-300 hover:bg-white hover:text-raisinBlack hover:border-white w-auto min-w-55 text-center"
-              >
+              <Link href="/kontakt" className={`${btnBase} ${btnSecondary}`}>
                 Skontaktuj się
               </Link>
             </>

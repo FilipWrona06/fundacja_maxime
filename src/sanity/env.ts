@@ -14,13 +14,13 @@ export const apiVersion =
 // 2. DATASET
 export const dataset = assertValue(
   process.env.NEXT_PUBLIC_SANITY_DATASET,
-  "Błąd krytyczny: Brak zmiennej NEXT_PUBLIC_SANITY_DATASET w pliku .env"
+  "Błąd krytyczny: Brak zmiennej NEXT_PUBLIC_SANITY_DATASET w pliku .env",
 );
 
 // 3. PROJECT ID
 export const projectId = assertValue(
   process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-  "Błąd krytyczny: Brak zmiennej NEXT_PUBLIC_SANITY_PROJECT_ID w pliku .env"
+  "Błąd krytyczny: Brak zmiennej NEXT_PUBLIC_SANITY_PROJECT_ID w pliku .env",
 );
 
 // 4. CDN CONFIGURATION (Wydajność vs Świeżość)
