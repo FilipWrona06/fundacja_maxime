@@ -3,13 +3,11 @@ import dynamic from "next/dynamic";
 import Script from "next/script";
 import { defineQuery } from "next-sanity";
 
-// --- IMPORTY KOMPONENTÓW ---
-
-// 1. KRYTYCZNE (Above the Fold) - Import statyczny
+// --- IMPORTY STATYCZNE (Krytyczne dla LCP) ---
 import { Hero } from "@/components/home/Hero";
 import { Partners } from "@/components/home/Partners";
 
-// 2. NIEKRYTYCZNE (Below the Fold) - Lazy Loading
+// --- IMPORTY DYNAMICZNE (Lazy Loading) ---
 const About = dynamic(() =>
   import("@/components/home/About").then((mod) => mod.About),
 );
@@ -29,7 +27,7 @@ import { sanityFetch } from "@/sanity/lib/live";
 interface SanityBlock {
   _type: string;
   _key: string;
-  // biome-ignore lint/suspicious/noExplicitAny: CMS data is dynamic
+  // biome-ignore lint/suspicious/noExplicitAny: Dane z CMS są dynamiczne
   [key: string]: any;
 }
 
@@ -46,26 +44,29 @@ const HOME_QUERY = defineQuery(`
       _type,
       _key,
       
-      // --- HERO (Zaktualizowane o Smart CTA) ---
+      // HERO
       _type == "hero" => {
         badge,
         headingLine1,
         headingLine2,
         description,
+        // Pobieramy obrazek tła z metadanymi
+        posterImage { 
+          asset->{ _id, url, metadata { lqip, dimensions } } 
+        },
         buttons[]{ 
           _key, 
           title, 
           style,
-          // Nowe pola CTA:
           linkType,
           externalLink,
-          "internalLink": internalLink->slug.current, // Dereferencja: pobieramy slug z linkowanej strony
+          "internalLink": internalLink->slug.current,
           openInNewTab,
           ariaLabel
         }
       },
 
-      // --- PARTNERS ---
+      // PARTNERS
       _type == "partners" => {
         eyebrow,
         title,
@@ -73,23 +74,32 @@ const HOME_QUERY = defineQuery(`
         items[]{
           _key,
           name,
-          logo { asset->{ _id, url, metadata { lqip, dimensions } }, hotspot, crop }
+          logo { 
+            asset->{ _id, url, metadata { lqip, dimensions } }, 
+            hotspot, 
+            crop 
+          }
         }
       },
 
-      // --- ABOUT ---
+      // ABOUT
       _type == "about" => {
         eyebrow,
         headingLine1,
         headingLine2,
         description,
-        image { asset->{ _id, url, metadata { lqip, dimensions } }, hotspot, crop },
+        image { 
+          asset->{ _id, url, metadata { lqip, dimensions } }, 
+          hotspot, 
+          crop,
+          alt // Alt text dla dostępności
+        },
         ctaLink,
         ctaText,
         values[]{ _key, title, description, icon }
       },
 
-      // --- TIMELINE ---
+      // TIMELINE
       _type == "timeline" => {
         settings,
         items[]{
@@ -97,17 +107,29 @@ const HOME_QUERY = defineQuery(`
           year,
           title,
           description,
-          image { asset->{ _id, url, metadata { lqip, dimensions } }, hotspot, crop }
+          image { 
+            asset->{ _id, url, metadata { lqip, dimensions } }, 
+            hotspot, 
+            crop 
+          }
         }
       },
 
-      // --- SUPPORT ---
+      // SUPPORT (Nazwa klucza: support)
       _type == "support" => {
         eyebrow,
         heading,
         description,
-        mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, hotspot, crop },
-        accentImage { asset->{ _id, url, metadata { lqip, dimensions } }, hotspot, crop },
+        mainImage { 
+          asset->{ _id, url, metadata { lqip, dimensions } }, 
+          hotspot, 
+          crop 
+        },
+        accentImage { 
+          asset->{ _id, url, metadata { lqip, dimensions } }, 
+          hotspot, 
+          crop 
+        },
         options[]{
           _key,
           number,
@@ -164,7 +186,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-// --- 2. GŁÓWNY KOMPONENT STRONY ---
+// --- 2. GŁÓWNY KOMPONENT ---
 export default async function Home() {
   const { data } = await sanityFetch({ query: HOME_QUERY });
 
@@ -173,6 +195,7 @@ export default async function Home() {
   }
 
   // --- 3. MAPOWANIE SEKCJI ---
+  // Redukcja tablicy do obiektu dla łatwiejszego dostępu: sections.hero, sections.about itd.
   const sections = data.content.reduce(
     (acc: Record<string, SanityBlock>, block: SanityBlock) => {
       acc[block._type] = block;
@@ -181,7 +204,7 @@ export default async function Home() {
     {},
   );
 
-  // --- 4. JSON-LD ---
+  // --- 4. JSON-LD (Schema.org) ---
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "NGO",
@@ -215,11 +238,11 @@ export default async function Home() {
       <Script
         id="json-ld"
         type="application/ld+json"
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD standard
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD is safe here
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <main className="bg-raisinBlack min-h-screen">
+      <main className="bg-raisinBlack min-h-screen w-full">
         {/* Sekcje ładowane natychmiast */}
         {sections.hero && <Hero data={sections.hero} />}
         {sections.partners && <Partners data={sections.partners} />}
@@ -231,7 +254,7 @@ export default async function Home() {
         {/* Placeholder Eventów */}
         <Events />
 
-        {/* Sekcja Support */}
+        {/* Sekcja Support (z kluczem 'support') */}
         {sections.support && <Support data={sections.support} />}
       </main>
     </>

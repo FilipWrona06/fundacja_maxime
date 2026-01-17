@@ -11,7 +11,7 @@ interface ValueItem {
   icon: string;
 }
 
-// Interfejs dla obrazka z Sanity (z metadata)
+// Interfejs dla obrazka z Sanity (z metadata i alt)
 interface SanityImage {
   asset: {
     url: string;
@@ -19,6 +19,7 @@ interface SanityImage {
       lqip: string;
     };
   };
+  alt?: string; // <--- Dodano obsługę tekstu alternatywnego z CMS
 }
 
 interface AboutProps {
@@ -47,14 +48,21 @@ export const About = ({ data }: AboutProps) => {
   } = data || {};
 
   const hasValues = values.length > 0;
+
+  // Pobieramy dane obrazka
   const imageUrl = image?.asset?.url || "/images/about.jpg";
   const blurUrl = image?.asset?.metadata?.lqip;
+  // Fallback dla Alt Text (SEO/Dostępność)
+  const altText = image?.alt || "Dyrygent orkiestry Maxime podczas koncertu";
 
   return (
-    <section className="relative py-24 md:py-32 bg-raisinBlack overflow-hidden">
+    <section
+      className="relative py-24 md:py-32 bg-raisinBlack overflow-hidden"
+      aria-labelledby="about-heading"
+    >
       <div className="container mx-auto px-4">
         <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
-          {/* --- LEWA STRONA (Statyczna - Server) --- */}
+          {/* --- LEWA STRONA (Media) --- */}
           <div className="w-full lg:w-1/2 relative group">
             <div
               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] h-[90%] bg-arylideYellow/10 blur-[80px] rounded-full pointer-events-none"
@@ -67,7 +75,7 @@ export const About = ({ data }: AboutProps) => {
               <div className="relative w-full h-full transition-transform duration-700 ease-out group-hover:scale-105 will-change-transform">
                 <Image
                   src={imageUrl}
-                  alt="O fundacji"
+                  alt={altText} // Dynamiczny Alt Text
                   fill
                   className="object-cover"
                   placeholder={blurUrl ? "blur" : "empty"}
@@ -77,6 +85,7 @@ export const About = ({ data }: AboutProps) => {
                 />
               </div>
 
+              {/* Warstwy dekoracyjne (ukryte dla screen readerów) */}
               <div
                 className="absolute inset-0 ring-1 ring-inset ring-white/10 pointer-events-none rounded-sm"
                 aria-hidden="true"
@@ -88,11 +97,14 @@ export const About = ({ data }: AboutProps) => {
             </div>
           </div>
 
-          {/* --- PRAWA STRONA (Statyczna + Wyspa) --- */}
+          {/* --- PRAWA STRONA (Treść) --- */}
           <div className="w-full lg:w-1/2 flex flex-col justify-center">
-            {/* Nagłówek (Server) */}
+            {/* Nagłówek */}
             <div className="mb-12">
-              <span className="inline-block text-arylideYellow text-xs font-bold tracking-[0.2em] uppercase mb-4 pl-1 animate-fade-in-up">
+              <span
+                id="about-heading" // ID do powiązania z aria-labelledby sekcji
+                className="inline-block text-arylideYellow text-xs font-bold tracking-[0.2em] uppercase mb-4 pl-1 animate-fade-in-up"
+              >
                 {eyebrow}
               </span>
               <h2 className="font-youngest text-5xl md:text-6xl text-white mb-8 leading-tight">
@@ -105,7 +117,6 @@ export const About = ({ data }: AboutProps) => {
             </div>
 
             {/* SLIDER (Wyspa Kliencka) */}
-            {/* ZMIANA: Kontener layoutu jest tutaj, na serwerze */}
             {hasValues && (
               <section
                 className="border-t border-white/10 pt-10 min-h-55 flex flex-col justify-between"
@@ -115,7 +126,7 @@ export const About = ({ data }: AboutProps) => {
               </section>
             )}
 
-            {/* Link CTA (Server) */}
+            {/* Link CTA */}
             <div className="mt-10">
               <Link
                 href={ctaLink}
