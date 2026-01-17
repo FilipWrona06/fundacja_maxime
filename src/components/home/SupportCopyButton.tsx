@@ -40,7 +40,6 @@ export const SupportCopyButton = ({ value, label }: SupportCopyButtonProps) => {
         )}
       </div>
 
-      {/* Toast Notification (CSS Animation) */}
       <div
         className={`absolute right-0 -top-8 text-[10px] text-arylideYellow uppercase tracking-widest font-bold transition-opacity duration-300 ${
           copied ? "opacity-100" : "opacity-0 pointer-events-none"

@@ -1,4 +1,6 @@
-import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
+"use client";
+
+import { useScroll } from "framer-motion";
 import { ArrowRight, ExternalLink, Image as ImageIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,10 +9,22 @@ import {
   type PortableTextBlock,
   type PortableTextComponents,
 } from "next-sanity";
-import { urlFor } from "@/sanity/lib/image";
-import { SupportCopyButton } from "./SupportCopyButton"; // <--- Import wyspy
+import { useRef } from "react";
+import { SupportCopyButton } from "./SupportCopyButton";
 
 // --- TYPY ---
+
+// Zdefiniowany ręcznie typ obrazka, pasujący do tego co zwraca GROQ
+interface SanityImage {
+  asset: {
+    url: string;
+    metadata: {
+      lqip: string;
+    };
+  };
+  alt?: string;
+}
+
 interface SupportOption {
   _key: string;
   number: string;
@@ -28,13 +42,13 @@ interface SupportProps {
     eyebrow?: string;
     heading?: PortableTextBlock[];
     description?: string;
-    mainImage?: SanityImageSource;
-    accentImage?: SanityImageSource;
+    mainImage?: SanityImage;
+    accentImage?: SanityImage;
     options?: SupportOption[];
   };
 }
 
-// --- PORTABLE TEXT (Server-side rendering) ---
+// --- PORTABLE TEXT (Server-side styles) ---
 const components: PortableTextComponents = {
   block: {
     normal: ({ children }) => <>{children}</>,
@@ -52,6 +66,8 @@ const components: PortableTextComponents = {
 };
 
 export const Support = ({ data }: SupportProps) => {
+  const containerRef = useRef(null);
+
   const {
     eyebrow = "Zaangażowanie",
     heading,
@@ -61,19 +77,29 @@ export const Support = ({ data }: SupportProps) => {
     options = [],
   } = data || {};
 
+  useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"],
+  });
+
   const hasOptions = options.length > 0;
 
   if (!hasOptions) {
-    return <section className="hidden" />;
+    return <section ref={containerRef} className="hidden" />;
   }
 
-  // Fallbacki dla obrazków (jeśli w Sanity pusto, pokazujemy placeholder CSS)
-  const mainImgUrl = mainImage ? urlFor(mainImage).url() : null;
-  const accentImgUrl = accentImage ? urlFor(accentImage).url() : null;
+  // Pobieranie danych (Bezpieczne typowanie)
+  const mainImgUrl = mainImage?.asset?.url || null;
+  const mainImgAlt = mainImage?.alt || "Wsparcie fundacji";
+  const accentImgUrl = accentImage?.asset?.url || null;
+  const accentImgAlt = accentImage?.alt || "Detale";
 
   return (
-    <section className="relative py-32 bg-raisinBlack overflow-hidden">
-      {/* TŁO (Czysty CSS) */}
+    <section
+      ref={containerRef}
+      className="relative py-32 bg-raisinBlack overflow-hidden"
+    >
+      {/* TŁO (CSS) */}
       <div
         className="absolute top-0 right-0 w-200 h-200 bg-arylideYellow/5 blur-[150px] rounded-full pointer-events-none opacity-60"
         aria-hidden="true"
@@ -82,7 +108,6 @@ export const Support = ({ data }: SupportProps) => {
       <div className="container mx-auto px-6 max-w-350 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32">
           {/* --- LEWA STRONA (STICKY) --- */}
-          {/* position: sticky działa natywnie w CSS bez JS */}
           <div className="relative hidden lg:block">
             <div className="sticky top-32 h-[calc(100vh-10rem)] flex flex-col justify-center">
               <div className="mb-16 relative z-20">
@@ -115,16 +140,20 @@ export const Support = ({ data }: SupportProps) => {
                   {mainImgUrl ? (
                     <Image
                       src={mainImgUrl}
-                      alt="Main visual"
+                      alt={mainImgAlt}
                       fill
                       className="object-cover"
+                      placeholder={
+                        mainImage?.asset?.metadata?.lqip ? "blur" : "empty"
+                      }
+                      blurDataURL={mainImage?.asset?.metadata?.lqip}
                       sizes="(max-width: 768px) 100vw, 50vw"
                     />
                   ) : (
                     <div className="w-full h-full flex flex-col items-center justify-center text-white/10 bg-linear-to-br from-white/5 to-transparent border border-white/10">
                       <ImageIcon className="w-12 h-12 mb-2" />
                       <span className="text-xs uppercase tracking-widest">
-                        Brak zdjęcia
+                        Brak zdjęcia głównego
                       </span>
                     </div>
                   )}
@@ -135,9 +164,13 @@ export const Support = ({ data }: SupportProps) => {
                   {accentImgUrl ? (
                     <Image
                       src={accentImgUrl}
-                      alt="Accent visual"
+                      alt={accentImgAlt}
                       fill
                       className="object-cover"
+                      placeholder={
+                        accentImage?.asset?.metadata?.lqip ? "blur" : "empty"
+                      }
+                      blurDataURL={accentImage?.asset?.metadata?.lqip}
                       sizes="(max-width: 768px) 100vw, 33vw"
                     />
                   ) : (

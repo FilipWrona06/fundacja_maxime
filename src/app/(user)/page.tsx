@@ -4,12 +4,10 @@ import Script from "next/script";
 import { defineQuery } from "next-sanity";
 
 // --- IMPORTY KOMPONENTÓW ---
-
-// 1. KRYTYCZNE (Above the Fold) - Import statyczny
 import { Hero } from "@/components/home/Hero";
 import { Partners } from "@/components/home/Partners";
 
-// 2. NIEKRYTYCZNE (Below the Fold) - Lazy Loading
+// Lazy Loading
 const About = dynamic(() =>
   import("@/components/home/About").then((mod) => mod.About),
 );
@@ -29,14 +27,14 @@ import { sanityFetch } from "@/sanity/lib/live";
 interface SanityBlock {
   _type: string;
   _key: string;
-  // biome-ignore lint/suspicious/noExplicitAny: CMS data is dynamic
+  // biome-ignore lint/suspicious/noExplicitAny: Dane z CMS są dynamiczne
   [key: string]: any;
 }
 
 // --- GROQ QUERY ---
 const HOME_QUERY = defineQuery(`
   *[_type == "page" && slug.current == "home"][0]{
-    // 1. DANE SEO
+    // 1. SEO
     title,
     seoTitle,
     seoDescription,
@@ -46,7 +44,7 @@ const HOME_QUERY = defineQuery(`
       _type,
       _key,
       
-      // --- HERO ---
+      // HERO
       _type == "hero" => {
         badge,
         headingLine1,
@@ -56,18 +54,13 @@ const HOME_QUERY = defineQuery(`
           asset->{ _id, url, metadata { lqip, dimensions } } 
         },
         buttons[]{ 
-          _key, 
-          title, 
-          style,
-          linkType,
-          externalLink,
+          _key, title, style, linkType, externalLink,
           "internalLink": internalLink->slug.current,
-          openInNewTab,
-          ariaLabel
+          openInNewTab, ariaLabel
         }
       },
 
-      // --- PARTNERS ---
+      // PARTNERS
       _type == "partners" => {
         eyebrow,
         title,
@@ -79,7 +72,7 @@ const HOME_QUERY = defineQuery(`
         }
       },
 
-      // --- ABOUT ---
+      // ABOUT
       _type == "about" => {
         eyebrow,
         headingLine1,
@@ -87,16 +80,14 @@ const HOME_QUERY = defineQuery(`
         description,
         image { 
           asset->{ _id, url, metadata { lqip, dimensions } }, 
-          hotspot, 
-          crop,
-          alt 
+          hotspot, crop, alt 
         },
         ctaLink,
         ctaText,
         values[]{ _key, title, description, icon }
       },
 
-      // --- TIMELINE (Zaktualizowane o nagłówki i ALT) ---
+      // TIMELINE
       _type == "timeline" => {
         eyebrow,
         heading,
@@ -107,24 +98,28 @@ const HOME_QUERY = defineQuery(`
           description,
           image { 
             asset->{ _id, url, metadata { lqip, dimensions } }, 
-            hotspot, 
-            crop,
-            alt
+            hotspot, crop, alt
           }
         }
       },
 
-      // --- SUPPORT ---
+      // SUPPORT (Wsparcie)
       _type == "support" => {
         eyebrow,
-        heading,
+        heading, // Portable Text
         description,
-        mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, hotspot, crop },
-        accentImage { asset->{ _id, url, metadata { lqip, dimensions } }, hotspot, crop },
+        mainImage { 
+          asset->{ _id, url, metadata { lqip, dimensions } }, 
+          hotspot, crop, alt 
+        },
+        accentImage { 
+          asset->{ _id, url, metadata { lqip, dimensions } }, 
+          hotspot, crop, alt 
+        },
         options[]{
           _key,
           number,
-          title,
+          title, // Portable Text
           text,
           actionType,
           copyValue,
@@ -137,7 +132,7 @@ const HOME_QUERY = defineQuery(`
   }
 `);
 
-// --- 1. METADATA (SEO) ---
+// --- METADATA ---
 export async function generateMetadata(): Promise<Metadata> {
   const { data } = await sanityFetch({ query: HOME_QUERY });
 
@@ -145,7 +140,6 @@ export async function generateMetadata(): Promise<Metadata> {
   const description =
     data?.seoDescription ||
     "Wspieramy młode talenty, organizujemy koncerty i łączymy pokolenia poprzez piękno dźwięku.";
-
   const ogImage = data?.seoImage || "/images/hero-poster.jpg";
 
   return {
@@ -158,14 +152,7 @@ export async function generateMetadata(): Promise<Metadata> {
       locale: "pl_PL",
       url: "https://fundacjamaxime.pl",
       siteName: "Fundacja Maxime",
-      images: [
-        {
-          url: ogImage,
-          width: 1200,
-          height: 630,
-          alt: title,
-        },
-      ],
+      images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
     },
     twitter: {
       card: "summary_large_image",
@@ -176,7 +163,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-// --- 2. GŁÓWNY KOMPONENT STRONY ---
+// --- GŁÓWNY KOMPONENT ---
 export default async function Home() {
   const { data } = await sanityFetch({ query: HOME_QUERY });
 
@@ -184,7 +171,6 @@ export default async function Home() {
     return <main className="bg-raisinBlack min-h-screen" />;
   }
 
-  // --- 3. MAPOWANIE SEKCJI ---
   const sections = data.content.reduce(
     (acc: Record<string, SanityBlock>, block: SanityBlock) => {
       acc[block._type] = block;
@@ -193,15 +179,13 @@ export default async function Home() {
     {},
   );
 
-  // --- 4. JSON-LD ---
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "NGO",
     name: "Fundacja Maxime",
     url: "https://fundacjamaxime.pl",
     logo: "https://fundacjamaxime.pl/logo.png",
-    description:
-      "Wspieramy młode talenty, organizujemy koncerty i łączymy pokolenia poprzez piękno dźwięku.",
+    description: "Wspieramy młode talenty i organizujemy koncerty.",
     address: {
       "@type": "PostalAddress",
       streetAddress: "ul. Muzyczna 14/3",
@@ -213,13 +197,7 @@ export default async function Home() {
       "@type": "ContactPoint",
       telephone: "+48 123 456 789",
       contactType: "customer service",
-      areaServed: "PL",
-      availableLanguage: "Polish",
     },
-    sameAs: [
-      "https://facebook.com/fundacjamaxime",
-      "https://instagram.com/fundacjamaxime",
-    ],
   };
 
   return (
@@ -232,18 +210,11 @@ export default async function Home() {
       />
 
       <main className="bg-raisinBlack min-h-screen w-full">
-        {/* Sekcje ładowane natychmiast */}
         {sections.hero && <Hero data={sections.hero} />}
         {sections.partners && <Partners data={sections.partners} />}
-
-        {/* Sekcje ładowane lazy */}
         {sections.about && <About data={sections.about} />}
         {sections.timeline && <Timeline data={sections.timeline} />}
-
-        {/* Placeholder Eventów */}
         <Events />
-
-        {/* Sekcja Support */}
         {sections.support && <Support data={sections.support} />}
       </main>
     </>
