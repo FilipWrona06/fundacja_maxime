@@ -4,10 +4,12 @@ import Script from "next/script";
 import { defineQuery } from "next-sanity";
 
 // --- IMPORTY KOMPONENTÓW ---
+
+// 1. KRYTYCZNE (Above the Fold) - Import statyczny
 import { Hero } from "@/components/home/Hero";
 import { Partners } from "@/components/home/Partners";
 
-// Dynamiczne importy (Lazy Loading)
+// 2. NIEKRYTYCZNE (Below the Fold) - Lazy Loading
 const About = dynamic(() =>
   import("@/components/home/About").then((mod) => mod.About),
 );
@@ -131,7 +133,7 @@ export async function generateMetadata(): Promise<Metadata> {
     data?.seoDescription ||
     "Wspieramy młode talenty, organizujemy koncerty i łączymy pokolenia poprzez piękno dźwięku.";
 
-  // Fallback do bezpiecznego pliku w public/images
+  // Fallback do istniejącego pliku w public/images
   const ogImage = data?.seoImage || "/images/hero-poster.jpg";
 
   return {
@@ -162,7 +164,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-// --- 2. GŁÓWNY KOMPONENT ---
+// --- 2. GŁÓWNY KOMPONENT STRONY ---
 export default async function Home() {
   const { data } = await sanityFetch({ query: HOME_QUERY });
 

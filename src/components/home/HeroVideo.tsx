@@ -1,31 +1,51 @@
 "use client";
 
-import Image from "next/image"; // <--- Używamy Next Image do postera
+import Image from "next/image";
 import BackgroundVideo from "next-video/background-video";
 // Import wideo
 import backgroundVideo from "../../../videos/background-video.mp4";
 
-export const HeroVideo = () => {
+// Typy zgodne z tym, co przekazuje Hero.tsx (z Sanity)
+interface HeroVideoProps {
+  poster?: {
+    asset: {
+      url: string;
+      metadata: {
+        lqip: string;
+      };
+    };
+  };
+}
+
+export const HeroVideo = ({ poster }: HeroVideoProps) => {
+  // LOGIKA WYBORU OBRAZKA:
+  // 1. Jeśli w CMS jest ustawiony obrazek -> użyj URL z CMS.
+  // 2. Jeśli nie ma -> użyj lokalnego pliku "/video-poster.webp".
+  const posterUrl = poster?.asset?.url || "/video-poster.webp";
+
+  // Dane do efektu rozmycia (tylko dla obrazków z Sanity)
+  const blurData = poster?.asset?.metadata?.lqip;
+
   return (
     <div className="absolute inset-0 w-full h-full overflow-hidden">
       {/* 1. POSTER (Warstwa spodnia) */}
-      {/* Używamy komponentu Image, żeby wymusić 'object-cover' i pełny ekran */}
       <div className="absolute inset-0 -z-20">
         <Image
-          src="/video-poster.webp"
+          src={posterUrl}
           alt="Hero background"
           fill
           className="object-cover"
-          priority // Ładujemy priorytetowo dla LCP
+          priority // Kluczowe dla LCP (ładuje się natychmiast)
+          // Jeśli mamy dane LQIP, włączamy efekt blur
+          placeholder={blurData ? "blur" : "empty"}
+          blurDataURL={blurData}
         />
       </div>
 
       {/* 2. WIDEO (Warstwa wierzchnia) */}
-      {/* Biblioteka next-video */}
       <div className="absolute inset-0 -z-10">
         <BackgroundVideo
           src={backgroundVideo}
-          // Usuwamy prop 'poster', bo obsłużyliśmy go wyżej
           className="w-full h-full object-cover"
           style={{
             position: "absolute",
