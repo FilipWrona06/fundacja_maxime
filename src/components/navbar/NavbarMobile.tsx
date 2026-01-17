@@ -5,13 +5,7 @@ import Link from "next/link";
 import { Logo } from "@/components/ui/Logo";
 import { useNavbarContext } from "./NavbarLogic";
 
-interface NavLink {
-  name: string;
-  href: string;
-}
-
-export const NavbarMobile = ({ links }: { links: NavLink[] }) => {
-  // Pobieramy stan z kontekstu
+export const NavbarMobile = ({ children }: { children: React.ReactNode }) => {
   const { isMobileOpen, closeMobileMenu } = useNavbarContext();
 
   return (
@@ -26,6 +20,12 @@ export const NavbarMobile = ({ links }: { links: NavLink[] }) => {
         }
       `}
       aria-hidden={!isMobileOpen}
+      // EVENT BUBBLING: Kliknięcie w jakikolwiek link wewnątrz zamknie menu
+      onClick={(e) => {
+        if ((e.target as HTMLElement).closest("a")) {
+          closeMobileMenu();
+        }
+      }}
     >
       <button
         type="button"
@@ -40,7 +40,6 @@ export const NavbarMobile = ({ links }: { links: NavLink[] }) => {
         <X className="w-10 h-10" />
       </button>
 
-      {/* Reszta kodu bez zmian... Używamy closeMobileMenu przy kliknięciach */}
       <Link
         href="/"
         onClick={closeMobileMenu}
@@ -50,23 +49,8 @@ export const NavbarMobile = ({ links }: { links: NavLink[] }) => {
       </Link>
 
       <nav className="flex flex-col items-center gap-6">
-        {links.map((link, idx) => (
-          <Link
-            key={link.name}
-            href={link.href}
-            onClick={closeMobileMenu}
-            className={`
-              text-3xl font-montserrat font-light text-white hover:text-arylideYellow 
-              transition-all duration-500 transform
-              ${isMobileOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}
-            `}
-            style={{
-              transitionDelay: `${isMobileOpen ? idx * 100 + 200 : 0}ms`,
-            }}
-          >
-            {link.name}
-          </Link>
-        ))}
+        {/* Tu wylądują linki wygenerowane na serwerze */}
+        {children}
       </nav>
 
       <a

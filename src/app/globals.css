@@ -138,7 +138,6 @@
     animation: marquee var(--marquee-duration, 60s) linear infinite;
   }
 
-  /* Pauza po najechaniu myszką - Dobre UX */
   .animate-marquee:hover {
     animation-play-state: paused;
   }
@@ -159,5 +158,45 @@
   }
   .delay-500 {
     animation-delay: 500ms;
+  }
+
+  /* --- MENU MOBILNE (Server-Client Bridge) --- */
+  /* To pozwala animować linki z serwera, gdy klient otworzy menu */
+  .visible .mobile-nav-link {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+
+  /* --- DOSTĘPNOŚĆ (REDUCED MOTION) --- */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+
+    .animate-fade-in-up,
+    .animate-fade-in,
+    .animate-progress-fill,
+    .animate-shine,
+    .mobile-nav-link {
+      opacity: 1 !important;
+      transform: none !important;
+      width: 100% !important;
+    }
+
+    .animate-marquee {
+      animation: none !important;
+      transform: none !important;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
   }
 }
