@@ -1,6 +1,7 @@
-"use client";
+// USUNIĘTO: "use client"
+// USUNIĘTO: framer-motion (useScroll, useTransform)
+// USUNIĘTO: useRef (niepotrzebny na serwerze)
 
-import { useScroll } from "framer-motion";
 import { ArrowRight, ExternalLink, Image as ImageIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,12 +10,9 @@ import {
   type PortableTextBlock,
   type PortableTextComponents,
 } from "next-sanity";
-import { useRef } from "react";
 import { SupportCopyButton } from "./SupportCopyButton";
 
 // --- TYPY ---
-
-// Zdefiniowany ręcznie typ obrazka, pasujący do tego co zwraca GROQ
 interface SanityImage {
   asset: {
     url: string;
@@ -48,7 +46,7 @@ interface SupportProps {
   };
 }
 
-// --- PORTABLE TEXT (Server-side styles) ---
+// --- PORTABLE TEXT ---
 const components: PortableTextComponents = {
   block: {
     normal: ({ children }) => <>{children}</>,
@@ -66,8 +64,6 @@ const components: PortableTextComponents = {
 };
 
 export const Support = ({ data }: SupportProps) => {
-  const containerRef = useRef(null);
-
   const {
     eyebrow = "Zaangażowanie",
     heading,
@@ -77,29 +73,21 @@ export const Support = ({ data }: SupportProps) => {
     options = [],
   } = data || {};
 
-  useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
-  });
-
   const hasOptions = options.length > 0;
 
   if (!hasOptions) {
-    return <section ref={containerRef} className="hidden" />;
+    return <section className="hidden" />;
   }
 
-  // Pobieranie danych (Bezpieczne typowanie)
+  // Pobieranie danych
   const mainImgUrl = mainImage?.asset?.url || null;
   const mainImgAlt = mainImage?.alt || "Wsparcie fundacji";
   const accentImgUrl = accentImage?.asset?.url || null;
   const accentImgAlt = accentImage?.alt || "Detale";
 
   return (
-    <section
-      ref={containerRef}
-      className="relative py-32 bg-raisinBlack overflow-hidden"
-    >
-      {/* TŁO (CSS) */}
+    <section className="relative py-32 bg-raisinBlack overflow-hidden">
+      {/* TŁO (Czysty CSS zamiast Motion) */}
       <div
         className="absolute top-0 right-0 w-200 h-200 bg-arylideYellow/5 blur-[150px] rounded-full pointer-events-none opacity-60"
         aria-hidden="true"
@@ -107,10 +95,12 @@ export const Support = ({ data }: SupportProps) => {
 
       <div className="container mx-auto px-6 max-w-350 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32">
-          {/* --- LEWA STRONA (STICKY) --- */}
+          {/* --- LEWA STRONA (STICKY - CSS) --- */}
           <div className="relative hidden lg:block">
+            {/* sticky działa natywnie w CSS, nie potrzebuje JS */}
             <div className="sticky top-32 h-[calc(100vh-10rem)] flex flex-col justify-center">
               <div className="mb-16 relative z-20">
+                {/* Zamiast motion.span -> zwykły span z klasą animate-fade-in-up */}
                 <span className="text-arylideYellow text-[10px] font-bold tracking-[0.4em] uppercase block mb-6 animate-fade-in-up">
                   {eyebrow}
                 </span>
@@ -215,7 +205,7 @@ export const Support = ({ data }: SupportProps) => {
                     {item.text}
                   </p>
 
-                  {/* AKCJA: KOPIUJ (Client Island) */}
+                  {/* AKCJA: KOPIUJ (Jedyny element Client-Side) */}
                   {item.actionType === "copy" && item.copyValue && (
                     <SupportCopyButton
                       value={item.copyValue}
@@ -223,7 +213,7 @@ export const Support = ({ data }: SupportProps) => {
                     />
                   )}
 
-                  {/* AKCJA: LINK (Server HTML) */}
+                  {/* AKCJA: LINK (Czysty HTML) */}
                   {(item.actionType === "external" ||
                     item.actionType === "internal") &&
                     item.linkUrl && (
