@@ -1,12 +1,4 @@
-// --- START OF FILE src/components/layout/Footer.tsx ---
-
-"use client";
-
-import { motion } from "framer-motion";
 import {
-  ArrowUp,
-  Check,
-  Copy,
   Facebook,
   Instagram,
   Mail,
@@ -15,10 +7,11 @@ import {
   Youtube,
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
 import { Logo } from "@/components/ui/Logo";
+import { FooterCopyButton } from "../footer/FooterCopyButton";
+import { FooterScrollTop } from "../footer/FooterScrollTop";
 
-const footerLinks = [
+const FOOTER_LINKS = [
   { name: "Strona główna", href: "/" },
   { name: "Wydarzenia", href: "/wydarzenia" },
   { name: "O nas", href: "/o-nas" },
@@ -27,25 +20,14 @@ const footerLinks = [
   { name: "Kontakt", href: "/kontakt" },
 ];
 
-const socialLinks = [
+const SOCIAL_LINKS = [
   { icon: Facebook, href: "https://facebook.com", label: "Facebook" },
   { icon: Instagram, href: "https://instagram.com", label: "Instagram" },
   { icon: Youtube, href: "https://youtube.com", label: "YouTube" },
 ];
 
 export const Footer = () => {
-  const [copied, setCopied] = useState(false);
   const bankAccount = "12 3456 0000 0000 1234 5678 9012";
-
-  const handleCopyAccount = () => {
-    navigator.clipboard.writeText(bankAccount.replace(/\s/g, ""));
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
 
   return (
     <footer className="bg-raisinBlack border-t border-white/10 pt-20 pb-8 relative overflow-hidden">
@@ -66,7 +48,7 @@ export const Footer = () => {
             </p>
 
             <div className="flex gap-4">
-              {socialLinks.map((social) => (
+              {SOCIAL_LINKS.map((social) => (
                 <a
                   key={social.label}
                   href={social.href}
@@ -90,7 +72,7 @@ export const Footer = () => {
               Menu
             </h4>
             <ul className="space-y-3">
-              {footerLinks.map((link) => (
+              {FOOTER_LINKS.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
@@ -158,38 +140,12 @@ export const Footer = () => {
                 <span className="text-white font-mono">123456789</span>
               </p>
 
-              {/* Numer konta - POPRAWIONA INTERAKCJA */}
+              {/* Numer konta - Wyspa Kliencka */}
               <div className="mt-6 pt-2">
                 <span className="text-xs text-white/40 uppercase tracking-wider block mb-2">
                   Konto do darowizn:
                 </span>
-                <button
-                  type="button"
-                  className="relative group cursor-pointer w-full text-left"
-                  onClick={handleCopyAccount}
-                  title="Kliknij, aby skopiować numer konta"
-                >
-                  <div className="bg-white/5 border border-white/10 rounded px-3 py-3 font-mono text-xs sm:text-sm text-arylideYellow transition-colors group-hover:bg-white/10 group-hover:border-arylideYellow/30">
-                    {bankAccount}
-                  </div>
-                  <div className="absolute right-2 top-1/2 -translate-y-1/2 text-white/20 group-hover:text-arylideYellow transition-colors">
-                    {copied ? (
-                      <Check className="w-4 h-4" />
-                    ) : (
-                      <Copy className="w-4 h-4" />
-                    )}
-                  </div>
-                  {/* Tooltip 'Skopiowano' */}
-                  {copied && (
-                    <motion.span
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="absolute -top-8 right-0 text-[10px] bg-arylideYellow text-raisinBlack font-bold px-2 py-1 rounded"
-                    >
-                      Skopiowano!
-                    </motion.span>
-                  )}
-                </button>
+                <FooterCopyButton bankAccount={bankAccount} />
               </div>
             </div>
           </div>
@@ -217,17 +173,8 @@ export const Footer = () => {
             </Link>
           </div>
 
-          {/* Back to top button */}
-          <button
-            onClick={scrollToTop}
-            type="button"
-            className="group flex items-center gap-2 text-white/20 text-xs uppercase tracking-widest hover:text-arylideYellow transition-colors ml-0 md:ml-8"
-          >
-            W górę
-            <span className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center group-hover:border-arylideYellow group-hover:bg-arylideYellow group-hover:text-raisinBlack transition-all">
-              <ArrowUp className="w-3 h-3" />
-            </span>
-          </button>
+          {/* Back to top button - Wyspa Kliencka */}
+          <FooterScrollTop />
         </div>
       </div>
     </footer>
