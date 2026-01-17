@@ -1,46 +1,54 @@
 import Image from "next/image";
 
 // --- TYPY ---
+interface SanityImage {
+  asset: {
+    url: string;
+    metadata: {
+      lqip: string;
+    };
+  };
+  alt?: string; // Obsługa ALT
+}
+
 interface TimelineItem {
   _key: string;
   year: string;
   title: string;
   description: string;
-  image: {
-    asset: {
-      url: string;
-      metadata: {
-        lqip: string;
-      };
-    };
-  };
+  image: SanityImage;
 }
 
 interface TimelineProps {
   data?: {
+    eyebrow?: string;
+    heading?: string;
     items?: TimelineItem[];
   };
 }
 
 export const Timeline = ({ data }: TimelineProps) => {
-  const items = data?.items || [];
+  const {
+    items = [],
+    eyebrow = "Ewolucja", // Fallback
+    heading = "Nasza historia", // Fallback
+  } = data || {};
 
   if (items.length === 0) return null;
 
   return (
-    // DODANO: 'relative' - kluczowe, żeby elementy absolute nie uciekały
     <section
       className="relative bg-raisinBlack py-32 overflow-hidden"
       aria-label="Historia fundacji"
     >
       <div className="container mx-auto px-6 max-w-300 relative z-10">
-        {/* Nagłówek */}
+        {/* Nagłówek (Dynamiczny z Sanity) */}
         <div className="text-center mb-32">
-          <span className="text-arylideYellow text-xs font-bold tracking-[0.4em] uppercase block mb-6">
-            Ewolucja
+          <span className="text-arylideYellow text-xs font-bold tracking-[0.4em] uppercase block mb-6 animate-fade-in-up">
+            {eyebrow}
           </span>
-          <h2 className="font-youngest text-6xl md:text-8xl text-white">
-            Nasza historia
+          <h2 className="font-youngest text-6xl md:text-8xl text-white animate-fade-in-up delay-100">
+            {heading}
           </h2>
         </div>
 
@@ -48,6 +56,7 @@ export const Timeline = ({ data }: TimelineProps) => {
           {items.map((item, index) => {
             const imageUrl = item.image?.asset?.url;
             const blurUrl = item.image?.asset?.metadata?.lqip;
+            const altText = item.image?.alt || item.title; // Fallback dla ALT
             const isEven = index % 2 === 0;
 
             return (
@@ -61,7 +70,7 @@ export const Timeline = ({ data }: TimelineProps) => {
                     {imageUrl ? (
                       <Image
                         src={imageUrl}
-                        alt={item.title}
+                        alt={altText}
                         fill
                         className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105 filter grayscale group-hover:grayscale-0"
                         placeholder={blurUrl ? "blur" : "empty"}
@@ -80,6 +89,7 @@ export const Timeline = ({ data }: TimelineProps) => {
                   {/* Dekoracyjny rok (W tle - za zdjęciem) */}
                   <span
                     className={`absolute -top-12 ${isEven ? "-right-12" : "-left-12"} font-youngest text-[8rem] md:text-[10rem] text-white/5 select-none z-0 pointer-events-none transition-transform duration-700 group-hover:translate-x-4`}
+                    aria-hidden="true" // Ukryte dla czytników (rok jest też w treści)
                   >
                     {item.year}
                   </span>

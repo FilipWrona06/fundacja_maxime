@@ -3,11 +3,13 @@ import dynamic from "next/dynamic";
 import Script from "next/script";
 import { defineQuery } from "next-sanity";
 
-// --- IMPORTY STATYCZNE (Krytyczne dla LCP) ---
+// --- IMPORTY KOMPONENTÓW ---
+
+// 1. KRYTYCZNE (Above the Fold) - Import statyczny
 import { Hero } from "@/components/home/Hero";
 import { Partners } from "@/components/home/Partners";
 
-// --- IMPORTY DYNAMICZNE (Lazy Loading) ---
+// 2. NIEKRYTYCZNE (Below the Fold) - Lazy Loading
 const About = dynamic(() =>
   import("@/components/home/About").then((mod) => mod.About),
 );
@@ -27,7 +29,7 @@ import { sanityFetch } from "@/sanity/lib/live";
 interface SanityBlock {
   _type: string;
   _key: string;
-  // biome-ignore lint/suspicious/noExplicitAny: Dane z CMS są dynamiczne
+  // biome-ignore lint/suspicious/noExplicitAny: CMS data is dynamic
   [key: string]: any;
 }
 
@@ -44,13 +46,12 @@ const HOME_QUERY = defineQuery(`
       _type,
       _key,
       
-      // HERO
+      // --- HERO ---
       _type == "hero" => {
         badge,
         headingLine1,
         headingLine2,
         description,
-        // Pobieramy obrazek tła z metadanymi
         posterImage { 
           asset->{ _id, url, metadata { lqip, dimensions } } 
         },
@@ -66,7 +67,7 @@ const HOME_QUERY = defineQuery(`
         }
       },
 
-      // PARTNERS
+      // --- PARTNERS ---
       _type == "partners" => {
         eyebrow,
         title,
@@ -74,15 +75,11 @@ const HOME_QUERY = defineQuery(`
         items[]{
           _key,
           name,
-          logo { 
-            asset->{ _id, url, metadata { lqip, dimensions } }, 
-            hotspot, 
-            crop 
-          }
+          logo { asset->{ _id, url, metadata { lqip, dimensions } }, hotspot, crop }
         }
       },
 
-      // ABOUT
+      // --- ABOUT ---
       _type == "about" => {
         eyebrow,
         headingLine1,
@@ -92,16 +89,17 @@ const HOME_QUERY = defineQuery(`
           asset->{ _id, url, metadata { lqip, dimensions } }, 
           hotspot, 
           crop,
-          alt // Alt text dla dostępności
+          alt 
         },
         ctaLink,
         ctaText,
         values[]{ _key, title, description, icon }
       },
 
-      // TIMELINE
+      // --- TIMELINE (Zaktualizowane o nagłówki i ALT) ---
       _type == "timeline" => {
-        settings,
+        eyebrow,
+        heading,
         items[]{
           _key,
           year,
@@ -110,26 +108,19 @@ const HOME_QUERY = defineQuery(`
           image { 
             asset->{ _id, url, metadata { lqip, dimensions } }, 
             hotspot, 
-            crop 
+            crop,
+            alt
           }
         }
       },
 
-      // SUPPORT (Nazwa klucza: support)
+      // --- SUPPORT ---
       _type == "support" => {
         eyebrow,
         heading,
         description,
-        mainImage { 
-          asset->{ _id, url, metadata { lqip, dimensions } }, 
-          hotspot, 
-          crop 
-        },
-        accentImage { 
-          asset->{ _id, url, metadata { lqip, dimensions } }, 
-          hotspot, 
-          crop 
-        },
+        mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, hotspot, crop },
+        accentImage { asset->{ _id, url, metadata { lqip, dimensions } }, hotspot, crop },
         options[]{
           _key,
           number,
@@ -155,7 +146,6 @@ export async function generateMetadata(): Promise<Metadata> {
     data?.seoDescription ||
     "Wspieramy młode talenty, organizujemy koncerty i łączymy pokolenia poprzez piękno dźwięku.";
 
-  // Fallback do istniejącego pliku w public/images
   const ogImage = data?.seoImage || "/images/hero-poster.jpg";
 
   return {
@@ -186,7 +176,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-// --- 2. GŁÓWNY KOMPONENT ---
+// --- 2. GŁÓWNY KOMPONENT STRONY ---
 export default async function Home() {
   const { data } = await sanityFetch({ query: HOME_QUERY });
 
@@ -195,7 +185,6 @@ export default async function Home() {
   }
 
   // --- 3. MAPOWANIE SEKCJI ---
-  // Redukcja tablicy do obiektu dla łatwiejszego dostępu: sections.hero, sections.about itd.
   const sections = data.content.reduce(
     (acc: Record<string, SanityBlock>, block: SanityBlock) => {
       acc[block._type] = block;
@@ -204,7 +193,7 @@ export default async function Home() {
     {},
   );
 
-  // --- 4. JSON-LD (Schema.org) ---
+  // --- 4. JSON-LD ---
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "NGO",
@@ -238,7 +227,7 @@ export default async function Home() {
       <Script
         id="json-ld"
         type="application/ld+json"
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD is safe here
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD standard
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
@@ -254,7 +243,7 @@ export default async function Home() {
         {/* Placeholder Eventów */}
         <Events />
 
-        {/* Sekcja Support (z kluczem 'support') */}
+        {/* Sekcja Support */}
         {sections.support && <Support data={sections.support} />}
       </main>
     </>
