@@ -20,7 +20,7 @@ const useNavbarContext = () => {
   return context;
 };
 
-// --- 2. GŁÓWNY WRAPPER (LOGIKA) ---
+// --- 2. NAVBAR ROOT (LOGIC WRAPPER) ---
 export const NavbarRoot = ({ children }: { children: React.ReactNode }) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
@@ -29,18 +29,21 @@ export const NavbarRoot = ({ children }: { children: React.ReactNode }) => {
   const toggleMobileMenu = () => setIsMobileOpen((prev) => !prev);
   const closeMobileMenu = () => setIsMobileOpen(false);
 
-  // Scroll Logic (Direct DOM)
+  // Scroll Logic (Zero-Render Performance)
   useEffect(() => {
     let rafId: number | null = null;
+
     const handleScroll = () => {
       if (rafId) return;
       rafId = requestAnimationFrame(() => {
         const currentScrollY = window.scrollY;
+        // Histereza: 20px w dół, 10px w górę (zapobiega migotaniu)
         const threshold = isScrolledRef.current ? 10 : 20;
         const shouldBeScrolled = currentScrollY > threshold;
 
         if (shouldBeScrolled !== isScrolledRef.current) {
           isScrolledRef.current = shouldBeScrolled;
+          // Bezpośrednia manipulacja DOM dla maksymalnej wydajności (0 re-renders)
           if (headerRef.current) {
             headerRef.current.setAttribute(
               "data-scrolled",
@@ -51,15 +54,17 @@ export const NavbarRoot = ({ children }: { children: React.ReactNode }) => {
         rafId = null;
       });
     };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
+    handleScroll(); // Init check
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
       if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);
 
-  // Body Lock
+  // Body Scroll Lock (Dostępność + UX)
   useEffect(() => {
     if (isMobileOpen) {
       document.body.style.overflow = "hidden";
@@ -88,57 +93,87 @@ export const NavbarRoot = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-// --- 3. PRZYCISK TRIGGER (HAMBURGER) ---
+// --- 3. NAVBAR TRIGGER (BUTTON) ---
 export const NavbarTrigger = () => {
-  const { toggleMobileMenu } = useNavbarContext();
+  const { toggleMobileMenu, isMobileOpen } = useNavbarContext();
+
   return (
     <button
       type="button"
       className="lg:hidden text-white hover:text-arylideYellow transition-colors active:scale-90 duration-200 p-1"
       onClick={toggleMobileMenu}
-      aria-label="Otwórz menu"
+      aria-label={isMobileOpen ? "Zamknij menu" : "Otwórz menu"}
+      aria-expanded={isMobileOpen} // Kluczowe dla czytników ekranu
+      aria-controls="mobile-menu-overlay" // Powiązanie z ID menu
     >
       <Menu className="w-8 h-8" />
     </button>
   );
 };
 
-// --- 4. OVERLAY MOBILNY ---
+// --- 4. NAVBAR OVERLAY (MOBILE MENU) ---
 export const NavbarOverlay = ({ children }: { children: React.ReactNode }) => {
   const { isMobileOpen, closeMobileMenu } = useNavbarContext();
 
+  // Organizacja klas CSS dla czytelności
+  const overlayClasses = [
+    "fixed inset-0 z-60 bg-raisinBlack/98 backdrop-blur-xl flex flex-col items-center justify-center gap-8",
+    "transition-all duration-700 ease-[cubic-bezier(0.33,1,0.68,1)]",
+    isMobileOpen
+      ? "opacity-100 visible translate-y-0 scale-100 blur-0"
+      : "opacity-0 invisible translate-y-8 scale-95 blur-sm pointer-events-none",
+  ].join(" ");
+
+  const ctaClasses = [
+    "mt-8 px-8 py-3 rounded-full text-base font-bold tracking-wide",
+    "bg-arylideYellow text-raisinBlack hover:bg-white",
+    "transition-all duration-500 ease-out hover:shadow-[0_0_20px_rgba(239,203,111,0.4)]",
+    isMobileOpen
+      ? "opacity-100 translate-y-0 scale-100"
+      : "opacity-0 translate-y-8 scale-90",
+  ].join(" ");
+
   return (
     <div
-      className={`
-        fixed inset-0 z-60 bg-raisinBlack/98 backdrop-blur-xl flex flex-col items-center justify-center gap-8 
-        transition-all duration-700 ease-[cubic-bezier(0.33,1,0.68,1)]
-        ${isMobileOpen ? "opacity-100 visible translate-y-0 scale-100 blur-0" : "opacity-0 invisible translate-y-8 scale-95 blur-sm pointer-events-none"}
-      `}
+      id="mobile-menu-overlay"
+      className={overlayClasses}
       aria-hidden={!isMobileOpen}
-      onClick={(e) => {
-        if ((e.target as HTMLElement).closest("a")) closeMobileMenu();
+      role="dialog" // Semantyka: to jest modal
+      aria-modal="true" // Wymusza focus wewnątrz (dla screen readerów)
+      onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+        // Event Delegation: Zamknij menu po kliknięciu w dowolny link wewnątrz
+        if ((e.target as HTMLElement).closest("a")) {
+          closeMobileMenu();
+        }
       }}
     >
       {/* Przycisk Zamknięcia */}
       <button
         type="button"
-        className={`absolute top-8 right-8 text-philippineSilver hover:text-white transition-all duration-500 hover:rotate-90 active:scale-90 p-2 ${isMobileOpen ? "opacity-100 rotate-0" : "opacity-0 -rotate-90"}`}
+        className={`
+          absolute top-8 right-8 text-philippineSilver hover:text-white 
+          transition-all duration-500 hover:rotate-90 active:scale-90 p-2
+          ${isMobileOpen ? "opacity-100 rotate-0" : "opacity-0 -rotate-90"}
+        `}
         onClick={closeMobileMenu}
         aria-label="Zamknij menu"
       >
         <X className="w-10 h-10" />
       </button>
 
-      {/* Logo w menu mobilnym */}
+      {/* Logo */}
       <Link
         href="/"
         onClick={closeMobileMenu}
-        className={`mb-6 transition-all duration-700 delay-100 ${isMobileOpen ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-8 scale-90"}`}
+        className={`
+          mb-6 transition-all duration-700 delay-100
+          ${isMobileOpen ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-8 scale-90"}
+        `}
       >
         <Logo className="h-20" />
       </Link>
 
-      {/* Linki z serwera */}
+      {/* Linki (Wstrzyknięte z serwera) */}
       <nav className="flex flex-col items-center gap-6">{children}</nav>
 
       {/* CTA Mobilne */}
@@ -146,7 +181,7 @@ export const NavbarOverlay = ({ children }: { children: React.ReactNode }) => {
         href="https://patronite.pl"
         target="_blank"
         rel="noopener noreferrer"
-        className={`mt-8 px-8 py-3 rounded-full text-base font-bold tracking-wide bg-arylideYellow text-raisinBlack hover:bg-white transition-all duration-500 ease-out hover:shadow-[0_0_20px_rgba(239,203,111,0.4)] ${isMobileOpen ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-8 scale-90"}`}
+        className={ctaClasses}
         style={{ transitionDelay: isMobileOpen ? "700ms" : "0ms" }}
       >
         Wesprzyj nas
@@ -154,7 +189,10 @@ export const NavbarOverlay = ({ children }: { children: React.ReactNode }) => {
 
       {/* Slogan */}
       <div
-        className={`absolute bottom-10 left-1/2 -translate-x-1/2 pointer-events-none transition-all duration-1000 w-full text-center ${isMobileOpen ? "opacity-90 blur-0" : "opacity-0 blur-sm"}`}
+        className={`
+          absolute bottom-10 left-1/2 -translate-x-1/2 pointer-events-none transition-all duration-1000 w-full text-center
+          ${isMobileOpen ? "opacity-90 blur-0" : "opacity-0 blur-sm"}
+        `}
       >
         <span className="font-youngest text-[2.4rem] text-arylideYellow whitespace-nowrap">
           „Z pasji do muzyki”
