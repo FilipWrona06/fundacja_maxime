@@ -1,7 +1,11 @@
 import Link from "next/link";
 import { NavbarContent } from "../navbar/NavbarContent";
-import { NavbarLogic } from "../navbar/NavbarLogic";
-import { NavbarMobileTrigger } from "../navbar/NavbarMobileTrigger";
+// Importujemy 3 komponenty z jednego pliku
+import {
+  NavbarOverlay,
+  NavbarRoot,
+  NavbarTrigger,
+} from "../navbar/NavbarInteractive";
 
 const NAV_LINKS = [
   { name: "Home", href: "/" },
@@ -12,16 +16,12 @@ const NAV_LINKS = [
 ];
 
 export const Navbar = () => {
-  // Generujemy linki mobilne NA SERWERZE
-  // Dzięki temu NavbarMobile nie musi iterować po tablicy w JS klienta
+  // Generowanie linków mobilnych na serwerze
   const mobileLinks = NAV_LINKS.map((link, idx) => (
     <Link
       key={link.name}
       href={link.href}
       className="text-3xl font-montserrat font-light text-white hover:text-arylideYellow transition-all duration-500 transform opacity-0 translate-y-8 mobile-nav-link"
-      // Używamy stylów inline dla staggera, albo klas CSS (tu inline dla prostoty server-side)
-      // Uwaga: Klasy opacity/translate są nadpisywane przez stan rodzica w NavbarMobile w JS,
-      // ale tutaj dajemy bazę.
       style={{ transitionDelay: `${idx * 100 + 200}ms` }}
     >
       {link.name}
@@ -29,11 +29,15 @@ export const Navbar = () => {
   ));
 
   return (
-    <NavbarLogic mobileMenuChildren={mobileLinks}>
+    <NavbarRoot>
+      {/* Desktop Content (Server Component) */}
       <NavbarContent
         links={NAV_LINKS}
-        mobileTrigger={<NavbarMobileTrigger />}
+        mobileTrigger={<NavbarTrigger />} // Trigger (Client Component)
       />
-    </NavbarLogic>
+
+      {/* Mobile Overlay (Client Component) wstrzyknięty z treścią z serwera */}
+      <NavbarOverlay>{mobileLinks}</NavbarOverlay>
+    </NavbarRoot>
   );
 };
