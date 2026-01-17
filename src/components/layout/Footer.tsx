@@ -12,6 +12,7 @@ import { Logo } from "@/components/ui/Logo";
 import { FooterScrollTop } from "../footer/FooterScrollTop";
 import { NewsletterForm } from "../footer/NewsletterForm";
 
+// --- DANE ---
 const FOOTER_LINKS = [
   { name: "Strona główna", href: "/" },
   { name: "Wydarzenia", href: "/wydarzenia" },
@@ -22,23 +23,66 @@ const FOOTER_LINKS = [
 ];
 
 const SOCIAL_LINKS = [
-  { icon: Facebook, href: "https://facebook.com", label: "Facebook" },
-  { icon: Instagram, href: "https://instagram.com", label: "Instagram" },
-  { icon: Youtube, href: "https://youtube.com", label: "YouTube" },
-  { icon: Heart, href: "https://patronite.pl", label: "Patronite" },
+  {
+    icon: Facebook,
+    href: "https://facebook.com",
+    label: "Odwiedź nas na Facebooku",
+  },
+  {
+    icon: Instagram,
+    href: "https://instagram.com",
+    label: "Odwiedź nas na Instagramie",
+  },
+  {
+    icon: Youtube,
+    href: "https://youtube.com",
+    label: "Subskrybuj nasz kanał YouTube",
+  },
+  {
+    icon: Heart,
+    href: "https://patronite.pl",
+    label: "Wspieraj nas na Patronite",
+  },
+];
+
+const CONTACT_INFO = {
+  address: {
+    text: "ul. Muzyczna 14/3, 40-001 Katowice",
+    href: "https://maps.google.com/?q=ul.Muzyczna+14/3+Katowice",
+  },
+  email: {
+    text: "kontakt@fundacjamaxime.pl",
+    href: "mailto:kontakt@fundacjamaxime.pl",
+  },
+  phone: { text: "+48 123 456 789", href: "tel:+48123456789" },
+};
+
+const COMPANY_DATA = [
+  { label: "KRS", value: "0000123456" },
+  { label: "NIP", value: "123-456-78-90" },
+  { label: "REGON", value: "123456789" },
 ];
 
 export const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer className="bg-raisinBlack border-t border-white/10 pt-20 pb-8 relative overflow-hidden">
       {/* Dekoracyjne tło */}
-      <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-arylideYellow/30 to-transparent" />
+      <div
+        className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-arylideYellow/30 to-transparent"
+        aria-hidden="true"
+      />
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 mb-16">
           {/* KOLUMNA 1: Brand & Socials (4 col) */}
           <div className="lg:col-span-4 flex flex-col items-start">
-            <Link href="/" className="mb-6 block">
+            <Link
+              href="/"
+              className="mb-6 block"
+              aria-label="Strona główna Fundacji Maxime"
+            >
               <Logo className="h-12 w-auto" />
             </Link>
             <p className="text-philippineSilver text-sm leading-relaxed mb-8 max-w-sm">
@@ -50,7 +94,7 @@ export const Footer = () => {
             <div className="flex gap-4">
               {SOCIAL_LINKS.map((social) => (
                 <a
-                  key={social.label}
+                  key={social.href}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -61,6 +105,7 @@ export const Footer = () => {
                   <social.icon
                     strokeWidth={1.5}
                     className="w-5 h-5 transition-transform group-hover:scale-110"
+                    aria-hidden="true"
                   />
                 </a>
               ))}
@@ -79,7 +124,10 @@ export const Footer = () => {
                     href={link.href}
                     className="text-philippineSilver text-sm hover:text-arylideYellow transition-colors flex items-center gap-2 group"
                   >
-                    <span className="w-1 h-1 rounded-full bg-white/20 group-hover:bg-arylideYellow transition-colors" />
+                    <span
+                      className="w-1 h-1 rounded-full bg-white/20 group-hover:bg-arylideYellow transition-colors"
+                      aria-hidden="true"
+                    />
                     {link.name}
                   </Link>
                 </li>
@@ -88,7 +136,6 @@ export const Footer = () => {
           </div>
 
           {/* KOLUMNA 3: Kontakt + Dane (3 col) */}
-          {/* Zmieniono: Dane przeniesione tutaj pod Kontakt */}
           <div className="lg:col-span-3 flex flex-col gap-10">
             {/* Sekcja: Kontakt */}
             <div>
@@ -97,53 +144,66 @@ export const Footer = () => {
               </h4>
               <ul className="space-y-4 text-sm text-philippineSilver">
                 <li className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-arylideYellow shrink-0 mt-0.5" />
-                  <span>
+                  <MapPin
+                    className="w-5 h-5 text-arylideYellow shrink-0 mt-0.5"
+                    aria-hidden="true"
+                  />
+                  <a
+                    href={CONTACT_INFO.address.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-white transition-colors"
+                  >
                     ul. Muzyczna 14/3
                     <br />
                     40-001 Katowice
-                  </span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-arylideYellow shrink-0" />
-                  <a
-                    href="mailto:kontakt@fundacjamaxime.pl"
-                    className="hover:text-white transition-colors"
-                  >
-                    kontakt@fundacjamaxime.pl
                   </a>
                 </li>
                 <li className="flex items-center gap-3">
-                  <Phone className="w-5 h-5 text-arylideYellow shrink-0" />
+                  <Mail
+                    className="w-5 h-5 text-arylideYellow shrink-0"
+                    aria-hidden="true"
+                  />
                   <a
-                    href="tel:+48123456789"
+                    href={CONTACT_INFO.email.href}
                     className="hover:text-white transition-colors"
                   >
-                    +48 123 456 789
+                    {CONTACT_INFO.email.text}
+                  </a>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Phone
+                    className="w-5 h-5 text-arylideYellow shrink-0"
+                    aria-hidden="true"
+                  />
+                  <a
+                    href={CONTACT_INFO.phone.href}
+                    className="hover:text-white transition-colors"
+                  >
+                    {CONTACT_INFO.phone.text}
                   </a>
                 </li>
               </ul>
             </div>
 
-            {/* Sekcja: Dane Fundacji (Przeniesiona) */}
+            {/* Sekcja: Dane Fundacji */}
             <div>
               <h4 className="text-white/60 font-bold uppercase tracking-widest text-xs mb-4 border-l-2 border-white/20 pl-3">
                 Dane rejestrowe
               </h4>
-              <div className="space-y-2 text-sm text-philippineSilver">
-                <p className="flex justify-between border-b border-white/5 pb-2">
-                  <span>KRS:</span>
-                  <span className="text-white font-mono">0000123456</span>
-                </p>
-                <p className="flex justify-between border-b border-white/5 pb-2">
-                  <span>NIP:</span>
-                  <span className="text-white font-mono">123-456-78-90</span>
-                </p>
-                <p className="flex justify-between border-b border-white/5 pb-2">
-                  <span>REGON:</span>
-                  <span className="text-white font-mono">123456789</span>
-                </p>
-              </div>
+              <dl className="space-y-2 text-sm text-philippineSilver">
+                {COMPANY_DATA.map((item) => (
+                  <div
+                    key={item.label}
+                    className="flex justify-between border-b border-white/5 pb-2"
+                  >
+                    <dt>{item.label}:</dt>
+                    <dd className="text-white font-mono select-all">
+                      {item.value}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
             </div>
           </div>
 
@@ -156,8 +216,7 @@ export const Footer = () => {
         {/* --- BOTTOM BAR --- */}
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-white/20 text-xs text-center md:text-left">
-            &copy; {new Date().getFullYear()} Fundacja Maxime. Wszelkie prawa
-            zastrzeżone.
+            &copy; {currentYear} Fundacja Maxime. Wszelkie prawa zastrzeżone.
           </p>
 
           <div className="flex items-center gap-6">
