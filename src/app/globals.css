@@ -163,7 +163,7 @@
   /* --- MENU MOBILNE (Server-Client Bridge) --- */
   /* To pozwala animować linki z serwera, gdy klient otworzy menu */
   .visible .mobile-nav-link {
-    opacity: 1 !important;
-    transform: translateY(0) !important;
+    opacity: 1;
+    transform: translateY(0);
   }
 }

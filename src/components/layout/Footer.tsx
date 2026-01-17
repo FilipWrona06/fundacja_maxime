@@ -1,5 +1,6 @@
 import {
   Facebook,
+  Heart,
   Instagram,
   Mail,
   MapPin,
@@ -8,8 +9,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { Logo } from "@/components/ui/Logo";
-import { FooterCopyButton } from "../footer/FooterCopyButton";
 import { FooterScrollTop } from "../footer/FooterScrollTop";
+import { NewsletterForm } from "../footer/NewsletterForm";
 
 const FOOTER_LINKS = [
   { name: "Strona główna", href: "/" },
@@ -24,11 +25,10 @@ const SOCIAL_LINKS = [
   { icon: Facebook, href: "https://facebook.com", label: "Facebook" },
   { icon: Instagram, href: "https://instagram.com", label: "Instagram" },
   { icon: Youtube, href: "https://youtube.com", label: "YouTube" },
+  { icon: Heart, href: "https://patronite.pl", label: "Patronite" },
 ];
 
 export const Footer = () => {
-  const bankAccount = "12 3456 0000 0000 1234 5678 9012";
-
   return (
     <footer className="bg-raisinBlack border-t border-white/10 pt-20 pb-8 relative overflow-hidden">
       {/* Dekoracyjne tło */}
@@ -56,6 +56,7 @@ export const Footer = () => {
                   rel="noopener noreferrer"
                   className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-arylideYellow hover:text-raisinBlack hover:border-arylideYellow transition-all duration-300 group"
                   aria-label={social.label}
+                  title={social.label}
                 >
                   <social.icon
                     strokeWidth={1.5}
@@ -86,68 +87,69 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* KOLUMNA 3: Kontakt (3 col) */}
-          <div className="lg:col-span-3">
-            <h4 className="text-white font-bold uppercase tracking-widest text-sm mb-6 border-l-2 border-arylideYellow pl-3">
-              Kontakt
-            </h4>
-            <ul className="space-y-4 text-sm text-philippineSilver">
-              <li className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-arylideYellow shrink-0 mt-0.5" />
-                <span>
-                  ul. Muzyczna 14/3
-                  <br />
-                  40-001 Katowice
-                </span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Mail className="w-5 h-5 text-arylideYellow shrink-0" />
-                <a
-                  href="mailto:kontakt@fundacjamaxime.pl"
-                  className="hover:text-white transition-colors"
-                >
-                  kontakt@fundacjamaxime.pl
-                </a>
-              </li>
-              <li className="flex items-center gap-3">
-                <Phone className="w-5 h-5 text-arylideYellow shrink-0" />
-                <a
-                  href="tel:+48123456789"
-                  className="hover:text-white transition-colors"
-                >
-                  +48 123 456 789
-                </a>
-              </li>
-            </ul>
-          </div>
+          {/* KOLUMNA 3: Kontakt + Dane (3 col) */}
+          {/* Zmieniono: Dane przeniesione tutaj pod Kontakt */}
+          <div className="lg:col-span-3 flex flex-col gap-10">
+            {/* Sekcja: Kontakt */}
+            <div>
+              <h4 className="text-white font-bold uppercase tracking-widest text-sm mb-6 border-l-2 border-arylideYellow pl-3">
+                Kontakt
+              </h4>
+              <ul className="space-y-4 text-sm text-philippineSilver">
+                <li className="flex items-start gap-3">
+                  <MapPin className="w-5 h-5 text-arylideYellow shrink-0 mt-0.5" />
+                  <span>
+                    ul. Muzyczna 14/3
+                    <br />
+                    40-001 Katowice
+                  </span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Mail className="w-5 h-5 text-arylideYellow shrink-0" />
+                  <a
+                    href="mailto:kontakt@fundacjamaxime.pl"
+                    className="hover:text-white transition-colors"
+                  >
+                    kontakt@fundacjamaxime.pl
+                  </a>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Phone className="w-5 h-5 text-arylideYellow shrink-0" />
+                  <a
+                    href="tel:+48123456789"
+                    className="hover:text-white transition-colors"
+                  >
+                    +48 123 456 789
+                  </a>
+                </li>
+              </ul>
+            </div>
 
-          {/* KOLUMNA 4: Dane Fundacji (3 col) */}
-          <div className="lg:col-span-3">
-            <h4 className="text-white font-bold uppercase tracking-widest text-sm mb-6 border-l-2 border-arylideYellow pl-3">
-              Dane Fundacji
-            </h4>
-            <div className="space-y-3 text-sm text-philippineSilver">
-              <p className="flex justify-between border-b border-white/5 pb-2">
-                <span>KRS:</span>
-                <span className="text-white font-mono">0000123456</span>
-              </p>
-              <p className="flex justify-between border-b border-white/5 pb-2">
-                <span>NIP:</span>
-                <span className="text-white font-mono">123-456-78-90</span>
-              </p>
-              <p className="flex justify-between border-b border-white/5 pb-2">
-                <span>REGON:</span>
-                <span className="text-white font-mono">123456789</span>
-              </p>
-
-              {/* Numer konta - Wyspa Kliencka */}
-              <div className="mt-6 pt-2">
-                <span className="text-xs text-white/40 uppercase tracking-wider block mb-2">
-                  Konto do darowizn:
-                </span>
-                <FooterCopyButton bankAccount={bankAccount} />
+            {/* Sekcja: Dane Fundacji (Przeniesiona) */}
+            <div>
+              <h4 className="text-white/60 font-bold uppercase tracking-widest text-xs mb-4 border-l-2 border-white/20 pl-3">
+                Dane rejestrowe
+              </h4>
+              <div className="space-y-2 text-sm text-philippineSilver">
+                <p className="flex justify-between border-b border-white/5 pb-2">
+                  <span>KRS:</span>
+                  <span className="text-white font-mono">0000123456</span>
+                </p>
+                <p className="flex justify-between border-b border-white/5 pb-2">
+                  <span>NIP:</span>
+                  <span className="text-white font-mono">123-456-78-90</span>
+                </p>
+                <p className="flex justify-between border-b border-white/5 pb-2">
+                  <span>REGON:</span>
+                  <span className="text-white font-mono">123456789</span>
+                </p>
               </div>
             </div>
+          </div>
+
+          {/* KOLUMNA 4: Newsletter (3 col) */}
+          <div className="lg:col-span-3">
+            <NewsletterForm />
           </div>
         </div>
 
