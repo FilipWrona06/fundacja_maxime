@@ -1,10 +1,7 @@
-"use client";
+import { NavbarContent } from "../navbar/NavbarContent";
+import { NavbarLogic } from "../navbar/NavbarLogic";
+import { NavbarMobileTrigger } from "../navbar/NavbarMobileTrigger";
 
-import { useEffect, useRef, useState } from "react";
-import { NavbarDesktop } from "../navbar/NavbarDesktop";
-import { NavbarMobile } from "../navbar/NavbarMobile";
-
-// Dane (zdefiniowane wewnątrz pliku .tsx, tak jak chciałeś)
 const NAV_LINKS = [
   { name: "Home", href: "/" },
   { name: "Wydarzenia", href: "/wydarzenia" },
@@ -14,65 +11,13 @@ const NAV_LINKS = [
 ];
 
 export const Navbar = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const isScrolledRef = useRef(false);
-
-  // --- LOGIKA SCROLLA ---
-  useEffect(() => {
-    let rafId: number | null = null;
-
-    const handleScroll = () => {
-      if (rafId) return;
-
-      rafId = requestAnimationFrame(() => {
-        const currentScrollY = window.scrollY;
-        const threshold = isScrolledRef.current ? 10 : 20;
-        const shouldBeScrolled = currentScrollY > threshold;
-
-        if (shouldBeScrolled !== isScrolledRef.current) {
-          isScrolledRef.current = shouldBeScrolled;
-          setIsScrolled(shouldBeScrolled);
-        }
-
-        rafId = null;
-      });
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      if (rafId) cancelAnimationFrame(rafId);
-    };
-  }, []);
-
-  // --- LOGIKA BODY LOCK ---
-  useEffect(() => {
-    if (isMobileOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [isMobileOpen]);
-
   return (
-    <>
-      <NavbarDesktop
+    <NavbarLogic links={NAV_LINKS}>
+      <NavbarContent
         links={NAV_LINKS}
-        isScrolled={isScrolled}
-        onOpenMobile={() => setIsMobileOpen(true)}
+        // Tu wstrzykujemy przycisk, który jest "wyspą" kliencką
+        mobileTrigger={<NavbarMobileTrigger />}
       />
-
-      <NavbarMobile
-        links={NAV_LINKS}
-        isOpen={isMobileOpen}
-        onClose={() => setIsMobileOpen(false)}
-      />
-    </>
+    </NavbarLogic>
   );
 };
