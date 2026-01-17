@@ -12,6 +12,7 @@ export const SupportCopyButton = ({ value, label }: SupportCopyButtonProps) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
+    // navigator jest dostępny tylko w przeglądarce
     navigator.clipboard.writeText(value);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -21,7 +22,7 @@ export const SupportCopyButton = ({ value, label }: SupportCopyButtonProps) => {
     <button
       type="button"
       onClick={handleCopy}
-      className="relative flex items-center justify-between w-full max-w-md border-b border-white/20 py-4 group hover:border-arylideYellow transition-colors duration-500 text-left"
+      className="relative flex items-center justify-between w-full max-w-md border-b border-white/20 py-4 group hover:border-arylideYellow transition-colors duration-500 text-left cursor-pointer"
     >
       <div className="flex flex-col items-start">
         <span className="text-[10px] uppercase text-white/30 tracking-widest mb-1">
