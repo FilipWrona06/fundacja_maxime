@@ -48,9 +48,6 @@
   }
 
   /* 2. Globalne ustawienia tekstu i tła */
-  html {
-    scroll-behavior: smooth; /* Płynne kotwice */
-  }
 
   body {
     @apply bg-raisinBlack text-white font-montserrat antialiased;
