@@ -2,7 +2,8 @@
 
 import { X } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Logo } from "@/components/ui/Logo";
 import { useNavbarContext } from "./NavbarLogic";
 
@@ -12,36 +13,47 @@ export default function NavbarMobile({
   children: React.ReactNode;
 }) {
   const { isMobileOpen, closeMobileMenu } = useNavbarContext();
+  const [mounted, setMounted] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Focus Trap (Dostępność)
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Focus Trap
   useEffect(() => {
     if (isMobileOpen && menuRef.current) {
-      const focusable = menuRef.current.querySelector(
-        "button, a",
-      ) as HTMLElement;
-      if (focusable) focusable.focus();
+      const timer = setTimeout(() => {
+        const closeBtn = menuRef.current?.querySelector("button");
+        closeBtn?.focus();
+      }, 50);
+      return () => clearTimeout(timer);
     }
   }, [isMobileOpen]);
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <div
       ref={menuRef}
       id="mobile-menu-overlay"
       role="dialog"
       aria-modal="true"
       aria-hidden={!isMobileOpen}
+      // 1. DODANO: 'group' - aby dzieci mogły reagować na stan tego kontenera
+      // 2. DODANO: data-mobile-open - atrybut sterujący widocznością linków
       className={`
-        fixed inset-0 z-60 bg-raisinBlack/98 backdrop-blur-xl flex flex-col items-center justify-center gap-8
+        group 
+        fixed inset-0 z-100 bg-raisinBlack/98 backdrop-blur-xl flex flex-col items-center justify-center gap-8
         transition-all duration-700 ease-[cubic-bezier(0.33,1,0.68,1)] will-change-[opacity,transform]
         ${
           isMobileOpen
-            ? "opacity-100 visible translate-y-0 scale-100 blur-0"
+            ? "opacity-100 visible translate-y-0 scale-100 blur-0 pointer-events-auto"
             : "opacity-0 invisible translate-y-8 scale-95 blur-sm pointer-events-none"
         }
       `}
+      data-mobile-open={isMobileOpen} // <--- KLUCZOWE DLA LINKÓW
       onClick={(e) => {
-        // Zamknij przy kliknięciu w link
         if ((e.target as HTMLElement).closest("a")) closeMobileMenu();
       }}
     >
@@ -59,7 +71,7 @@ export default function NavbarMobile({
         <X className="w-10 h-10" />
       </button>
 
-      {/* Logo */}
+      {/* Logo - też reaguje na data-mobile-open dzięki klasie group w Navbar.tsx/Mobile.tsx logic */}
       <Link
         href="/"
         className={`mb-6 transition-all duration-700 delay-100 ${isMobileOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
@@ -68,7 +80,11 @@ export default function NavbarMobile({
         <Logo className="h-20" />
       </Link>
 
-      {/* Linki (wstrzyknięte z serwera) */}
+      {/* 
+         Tu są wstrzykiwane linki z Navbar.tsx.
+         Mają one klasę: group-data-[mobile-open=true]:opacity-100
+         Teraz zadziałają, bo ich bezpośredni przodek (div powyżej) ma ten atrybut!
+      */}
       <nav className="flex flex-col items-center gap-6">{children}</nav>
 
       {/* CTA */}
@@ -87,6 +103,19 @@ export default function NavbarMobile({
       >
         Wesprzyj nas
       </a>
-    </div>
+
+      {/* Slogan */}
+      <div
+        className={`
+        absolute bottom-10 text-center transition-all duration-1000
+        ${isMobileOpen ? "opacity-90 blur-0" : "opacity-0 blur-sm"}
+      `}
+      >
+        <span className="font-youngest text-[2.4rem] text-arylideYellow">
+          „Z pasji do muzyki”
+        </span>
+      </div>
+    </div>,
+    document.body,
   );
 }
