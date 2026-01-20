@@ -1,4 +1,5 @@
-import Link from "next/link";
+// USUWAMY import Link z next/link
+import { FooterLink } from "@/components/ui/FooterLink"; // <--- IMPORT
 
 const LINKS = [
   { name: "Strona główna", href: "/" },
@@ -19,16 +20,8 @@ export const FooterLinks = () => {
         <ul className="space-y-3">
           {LINKS.map((link) => (
             <li key={link.name}>
-              <Link
-                href={link.href}
-                className="text-philippineSilver text-sm hover:text-arylideYellow transition-colors flex items-center gap-2 group w-fit"
-              >
-                <span
-                  className="w-1 h-1 rounded-full bg-white/20 group-hover:bg-arylideYellow transition-colors duration-300"
-                  aria-hidden="true"
-                />
-                {link.name}
-              </Link>
+              {/* UŻYCIE NOWEGO KOMPONENTU */}
+              <FooterLink href={link.href}>{link.name}</FooterLink>
             </li>
           ))}
         </ul>

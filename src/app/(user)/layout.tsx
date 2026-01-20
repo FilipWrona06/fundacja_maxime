@@ -1,12 +1,17 @@
 import dynamic from "next/dynamic"; // <--- Do lazy loadingu
 import { draftMode } from "next/headers";
-import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { SanityLive } from "@/sanity/lib/live";
 
-// --- LAZY LOADING ---
-// Ładujemy VisualEditing tylko wtedy, gdy jest potrzebny.
-// Zwykły użytkownik nie pobierze ani bajta tego kodu.
+// --- LAZY LOADING STOPKI ---
+// 1. Dzielimy kod JS (Code Splitting).
+// 2. ssr: true zapewnia, że linki SEO są w HTML-u od razu.
+const Footer = dynamic(
+  () => import("@/components/layout/Footer").then((mod) => mod.Footer),
+  { ssr: true },
+);
+
+// --- LAZY LOADING VISUAL EDITING ---
 const VisualEditing = dynamic(() =>
   import("next-sanity/visual-editing").then((mod) => mod.VisualEditing),
 );
@@ -21,7 +26,6 @@ export default async function UserLayout({
   return (
     <div className="flex min-h-screen flex-col w-full relative">
       {/* --- 1. DOSTĘPNOŚĆ (SKIP LINK) --- */}
-      {/* Niewidoczny dla myszki, kluczowy dla klawiatury (Tab) */}
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-100 focus:px-6 focus:py-3 focus:bg-arylideYellow focus:text-raisinBlack focus:font-bold focus:rounded-sm transition-all"
@@ -29,26 +33,36 @@ export default async function UserLayout({
         Przejdź do treści głównej
       </a>
 
+      {/* NAVBAR - Statyczny (LCP - musi być widoczny od razu) */}
       <Navbar />
 
-      {/* --- 2. SEMANTYKA --- */}
-      {/* id="main-content" jest celem dla Skip Linka */}
+      {/* --- 2. GŁÓWNA TREŚĆ --- */}
       <main id="main-content" className="grow w-full flex flex-col">
         {children}
       </main>
 
-      <Footer />
+      {/* --- 3. STOPKA Z OPTYMALIZACJĄ RENDEROWANIA --- */}
+      {/* 
+        content-visibility: auto -> Przeglądarka renderuje stopkę dopiero,
+        gdy użytkownik zbliży się do niej podczas scrollowania.
+        contain-intrinsic-size -> Rezerwuje miejsce, żeby pasek scrolla nie skakał.
+      */}
+      <div
+        style={{
+          contentVisibility: "auto",
+          containIntrinsicSize: "1px 500px", // Szacowana wysokość stopki
+        }}
+      >
+        <Footer />
+      </div>
 
-      {/* --- 3. SANITY INTEGRATION --- */}
+      {/* --- 4. SANITY LIVE (Real-time updates) --- */}
       <SanityLive />
 
-      {/* --- 4. WYDAJNOŚĆ (DRAFT MODE) --- */}
-      {/* Ten kod trafi do przeglądarki TYLKO w trybie edycji */}
+      {/* --- 5. DRAFT MODE UI (Tylko dla admina) --- */}
       {isDraftMode && (
         <>
           <VisualEditing />
-
-          {/* Przycisk wyjścia z trybu edycji */}
           <div className="fixed bottom-4 right-4 z-50 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <a
               href="/api/draft-mode/disable"
