@@ -140,7 +140,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const description =
     data?.seoDescription ||
     "Wspieramy młode talenty, organizujemy koncerty i łączymy pokolenia poprzez piękno dźwięku.";
-  const ogImage = data?.seoImage || "/images/hero-poster.jpg";
+  const ogImage = data?.seoImage || "/video-poster.webp";
 
   return {
     title: title,
