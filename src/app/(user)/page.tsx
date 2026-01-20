@@ -49,7 +49,6 @@ const HOME_QUERY = defineQuery(`
         badge,
         headingLine1,
         headingLine2,
-        description,
         posterImage { 
           asset->{ _id, url, metadata { lqip, dimensions } } 
         },

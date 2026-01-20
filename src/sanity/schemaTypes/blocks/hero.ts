@@ -43,19 +43,6 @@ export const hero = defineType({
       initialValue: "do muzyki",
       validation: (Rule) => Rule.required().max(20),
     }),
-    defineField({
-      name: "description",
-      title: "Opis pod nagłówkiem",
-      description:
-        "Krótki tekst wprowadzający. Unikaj więcej niż 3 zdań dla czytelności.",
-      type: "text",
-      rows: 3,
-      group: "content",
-      initialValue:
-        "Wspieramy młode talenty, organizujemy koncerty i łączymy pokolenia poprzez piękno dźwięku.",
-      validation: (Rule) =>
-        Rule.max(160).warning("Zbyt długi opis może odwracać uwagę od wideo."),
-    }),
 
     // --- 2. MEDIA (Opcjonalny Poster z CMS) ---
     defineField({
