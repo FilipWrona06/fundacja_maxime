@@ -110,10 +110,8 @@ export const Hero = ({ data }: HeroProps) => {
         {/* Nagłówek H1 - ZASTOSOWANO OPCJĘ 1 i 3 */}
         {/* 
             Zmiany w klasach:
-            1. [-webkit-text-stroke:1.5px_black] -> OPCJA 3: Dodaje czarny kontur o grubości 1.5px wokół liter.
             2. drop-shadow-[0_5px_10px_rgba(0,0,0,1)] -> OPCJA 1: Dodaje twardy, czarny cień pod całym napisem.
-            
-            Efekt: Litery mają "obwódkę" i cień, co czyni je czytelnymi nawet na jasnym tle wideo.
+            Efekt: Litery mają cień, co czyni je czytelnymi nawet na jasnym tle wideo.
         */}
         <h1 className="animate-fade-in-up delay-200 font-youngest text-[4.78rem] sm:text-[8rem] md:text-[10rem] text-arylideYellow mb-2 drop-shadow-[0_5px_10px_rgba(0,0,0,1)] leading-tight select-none">
           <span className="block">{headingLine1}</span>
