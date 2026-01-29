@@ -29,7 +29,6 @@ interface HeroProps {
     badge?: string;
     headingLine1?: string;
     headingLine2?: string;
-    // USUNIĘTO: description z interfejsu
     posterImage?: SanityImage;
     buttons?: HeroButton[];
   };
@@ -89,7 +88,12 @@ export const Hero = ({ data }: HeroProps) => {
     >
       {/* --- VIDEO TŁO --- */}
       <div className="absolute inset-0 z-0" aria-hidden="true">
-        {/* Overlay dla lepszej czytelności napisów */}
+        {/* 
+            POWRÓT DO ORYGINAŁU (Bez opcji 2):
+            - Usunięto backdrop-blur
+            - Przywrócono jaśniejszy overlay (rgba(38,38,38,0.3))
+            Dzięki temu wideo jest bardzo wyraźne, a czytelność tekstu załatwiamy poniżej w H1.
+        */}
         <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,rgba(38,38,38,0.3)_0%,rgba(38,38,38,0.8)_100%)]" />
         <HeroVideo poster={posterImage} />
       </div>
@@ -103,15 +107,20 @@ export const Hero = ({ data }: HeroProps) => {
           </span>
         </div>
 
-        {/* Nagłówek H1 - Wielki i Czytelny */}
-        <h1 className="animate-fade-in-up delay-200 font-youngest text-[4.78rem] sm:text-[8rem] md:text-[10rem] text-arylideYellow mb-2 drop-shadow-2xl leading-tight select-none">
+        {/* Nagłówek H1 - ZASTOSOWANO OPCJĘ 1 i 3 */}
+        {/* 
+            Zmiany w klasach:
+            1. [-webkit-text-stroke:1.5px_black] -> OPCJA 3: Dodaje czarny kontur o grubości 1.5px wokół liter.
+            2. drop-shadow-[0_5px_10px_rgba(0,0,0,1)] -> OPCJA 1: Dodaje twardy, czarny cień pod całym napisem.
+            
+            Efekt: Litery mają "obwódkę" i cień, co czyni je czytelnymi nawet na jasnym tle wideo.
+        */}
+        <h1 className="animate-fade-in-up delay-200 font-youngest text-[4.78rem] sm:text-[8rem] md:text-[10rem] text-arylideYellow mb-2 drop-shadow-[0_5px_10px_rgba(0,0,0,1)] leading-tight select-none">
           <span className="block">{headingLine1}</span>
           <span className="block -mt-2 md:-mt-6">{headingLine2}</span>
         </h1>
 
-        {/* USUNIĘTO: <p> z opisem */}
-
-        {/* Przyciski - Zwiększono margines górny (mt-12) dla oddechu */}
+        {/* Przyciski */}
         <div className="animate-fade-in-up delay-300 mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
           {buttonsToDisplay.map((btn) => {
             const isPrimary = btn.style?.startsWith("primary");
