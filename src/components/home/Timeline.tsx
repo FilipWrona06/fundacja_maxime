@@ -8,7 +8,7 @@ interface SanityImage {
       lqip: string;
     };
   };
-  alt?: string; // Obsługa ALT
+  alt?: string;
 }
 
 interface TimelineItem {
@@ -30,8 +30,8 @@ interface TimelineProps {
 export const Timeline = ({ data }: TimelineProps) => {
   const {
     items = [],
-    eyebrow = "Ewolucja", // Fallback
-    heading = "Nasza historia", // Fallback
+    eyebrow = "Ewolucja",
+    heading = "Nasza historia",
   } = data || {};
 
   if (items.length === 0) return null;
@@ -42,7 +42,7 @@ export const Timeline = ({ data }: TimelineProps) => {
       aria-label="Historia fundacji"
     >
       <div className="container mx-auto px-6 max-w-300 relative z-10">
-        {/* Nagłówek (Dynamiczny z Sanity) */}
+        {/* Nagłówek */}
         <div className="text-center mb-32">
           <span className="text-arylideYellow text-xs font-bold tracking-[0.4em] uppercase block mb-6 animate-fade-in-up">
             {eyebrow}
@@ -56,7 +56,7 @@ export const Timeline = ({ data }: TimelineProps) => {
           {items.map((item, index) => {
             const imageUrl = item.image?.asset?.url;
             const blurUrl = item.image?.asset?.metadata?.lqip;
-            const altText = item.image?.alt || item.title; // Fallback dla ALT
+            const altText = item.image?.alt || item.title;
             const isEven = index % 2 === 0;
 
             return (
@@ -64,7 +64,7 @@ export const Timeline = ({ data }: TimelineProps) => {
                 key={item._key}
                 className={`flex flex-col lg:flex-row items-center group ${isEven ? "" : "lg:flex-row-reverse"}`}
               >
-                {/* --- ZDJĘCIE (60% szerokości) --- */}
+                {/* --- ZDJĘCIE --- */}
                 <div className="w-full lg:w-7/12 relative">
                   <div className="relative aspect-4/3 overflow-hidden rounded-sm bg-[#111]">
                     {imageUrl ? (
@@ -72,7 +72,12 @@ export const Timeline = ({ data }: TimelineProps) => {
                         src={imageUrl}
                         alt={altText}
                         fill
-                        className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105 filter grayscale group-hover:grayscale-0"
+                        // ZMIANY W KLASACH PONIŻEJ:
+                        // 1. transition-all: żeby animował się też kolor, a nie tylko skala
+                        // 2. grayscale-0: domyślnie kolor (mobile/tablet)
+                        // 3. lg:grayscale: czarno-białe dopiero od breakpointu LG (desktop)
+                        // 4. lg:group-hover:grayscale-0: kolor po najechaniu tylko na desktopie
+                        className="object-cover transition-all duration-1000 ease-out group-hover:scale-105 filter grayscale-0 lg:grayscale lg:group-hover:grayscale-0"
                         placeholder={blurUrl ? "blur" : "empty"}
                         blurDataURL={blurUrl}
                         sizes="(max-width: 768px) 100vw, 60vw"
@@ -86,16 +91,16 @@ export const Timeline = ({ data }: TimelineProps) => {
                     <div className="absolute inset-0 bg-raisinBlack/10 mix-blend-multiply transition-opacity duration-500 group-hover:opacity-0" />
                   </div>
 
-                  {/* Dekoracyjny rok (W tle - za zdjęciem) */}
+                  {/* Dekoracyjny rok */}
                   <span
                     className={`absolute -top-12 ${isEven ? "-right-12" : "-left-12"} font-youngest text-[8rem] md:text-[10rem] text-white/5 select-none z-0 pointer-events-none transition-transform duration-700 group-hover:translate-x-4`}
-                    aria-hidden="true" // Ukryte dla czytników (rok jest też w treści)
+                    aria-hidden="true"
                   >
                     {item.year}
                   </span>
                 </div>
 
-                {/* --- TREŚĆ (Nakładająca się) --- */}
+                {/* --- TREŚĆ --- */}
                 <div
                   className={`w-full lg:w-5/12 relative z-10 -mt-16 lg:mt-0 ${isEven ? "lg:-ml-24" : "lg:-mr-24"}`}
                 >
