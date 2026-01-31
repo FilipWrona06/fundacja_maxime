@@ -43,19 +43,13 @@ export const DayCell = memo(
             !isCurrentMonth
               ? "opacity-20 cursor-default pointer-events-none bg-white/5 border-transparent"
               : "border-white/5 bg-[#181818]",
-
-            // Hover effects
             isCurrentMonth &&
               !isSelected &&
               "hover:border-white/20 hover:bg-[#222] hover:scale-[1.05] hover:z-20 hover:shadow-xl",
-
-            // TŁO DLA DNIA Z WYDARZENIEM
             isCurrentMonth &&
               hasEvent &&
               !isSelected &&
               "bg-linear-to-br from-[#222] to-[#111] border-arylideYellow/20 hover:border-arylideYellow/50",
-
-            // WYBRANY DZIEŃ
             isSelected &&
               "bg-raisinBlack ring-2 ring-inset ring-arylideYellow z-10 shadow-[0_0_20px_rgba(239,203,111,0.2)] scale-[1.05]",
           )}

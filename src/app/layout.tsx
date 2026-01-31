@@ -26,7 +26,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://fundacjamaxime.pl"),
+  metadataBase: new URL("https://fundacja-maxime.vercel.app/"),
   title: {
     default: "Fundacja Maxime - Z pasji do muzyki",
     template: "%s | Fundacja Maxime",

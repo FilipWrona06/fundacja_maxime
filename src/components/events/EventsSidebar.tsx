@@ -11,35 +11,14 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-
-// Definicja typu wydarzenia (taka sama jak w page.tsx, tutaj lokalnie dla propsów)
-interface EventItem {
-  id: string;
-  title: string;
-  subtitle: string;
-  date: string;
-  time: string;
-  doorsOpen: string;
-  location: string;
-  address: string;
-  price: string;
-  image: string;
-  type: string;
-  isSoldOut: boolean;
-  slug: string;
-}
+import { type EventItem, MONTH_NAMES } from "./Shared";
 
 interface EventsSidebarProps {
   selectedDate: Date;
-  monthName: string;
   events: EventItem[];
 }
 
-export const EventsSidebar = ({
-  selectedDate,
-  monthName,
-  events,
-}: EventsSidebarProps) => {
+export const EventsSidebar = ({ selectedDate, events }: EventsSidebarProps) => {
   return (
     <div className="xl:w-1/4 w-full flex flex-col min-h-150 relative">
       <div
@@ -58,7 +37,7 @@ export const EventsSidebar = ({
               {selectedDate.getDate()}
             </time>
             <span className="text-2xl ml-3 text-white/50 font-sans tracking-wide uppercase">
-              {monthName}
+              {MONTH_NAMES[selectedDate.getMonth()]}
             </span>
           </h3>
           <p className="text-philippineSilver text-base capitalize font-light tracking-wide border-l-2 border-white/10 pl-4">
