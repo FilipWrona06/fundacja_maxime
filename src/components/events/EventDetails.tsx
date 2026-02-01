@@ -1,7 +1,5 @@
-"use client";
-
+// --- FILE: components/events/EventDetails.tsx ---
 import { clsx } from "clsx";
-import { motion } from "framer-motion";
 import {
   AlertCircle,
   ArrowLeft,
@@ -16,29 +14,14 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { type EventItem, parseEventDateTime } from "./Shared";
 
-interface EventClientViewProps {
+interface EventDetailsProps {
   event: EventItem | null;
   slug: string;
 }
 
-export const EventClientView = ({ event, slug }: EventClientViewProps) => {
-  const [isEnded, setIsEnded] = useState(false);
-
-  useEffect(() => {
-    if (!event) return;
-    const checkTime = () => {
-      const now = new Date();
-      const eventDate = parseEventDateTime(event.date, event.time);
-      setIsEnded(now > eventDate);
-    };
-    checkTime();
-    const interval = setInterval(checkTime, 60000);
-    return () => clearInterval(interval);
-  }, [event]);
-
+export const EventDetails = ({ event, slug }: EventDetailsProps) => {
   if (!event) {
     return (
       <main className="min-h-screen bg-raisinBlack flex items-center justify-center p-4">
@@ -63,6 +46,11 @@ export const EventClientView = ({ event, slug }: EventClientViewProps) => {
       </main>
     );
   }
+
+  // Logika sprawdzania czasu przeniesiona na czas renderowania (Server Side)
+  const now = new Date();
+  const eventDateObj = parseEventDateTime(event.date, event.time);
+  const isEnded = now > eventDateObj;
 
   const displayDate = new Date(event.date).toLocaleDateString("pl-PL", {
     weekday: "long",
@@ -89,7 +77,8 @@ export const EventClientView = ({ event, slug }: EventClientViewProps) => {
             Powrót do kalendarza
           </Link>
           <div className="flex flex-col gap-6">
-            <div className="flex flex-wrap gap-3 animate-fade-up">
+            {/* Zastąpienie animate-fade-up klasą animate-in Tailwind */}
+            <div className="flex flex-wrap gap-3 animate-in fade-in slide-in-from-bottom-4 duration-700">
               {isEnded ? (
                 <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-sm bg-white/5 text-philippineSilver text-[10px] font-bold uppercase tracking-widest border border-white/10">
                   <History size={12} /> Wydarzenie Archiwalne
@@ -107,7 +96,7 @@ export const EventClientView = ({ event, slug }: EventClientViewProps) => {
                 {event.type}
               </span>
             </div>
-            <h1 className="font-youngest text-5xl md:text-7xl lg:text-8xl leading-[0.9] text-white max-w-6xl animate-fade-up [animation-delay:100ms] drop-shadow-2xl">
+            <h1 className="font-youngest text-5xl md:text-7xl lg:text-8xl leading-[0.9] text-white max-w-6xl animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100 drop-shadow-2xl">
               {event.title}
             </h1>
           </div>
@@ -118,12 +107,10 @@ export const EventClientView = ({ event, slug }: EventClientViewProps) => {
         <div className="grid lg:grid-cols-12 gap-12 xl:gap-24 items-start">
           <aside className="lg:col-span-5 xl:col-span-4 order-2 lg:order-1 relative">
             <div className="sticky top-32 flex flex-col gap-8">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
+              {/* Zastąpienie motion.div zwykłym div z animacją CSS */}
+              <div
                 className={clsx(
-                  "bg-[#161616] border rounded-xl overflow-hidden backdrop-blur-md shadow-2xl relative group transition-colors duration-500",
+                  "bg-[#161616] border rounded-xl overflow-hidden backdrop-blur-md shadow-2xl relative group transition-all animate-in fade-in slide-in-from-bottom-8 duration-700",
                   isEnded
                     ? "border-white/5 opacity-80"
                     : "border-white/10 hover:border-arylideYellow/30",
@@ -154,6 +141,7 @@ export const EventClientView = ({ event, slug }: EventClientViewProps) => {
                 </div>
                 <div className="p-6 md:p-8 relative">
                   <div className="flex flex-col gap-6 mb-8">
+                    {/* Item Date */}
                     <div className="flex items-start gap-4 group/item">
                       <div
                         className={clsx(
@@ -182,6 +170,7 @@ export const EventClientView = ({ event, slug }: EventClientViewProps) => {
                         </time>
                       </div>
                     </div>
+                    {/* Item Time */}
                     <div className="flex items-start gap-4 group/item">
                       <div
                         className={clsx(
@@ -213,6 +202,7 @@ export const EventClientView = ({ event, slug }: EventClientViewProps) => {
                         </div>
                       </div>
                     </div>
+                    {/* Item Location */}
                     <div className="flex items-start gap-4 group/item">
                       <div
                         className={clsx(
@@ -237,6 +227,7 @@ export const EventClientView = ({ event, slug }: EventClientViewProps) => {
                       </div>
                     </div>
                   </div>
+
                   <div className="flex items-center justify-between mb-8 pt-6 border-t border-white/10 border-dashed">
                     <span className="text-philippineSilver text-xs font-bold uppercase tracking-widest">
                       Cena biletu
@@ -250,6 +241,7 @@ export const EventClientView = ({ event, slug }: EventClientViewProps) => {
                       {event.price}
                     </span>
                   </div>
+
                   <button
                     type="button"
                     disabled={isEnded || event.isSoldOut}
@@ -276,7 +268,7 @@ export const EventClientView = ({ event, slug }: EventClientViewProps) => {
                       : "Bezpieczna płatność przez PayU / BLIK"}
                   </p>
                 </div>
-              </motion.div>
+              </div>
               <button
                 type="button"
                 className="flex items-center justify-center gap-2 text-xs text-philippineSilver/60 font-bold uppercase tracking-widest hover:text-white transition-colors w-full py-2 group"
@@ -291,7 +283,7 @@ export const EventClientView = ({ event, slug }: EventClientViewProps) => {
           </aside>
 
           <div className="lg:col-span-7 xl:col-span-8 order-1 lg:order-2">
-            <section className="mb-20 animate-fade-up [animation-delay:200ms]">
+            <section className="mb-20 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">
               <h2 className="text-philippineSilver text-2xl md:text-3xl leading-relaxed font-light mb-8 max-w-3xl">
                 {event.subtitle}
               </h2>
@@ -306,7 +298,7 @@ export const EventClientView = ({ event, slug }: EventClientViewProps) => {
               </div>
             </section>
 
-            <section className="mb-20 animate-fade-up [animation-delay:300ms]">
+            <section className="mb-20 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
               <div className="flex items-center gap-4 mb-10">
                 <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-arylideYellow border border-white/10">
                   <Music size={24} className={isEnded ? "opacity-40" : ""} />
@@ -355,7 +347,7 @@ export const EventClientView = ({ event, slug }: EventClientViewProps) => {
               </div>
             </section>
 
-            <section className="mb-20 animate-fade-up [animation-delay:400ms]">
+            <section className="mb-20 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500">
               <div className="flex items-center gap-4 mb-10">
                 <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-arylideYellow border border-white/10">
                   <User size={24} className={isEnded ? "opacity-40" : ""} />
@@ -403,7 +395,7 @@ export const EventClientView = ({ event, slug }: EventClientViewProps) => {
               </div>
             </section>
 
-            <section className="animate-fade-up [animation-delay:500ms]">
+            <section className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500">
               <div className="flex items-center gap-4 mb-10">
                 <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-arylideYellow border border-white/10">
                   <MapPin size={24} className={isEnded ? "opacity-40" : ""} />

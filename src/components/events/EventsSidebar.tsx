@@ -1,7 +1,5 @@
-"use client";
-
+// --- FILE: components/events/EventsSidebar.tsx ---
 import { clsx } from "clsx";
-import { AnimatePresence, motion } from "framer-motion";
 import {
   ChevronRight as ChevronRightIcon,
   Clock,
@@ -52,16 +50,15 @@ export const EventsSidebar = ({ selectedDate, events }: EventsSidebarProps) => {
           className="flex flex-col gap-8"
           aria-label="Lista wydarzeń wybranego dnia"
         >
-          <AnimatePresence mode="wait">
+          {/* Używamy key, aby wymusić przeładowanie animacji CSS przy zmianie listy */}
+          <div key={selectedDate.toISOString()} className="space-y-8">
             {events.length > 0 ? (
-              events.map((event) => (
-                <motion.article
+              events.map((event, index) => (
+                <article
                   key={event.id}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.3 }}
-                  className="group bg-[#161616] border border-white/5 rounded-xl overflow-hidden hover:border-arylideYellow/50 transition-all duration-500 shadow-2xl hover:shadow-[0_0_40px_rgba(0,0,0,0.6)]"
+                  // CSS Animation zamiast motion.div
+                  className="group bg-[#161616] border border-white/5 rounded-xl overflow-hidden hover:border-arylideYellow/50 transition-all duration-500 shadow-2xl hover:shadow-[0_0_40px_rgba(0,0,0,0.6)] animate-in fade-in slide-in-from-right-4 fill-mode-backwards"
+                  style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <div className="relative h-52 w-full overflow-hidden bg-gray-900">
                     <Link
@@ -151,15 +148,10 @@ export const EventsSidebar = ({ selectedDate, events }: EventsSidebarProps) => {
                       {!event.isSoldOut && <ChevronRightIcon size={16} />}
                     </Link>
                   </div>
-                </motion.article>
+                </article>
               ))
             ) : (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                className="flex flex-col items-center justify-center text-center py-24 px-8 border border-dashed border-white/10 rounded-xl bg-[#151515]"
-              >
+              <div className="flex flex-col items-center justify-center text-center py-24 px-8 border border-dashed border-white/10 rounded-xl bg-[#151515] animate-in fade-in zoom-in-95 duration-300">
                 <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mb-8 text-white/20">
                   <Info className="w-10 h-10" />
                 </div>
@@ -170,9 +162,9 @@ export const EventsSidebar = ({ selectedDate, events }: EventsSidebarProps) => {
                   W tym dniu orkiestra odpoczywa lub odbywają się próby
                   zamknięte.
                 </p>
-              </motion.div>
+              </div>
             )}
-          </AnimatePresence>
+          </div>
         </section>
       </div>
     </div>

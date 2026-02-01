@@ -1,12 +1,12 @@
+// --- FILE: app/wydarzenia/[slug]/page.tsx ---
 import type { Metadata } from "next";
-import { EventClientView } from "@/components/events/EventClientView";
+import { EventDetails } from "@/components/events/EventDetails"; // Zmiana importu
 import { eventsData } from "@/components/events/Shared";
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
-// Dynamiczne metadane SEO
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const event = eventsData.find((e) => e.slug === slug);
@@ -25,5 +25,5 @@ export default async function EventPage({ params }: Props) {
   const { slug } = await params;
   const event = eventsData.find((e) => e.slug === slug) || null;
 
-  return <EventClientView event={event} slug={slug} />;
+  return <EventDetails event={event} slug={slug} />;
 }
