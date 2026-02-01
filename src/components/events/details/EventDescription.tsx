@@ -1,5 +1,5 @@
-// --- FILE: components/events/details/EventDescription.tsx ---
 import { clsx } from "clsx";
+import { PortableText } from "next-sanity";
 import type { EventItem } from "../Shared";
 
 interface EventDescriptionProps {
@@ -19,8 +19,12 @@ export const EventDescription = ({ event, isEnded }: EventDescriptionProps) => {
           isEnded ? "bg-white/20" : "bg-arylideYellow",
         )}
       />
-      <div className="text-white/80 leading-loose text-lg font-light space-y-6 max-w-4xl">
-        <p>{event.description}</p>
+      <div className="text-white/80 leading-loose text-lg font-light space-y-6 max-w-4xl prose prose-invert prose-headings:font-youngest prose-headings:font-normal prose-strong:text-arylideYellow prose-a:text-arylideYellow prose-blockquote:border-l-arylideYellow">
+        {event.description ? (
+          <PortableText value={event.description} />
+        ) : (
+          <p className="text-white/40 italic">Brak opisu wydarzenia.</p>
+        )}
       </div>
     </section>
   );

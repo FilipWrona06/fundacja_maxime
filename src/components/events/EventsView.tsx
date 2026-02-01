@@ -1,5 +1,3 @@
-// --- FILE: components/events/EventsView.tsx ---
-
 import { Calendar as CalendarIcon } from "lucide-react";
 import { CalendarGrid } from "./CalendarGrid";
 import { EventsSidebar } from "./EventsSidebar";
@@ -7,15 +5,20 @@ import { type EventItem, isSameDay, parseLocalDate } from "./Shared";
 
 interface EventsViewProps {
   events: EventItem[];
-  // Te dane przyjdą z page.tsx (URL params)
-  viewDateStr?: string; // YYYY-MM
-  selectedDateStr?: string; // YYYY-MM-DD
+  // Dane z URL
+  viewDateStr?: string;
+  selectedDateStr?: string;
+  // Dane z CMS (Nowe)
+  pageTitle?: string;
+  seasonLabel?: string;
 }
 
 export const EventsView = ({
   events,
   viewDateStr,
   selectedDateStr,
+  pageTitle = "Kalendarium", // Fallback
+  seasonLabel = "Sezon", // Fallback
 }: EventsViewProps) => {
   const now = new Date();
 
@@ -23,7 +26,6 @@ export const EventsView = ({
   let viewDate = now;
   if (viewDateStr) {
     const [y, m] = viewDateStr.split("-").map(Number);
-    // Zmiana: użycie Number.isNaN zamiast globalnego isNaN
     if (!Number.isNaN(y) && !Number.isNaN(m)) {
       viewDate = new Date(y, m - 1, 1);
     }
@@ -33,13 +35,12 @@ export const EventsView = ({
   let selectedDate = now;
   if (selectedDateStr) {
     const parsed = parseLocalDate(selectedDateStr);
-    // Zmiana: użycie Number.isNaN zamiast globalnego isNaN
     if (!Number.isNaN(parsed.getTime())) {
       selectedDate = parsed;
     }
   }
 
-  // 3. Generowanie siatki kalendarza (Logika serwerowa, bez useMemo)
+  // 3. Generowanie siatki kalendarza
   const year = viewDate.getFullYear();
   const month = viewDate.getMonth();
   const firstDayOfMonth = new Date(year, month, 1);
@@ -50,21 +51,18 @@ export const EventsView = ({
   const gridCells = [];
   const prevMonthDays = new Date(year, month, 0).getDate();
 
-  // Dni poprzedniego miesiąca
   for (let i = startDayOfWeek - 1; i >= 0; i--) {
     gridCells.push({
       date: new Date(year, month - 1, prevMonthDays - i),
       isCurrentMonth: false,
     });
   }
-  // Dni obecnego miesiąca
   for (let i = 1; i <= daysInMonth; i++) {
     gridCells.push({
       date: new Date(year, month, i),
       isCurrentMonth: true,
     });
   }
-  // Dni następnego miesiąca (dopełnienie do 42 pól)
   const remainingSlots = 42 - gridCells.length;
   for (let i = 1; i <= remainingSlots; i++) {
     gridCells.push({
@@ -93,10 +91,11 @@ export const EventsView = ({
       <header className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-6 animate-fade-in-up">
         <div>
           <span className="text-arylideYellow text-xs font-bold tracking-[0.2em] uppercase mb-4 flex items-center gap-2">
-            <CalendarIcon className="w-4 h-4" /> Sezon {viewDate.getFullYear()}
+            <CalendarIcon className="w-4 h-4" /> {seasonLabel}{" "}
+            {viewDate.getFullYear()}
           </span>
           <h1 className="font-youngest text-6xl md:text-8xl lg:text-9xl text-white leading-[0.8] drop-shadow-2xl">
-            Kalendarium
+            {pageTitle}
           </h1>
         </div>
       </header>

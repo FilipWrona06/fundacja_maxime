@@ -1,29 +1,22 @@
 import type { SchemaTypeDefinition } from "sanity";
-// --- BLOKI (Page Builder) ---
+// --- BLOKI ---
 import { about } from "./blocks/about";
-// import { eventsSection } from "./blocks/events"; // Odkomentuj, gdy stworzysz ten plik
 import { hero } from "./blocks/hero";
 import { partners } from "./blocks/partners";
 import { support } from "./blocks/support";
 import { timeline } from "./blocks/timeline";
-// --- OBIEKTY (Wielokrotnego użytku) ---
+// --- DOKUMENTY ---
+import { event } from "./documents/event";
+import { eventsArchive } from "./documents/eventsArchive"; // NOWE
+// --- OBIEKTY ---
 import { cta } from "./objects/cta";
-// --- DOKUMENTY (Strony, Kolekcje) ---
+import { programItem } from "./objects/programItem";
 import { page } from "./page";
 
-// Grupowanie typów dla lepszej czytelności
-const documents = [page];
-const objects = [cta];
-const blocks = [
-  about,
-  // eventsSection, // Odkomentuj gdy gotowe
-  hero,
-  partners,
-  support,
-  timeline,
-];
+const documents = [page, event, eventsArchive];
+const objects = [cta, programItem];
+const blocks = [about, hero, partners, support, timeline];
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  // Rozbijamy tablice (Spread Operator) - to wygląda czysto i profesjonalnie
   types: [...documents, ...objects, ...blocks],
 };

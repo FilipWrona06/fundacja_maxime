@@ -1,13 +1,20 @@
-// --- FILE: components/events/details/EventArtist.tsx ---
 import { clsx } from "clsx";
 import { User } from "lucide-react";
 import Image from "next/image";
 
 interface EventArtistProps {
   isEnded: boolean;
+  name?: string;
+  description?: string;
+  image?: string;
 }
 
-export const EventArtist = ({ isEnded }: EventArtistProps) => {
+export const EventArtist = ({
+  isEnded,
+  name = "Orkiestra Maxime",
+  description = "Główny zespół artystyczny Fundacji.",
+  image = "/images/about.jpg",
+}: EventArtistProps) => {
   return (
     <section className="mb-20 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500">
       <div className="flex items-center gap-4 mb-10">
@@ -26,8 +33,8 @@ export const EventArtist = ({ isEnded }: EventArtistProps) => {
       >
         <div className="relative w-40 h-40 md:w-48 md:h-48 rounded-full overflow-hidden shrink-0 border-4 border-white/5 shadow-2xl group-hover:border-white/20 transition-colors">
           <Image
-            src="/images/about.jpg"
-            alt="Orkiestra Maxime"
+            src={image}
+            alt={name}
             fill
             className={clsx(
               "object-cover transition-all duration-700",
@@ -46,12 +53,10 @@ export const EventArtist = ({ isEnded }: EventArtistProps) => {
                 : "text-white group-hover:text-arylideYellow",
             )}
           >
-            Orkiestra Maxime
+            {name}
           </h4>
           <p className="text-philippineSilver text-base leading-relaxed max-w-xl mx-auto md:mx-0 font-light">
-            Główny zespół artystyczny Fundacji. Orkiestra zrzesza
-            najzdolniejszych stypendystów oraz profesjonalnych muzyków ze
-            Śląska.
+            {description}
           </p>
         </div>
       </div>

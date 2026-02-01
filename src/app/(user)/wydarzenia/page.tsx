@@ -1,23 +1,76 @@
-// --- FILE: app/wydarzenia/page.tsx ---
 import type { Metadata } from "next";
+import { defineQuery } from "next-sanity";
 import { EventsView } from "@/components/events/EventsView";
-import { eventsData } from "@/components/events/Shared";
+import type { EventItem } from "@/components/events/Shared";
+import { sanityFetch } from "@/sanity/lib/live";
 
-export const metadata: Metadata = {
-  title: "Kalendarium Wydarzeń | Fundacja Maxime",
-  description: "Sprawdź nadchodzące koncerty, warsztaty i spotkania.",
-};
+// 1. GROQ QUERY
+// Pobieramy dwa obiekty w jednym zapytaniu:
+// 'pageSettings': ustawienia singletona eventsArchive
+// 'events': lista wydarzeń
+const EVENTS_PAGE_QUERY = defineQuery(`{
+  "pageSettings": *[_type == "eventsArchive"][0]{
+    title,
+    seasonLabel,
+    seoTitle,
+    seoDescription,
+    "seoImage": seoImage.asset->url
+  },
+  "events": *[_type == "event"] | order(date asc) {
+    "id": _id,
+    title,
+    subtitle,
+    "slug": slug.current,
+    date,
+    time,
+    doorsOpen,
+    "location": locationName,
+    "address": locationAddress,
+    price,
+    ticketUrl,
+    isSoldOut,
+    "type": eventType,
+    "image": mainImage.asset->url,
+    artistName
+  }
+}`);
 
-// Interfejs dla Next.js 15 (params są Promise) lub Next.js 14 (bez Promise dla searchParams)
-// Zakładam najnowszą wersję, gdzie searchParams może być asynchroniczne
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
+// 2. DYNAMIC METADATA
+export async function generateMetadata(): Promise<Metadata> {
+  const { data } = await sanityFetch({ query: EVENTS_PAGE_QUERY });
+  const settings = data?.pageSettings;
+
+  return {
+    title: settings?.seoTitle || "Kalendarium Wydarzeń | Fundacja Maxime",
+    description:
+      settings?.seoDescription ||
+      "Sprawdź nadchodzące koncerty, warsztaty i spotkania.",
+    openGraph: {
+      images: settings?.seoImage ? [settings.seoImage] : [],
+    },
+  };
+}
+
+// 3. PAGE COMPONENT
 export default async function EventsPage({ searchParams }: PageProps) {
   const params = await searchParams;
+  const { data } = await sanityFetch({ query: EVENTS_PAGE_QUERY });
 
-  // Pobieranie wartości z URL
+  // Fallbacki jeśli CMS jest pusty
+  const events = data?.events || [];
+  const settings = data?.pageSettings;
+
+  // Mapowanie danych dla bezpieczeństwa typów
+  // biome-ignore lint/suspicious/noExplicitAny: Sanity types
+  const mappedEvents: EventItem[] = events.map((e: any) => ({
+    ...e,
+    image: e.image || "/images/hero-poster.jpg",
+  }));
+
   const viewDateStr = typeof params.view === "string" ? params.view : undefined;
   const selectedDateStr =
     typeof params.date === "string" ? params.date : undefined;
@@ -37,9 +90,12 @@ export default async function EventsPage({ searchParams }: PageProps) {
       />
 
       <EventsView
-        events={eventsData}
+        events={mappedEvents}
         viewDateStr={viewDateStr}
         selectedDateStr={selectedDateStr}
+        // Przekazujemy dane z CMS
+        pageTitle={settings?.title}
+        seasonLabel={settings?.seasonLabel}
       />
     </main>
   );

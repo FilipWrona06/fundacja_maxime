@@ -1,5 +1,3 @@
-// --- FILE: components/events/EventDetails.tsx ---
-
 import { EventArtist } from "./details/EventArtist";
 import { EventDescription } from "./details/EventDescription";
 import { EventHeader } from "./details/EventHeader";
@@ -19,7 +17,6 @@ export const EventDetails = ({ event, slug }: EventDetailsProps) => {
     return <EventNotFound slug={slug} />;
   }
 
-  // Logika biznesowa
   const now = new Date();
   const eventDateObj = parseEventDateTime(event.date, event.time);
   const isEnded = now > eventDateObj;
@@ -33,7 +30,6 @@ export const EventDetails = ({ event, slug }: EventDetailsProps) => {
 
   return (
     <article className="min-h-screen bg-raisinBlack text-white selection:bg-arylideYellow selection:text-raisinBlack pb-32">
-      {/* Tła */}
       <div className="fixed top-0 left-0 w-full h-150 bg-linear-to-b from-[#1a1a1a] to-transparent pointer-events-none z-0" />
       <div className="fixed top-0 right-0 w-125 h-125 bg-arylideYellow/5 rounded-full blur-[150px] pointer-events-none -translate-y-1/2 translate-x-1/3 z-0" />
 
@@ -41,7 +37,6 @@ export const EventDetails = ({ event, slug }: EventDetailsProps) => {
 
       <div className="container mx-auto px-4 max-w-400 relative z-10">
         <div className="grid lg:grid-cols-12 gap-12 xl:gap-24 items-start">
-          {/* Sidebar */}
           <aside className="lg:col-span-5 xl:col-span-4 order-2 lg:order-1 relative">
             <div className="sticky top-32 flex flex-col gap-8">
               <EventSidebarCard
@@ -52,11 +47,17 @@ export const EventDetails = ({ event, slug }: EventDetailsProps) => {
             </div>
           </aside>
 
-          {/* Główna treść */}
           <div className="lg:col-span-7 xl:col-span-8 order-1 lg:order-2">
             <EventDescription event={event} isEnded={isEnded} />
-            <EventProgram program={event.program} isEnded={isEnded} />
-            <EventArtist isEnded={isEnded} />
+            {event.program && event.program.length > 0 && (
+              <EventProgram program={event.program} isEnded={isEnded} />
+            )}
+            <EventArtist
+              isEnded={isEnded}
+              name={event.artistName}
+              description={event.artistDescription}
+              image={event.artistImage}
+            />
             <EventLocation
               location={event.location}
               address={event.address}

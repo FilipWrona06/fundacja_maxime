@@ -1,4 +1,3 @@
-// --- FILE: components/events/details/EventSidebarCard.tsx ---
 import { clsx } from "clsx";
 import { Calendar, Clock, MapPin, Share2, Ticket } from "lucide-react";
 import Image from "next/image";
@@ -15,6 +14,10 @@ export const EventSidebarCard = ({
   isEnded,
   displayDate,
 }: EventSidebarCardProps) => {
+  // Jeśli jest external link i wydarzenie trwa -> używamy linku
+  // Jeśli brak linku -> button nieaktywny (chyba że chcesz link do kontaktu)
+  const canBuy = !isEnded && !event.isSoldOut && event.ticketUrl;
+
   return (
     <>
       <div
@@ -50,45 +53,23 @@ export const EventSidebarCard = ({
         </div>
         <div className="p-6 md:p-8 relative">
           <div className="flex flex-col gap-6 mb-8">
-            {/* Data */}
+            {/* Data, Czas, Miejsce (Bez zmian) */}
             <div className="flex items-start gap-4 group/item">
-              <div
-                className={clsx(
-                  "w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-all border",
-                  isEnded
-                    ? "bg-white/5 text-white/20 border-white/5"
-                    : "bg-white/5 text-arylideYellow border-white/10 group-hover/item:border-arylideYellow/50 group-hover/item:text-white",
-                )}
-              >
+              <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-all border bg-white/5 text-arylideYellow border-white/10">
                 <Calendar size={18} />
               </div>
               <div>
                 <span className="text-[10px] text-philippineSilver/60 uppercase tracking-widest block mb-1">
                   Data
                 </span>
-                <time
-                  dateTime={event.date}
-                  className={clsx(
-                    "font-bold text-lg capitalize block leading-tight",
-                    isEnded
-                      ? "text-philippineSilver line-through decoration-white/30"
-                      : "text-white",
-                  )}
-                >
+                <time className="font-bold text-lg capitalize block leading-tight text-white">
                   {displayDate}
                 </time>
               </div>
             </div>
-            {/* Godzina */}
+
             <div className="flex items-start gap-4 group/item">
-              <div
-                className={clsx(
-                  "w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-all border",
-                  isEnded
-                    ? "bg-white/5 text-white/20 border-white/5"
-                    : "bg-white/5 text-arylideYellow border-white/10 group-hover/item:border-arylideYellow/50 group-hover/item:text-white",
-                )}
-              >
+              <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-all border bg-white/5 text-arylideYellow border-white/10">
                 <Clock size={18} />
               </div>
               <div>
@@ -96,31 +77,20 @@ export const EventSidebarCard = ({
                   Godzina
                 </span>
                 <div className="flex items-baseline gap-2">
-                  <time
-                    dateTime={`${event.date}T${event.time}`}
-                    className={clsx(
-                      "font-bold text-lg",
-                      isEnded ? "text-philippineSilver" : "text-white",
-                    )}
-                  >
+                  <span className="font-bold text-lg text-white">
                     {event.time}
-                  </time>
-                  <span className="text-xs text-white/40">
-                    (Otwarcie: {event.doorsOpen})
                   </span>
+                  {event.doorsOpen && (
+                    <span className="text-xs text-white/40">
+                      (Otwarcie: {event.doorsOpen})
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
-            {/* Miejsce */}
+
             <div className="flex items-start gap-4 group/item">
-              <div
-                className={clsx(
-                  "w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-all border",
-                  isEnded
-                    ? "bg-white/5 text-white/20 border-white/5"
-                    : "bg-white/5 text-arylideYellow border-white/10 group-hover/item:border-arylideYellow/50 group-hover/item:text-white",
-                )}
-              >
+              <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-all border bg-white/5 text-arylideYellow border-white/10">
                 <MapPin size={18} />
               </div>
               <div>
@@ -151,30 +121,33 @@ export const EventSidebarCard = ({
             </span>
           </div>
 
-          <button
-            type="button"
-            disabled={isEnded || event.isSoldOut}
-            className={clsx(
-              "w-full py-4 px-6 rounded-lg font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-3 transition-all duration-300 relative overflow-hidden group/btn z-20 shadow-lg",
-              isEnded || event.isSoldOut
-                ? "bg-white/5 text-white/30 cursor-not-allowed border border-white/5"
-                : "bg-arylideYellow text-raisinBlack hover:bg-white hover:scale-[1.02] hover:shadow-arylideYellow/20",
-            )}
-          >
-            {isEnded ? (
-              "Sprzedaż zakończona"
-            ) : event.isSoldOut ? (
-              "Brak Biletów"
-            ) : (
-              <>
-                <Ticket size={16} /> Kup Bilet Online
-              </>
-            )}
-          </button>
+          {canBuy ? (
+            <a
+              href={event.ticketUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full py-4 px-6 rounded-lg font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-3 transition-all duration-300 relative overflow-hidden group/btn z-20 shadow-lg bg-arylideYellow text-raisinBlack hover:bg-white hover:scale-[1.02] hover:shadow-arylideYellow/20"
+            >
+              <Ticket size={16} /> Kup Bilet Online
+            </a>
+          ) : (
+            <button
+              type="button"
+              disabled
+              className="w-full py-4 px-6 rounded-lg font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-3 transition-all duration-300 relative overflow-hidden group/btn z-20 shadow-lg bg-white/5 text-white/30 cursor-not-allowed border border-white/5"
+            >
+              {isEnded
+                ? "Sprzedaż zakończona"
+                : event.isSoldOut
+                  ? "Brak Biletów"
+                  : "Bilety niedostępne online"}
+            </button>
+          )}
+
           <p className="text-center text-[10px] text-white/30 mt-4 font-mono">
             {isEnded
               ? "Wydarzenie archiwalne."
-              : "Bezpieczna płatność przez PayU / BLIK"}
+              : "Bezpieczna płatność u operatora"}
           </p>
         </div>
       </div>
