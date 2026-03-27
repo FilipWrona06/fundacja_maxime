@@ -43,7 +43,7 @@ export default async function Hero() {
       <div className="relative z-10 flex w-full max-w-6xl flex-col items-center justify-center px-4 pt-12 pb-28 text-center sm:py-0">
         {/* NAGŁÓWEK (Z SANITY) */}
         <h1
-          className="animate-fade-in-up mb-2 py-4 font-youngest text-raisinBlack text-[4.2rem] leading-[0.85] text-white opacity-0 sm:leading-tight sm:text-[5.5rem] md:text-[8rem] lg:mb-4 lg:text-[11.5rem]"
+          className="animate-fade-in-up mb-2 py-4 font-youngest text-[4.2rem] leading-[0.85] text-white opacity-0 sm:leading-tight sm:text-[5.5rem] md:text-[8rem] lg:mb-4 lg:text-[11.5rem]"
           style={{
             animationDelay: "200ms",
             textShadow:
