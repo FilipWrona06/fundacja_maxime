@@ -9,10 +9,10 @@ export default function SiteLayout({
   return (
     <>
       <Navbar />
-      
+
       {/* Tu będzie renderowana treść stron takich jak strona główna, kontakt itp. */}
       <main>{children}</main>
-      
+
       <Footer />
     </>
   );
