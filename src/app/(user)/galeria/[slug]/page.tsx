@@ -118,25 +118,25 @@ export default function GalleryAlbumPage({
   }, [lightboxOpen]);
 
   return (
-    <main className="relative min-h-screen w-full overflow-x-hidden bg-raisinBlack selection:bg-arylideYellow selection:text-raisinBlack">
+    <main className="bg-raisinBlack selection:bg-arylideYellow selection:text-raisinBlack relative min-h-screen w-full overflow-x-hidden">
       {/* ============================================================================ */}
       {/* KINOWY HERO SECTION ALBUMU */}
       {/* ============================================================================ */}
-      <section className="relative flex min-h-[85vh] w-full flex-col justify-end overflow-hidden pb-16 pt-40 px-6 lg:px-12">
+      <section className="relative flex min-h-[85vh] w-full flex-col justify-end overflow-hidden px-6 pt-40 pb-16 lg:px-12">
         <div className="absolute inset-0 z-0">
           <Image
             src={album.coverImage}
             alt={album.title}
             fill
             priority
-            className="object-cover opacity-60 transition-transform duration-3000 ease-out scale-100 hover:scale-105"
+            className="scale-100 object-cover opacity-60 transition-transform duration-3000 ease-out hover:scale-105"
           />
-          <div className="absolute inset-0 bg-linear-to-t from-raisinBlack via-raisinBlack/60 to-transparent" />
-          <div className="absolute inset-0 bg-linear-to-r from-raisinBlack via-transparent to-transparent opacity-80" />
+          <div className="from-raisinBlack via-raisinBlack/60 absolute inset-0 bg-linear-to-t to-transparent" />
+          <div className="from-raisinBlack absolute inset-0 bg-linear-to-r via-transparent to-transparent opacity-80" />
         </div>
 
-        <div className="pointer-events-none absolute -left-10 bottom-0 z-0 select-none opacity-10 mix-blend-overlay">
-          <span className="font-montserrat text-[25vw] font-black leading-none text-white lg:text-[20vw]">
+        <div className="pointer-events-none absolute bottom-0 -left-10 z-0 opacity-10 mix-blend-overlay select-none">
+          <span className="font-montserrat text-[25vw] leading-none font-black text-white lg:text-[20vw]">
             {album.date.slice(-4)}
           </span>
         </div>
@@ -145,7 +145,7 @@ export default function GalleryAlbumPage({
           <FadeIn>
             <Link
               href="/galeria"
-              className="group mb-12 lg:mb-20 inline-flex items-center gap-3 font-montserrat text-[0.65rem] font-bold uppercase tracking-[0.3em] text-white/50 transition-colors hover:text-arylideYellow"
+              className="group font-montserrat hover:text-arylideYellow mb-12 inline-flex items-center gap-3 text-[0.65rem] font-bold tracking-[0.3em] text-white/50 uppercase transition-colors lg:mb-20"
             >
               <svg
                 aria-hidden="true"
@@ -170,22 +170,22 @@ export default function GalleryAlbumPage({
             <div className="lg:col-span-8">
               <FadeIn delay="100ms">
                 <div className="mb-6 flex items-center gap-4">
-                  <div className="h-px w-12 bg-arylideYellow" />
-                  <span className="font-montserrat text-[0.65rem] font-bold uppercase tracking-[0.4em] text-arylideYellow">
+                  <div className="bg-arylideYellow h-px w-12" />
+                  <span className="font-montserrat text-arylideYellow text-[0.65rem] font-bold tracking-[0.4em] uppercase">
                     {album.category}
                   </span>
                 </div>
               </FadeIn>
               <FadeIn delay="300ms">
-                <h1 className="font-montserrat text-5xl sm:text-6xl md:text-7xl lg:text-[6rem] font-black leading-[1.05] tracking-tight text-white">
+                <h1 className="font-montserrat text-5xl leading-[1.05] font-black tracking-tight text-white sm:text-6xl md:text-7xl lg:text-[6rem]">
                   {album.title}
                 </h1>
               </FadeIn>
             </div>
 
-            <div className="lg:col-span-4 lg:flex lg:flex-col lg:items-end lg:justify-end lg:pb-4 text-left lg:text-right">
+            <div className="text-left lg:col-span-4 lg:flex lg:flex-col lg:items-end lg:justify-end lg:pb-4 lg:text-right">
               <FadeIn delay="500ms">
-                <p className="font-youngest text-3xl md:text-4xl text-arylideYellow mb-2">
+                <p className="font-youngest text-arylideYellow mb-2 text-3xl md:text-4xl">
                   {album.date}
                 </p>
                 <p className="font-montserrat text-sm font-medium text-white/80">
@@ -200,19 +200,19 @@ export default function GalleryAlbumPage({
       {/* ============================================================================ */}
       {/* OPIS ALBUMU I METADANE */}
       {/* ============================================================================ */}
-      <section className="relative z-20 w-full bg-raisinBlack px-6 py-16 lg:py-24 lg:px-12 border-b border-white/5">
+      <section className="bg-raisinBlack relative z-20 w-full border-b border-white/5 px-6 py-16 lg:px-12 lg:py-24">
         <div className="mx-auto w-full max-w-7xl">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+          <div className="grid grid-cols-1 items-start gap-12 md:grid-cols-12">
             <div className="md:col-span-7 lg:col-span-8">
               <FadeIn>
-                <p className="font-montserrat text-lg md:text-xl font-light leading-relaxed text-white/70">
+                <p className="font-montserrat text-lg leading-relaxed font-light text-white/70 md:text-xl">
                   {album.description}
                 </p>
               </FadeIn>
             </div>
-            <div className="md:col-span-5 lg:col-span-4 flex flex-col gap-8 md:pl-12 lg:border-l lg:border-white/10 lg:pl-16">
+            <div className="flex flex-col gap-8 md:col-span-5 md:pl-12 lg:col-span-4 lg:border-l lg:border-white/10 lg:pl-16">
               <FadeIn delay="200ms">
-                <span className="font-montserrat text-[0.6rem] font-bold uppercase tracking-[0.3em] text-white/30 block mb-2">
+                <span className="font-montserrat mb-2 block text-[0.6rem] font-bold tracking-[0.3em] text-white/30 uppercase">
                   Fotografia
                 </span>
                 <span className="font-montserrat text-base font-medium text-white">
@@ -220,7 +220,7 @@ export default function GalleryAlbumPage({
                 </span>
               </FadeIn>
               <FadeIn delay="400ms">
-                <span className="font-montserrat text-[0.6rem] font-bold uppercase tracking-[0.3em] text-white/30 block mb-2">
+                <span className="font-montserrat mb-2 block text-[0.6rem] font-bold tracking-[0.3em] text-white/30 uppercase">
                   Liczba kadrów
                 </span>
                 <span className="font-montserrat text-base font-medium text-white">
@@ -235,8 +235,8 @@ export default function GalleryAlbumPage({
       {/* ============================================================================ */}
       {/* EDITORIAL MASONRY GRID (SIATKA ZDJĘĆ) */}
       {/* ============================================================================ */}
-      <section className="relative z-10 w-full px-4 py-16 md:px-6 lg:py-32 lg:px-12 bg-[#1c1c1c]">
-        <div className="pointer-events-none absolute left-1/2 top-1/2 z-0 h-200 w-200 -translate-x-1/2 -translate-y-1/2 opacity-[0.02]">
+      <section className="relative z-10 w-full bg-[#1c1c1c] px-4 py-16 md:px-6 lg:px-12 lg:py-32">
+        <div className="pointer-events-none absolute top-1/2 left-1/2 z-0 h-200 w-200 -translate-x-1/2 -translate-y-1/2 opacity-[0.02]">
           <Image
             src="/Asset-1.svg"
             alt=""
@@ -246,7 +246,7 @@ export default function GalleryAlbumPage({
         </div>
 
         <div className="relative z-10 mx-auto w-full max-w-350">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 auto-rows-[300px] md:auto-rows-[400px] gap-4 md:gap-6">
+          <div className="grid auto-rows-[300px] grid-cols-1 gap-4 md:auto-rows-[400px] md:grid-cols-2 md:gap-6 lg:grid-cols-4">
             {album.photos.map((photo, index) => (
               <FadeIn
                 key={photo.id}
@@ -256,7 +256,7 @@ export default function GalleryAlbumPage({
                 <button
                   type="button"
                   onClick={() => openLightbox(index)}
-                  className="group relative block w-full h-full cursor-pointer appearance-none overflow-hidden border-none bg-raisinBlack p-0 text-left outline-none"
+                  className="group bg-raisinBlack relative block h-full w-full cursor-pointer appearance-none overflow-hidden border-none p-0 text-left outline-none"
                 >
                   <div className="absolute inset-0 z-0">
                     <Image
@@ -267,11 +267,11 @@ export default function GalleryAlbumPage({
                     />
                   </div>
 
-                  <div className="absolute inset-0 bg-oxfordBlue/40 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                  <div className="absolute inset-4 border border-arylideYellow/0 transition-all duration-500 group-hover:border-arylideYellow/50 scale-[1.05] group-hover:scale-100 pointer-events-none" />
+                  <div className="bg-oxfordBlue/40 absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                  <div className="border-arylideYellow/0 group-hover:border-arylideYellow/50 pointer-events-none absolute inset-4 scale-[1.05] border transition-all duration-500 group-hover:scale-100" />
 
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 scale-50 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-100 group-hover:scale-100 pointer-events-none">
-                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-arylideYellow/90 text-raisinBlack backdrop-blur-sm">
+                  <div className="pointer-events-none absolute inset-0 flex scale-50 items-center justify-center opacity-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-100 group-hover:opacity-100">
+                    <div className="bg-arylideYellow/90 text-raisinBlack flex h-16 w-16 items-center justify-center rounded-full backdrop-blur-sm">
                       <svg
                         className="h-6 w-6"
                         fill="none"
@@ -298,37 +298,37 @@ export default function GalleryAlbumPage({
       {/* ============================================================================ */}
       {/* NASTĘPNY ALBUM (GIGANTYCZNE CTA NA DOLE STRONY) */}
       {/* ============================================================================ */}
-      <section className="relative z-20 w-full h-[60vh] lg:h-[70vh] overflow-hidden group block">
+      <section className="group relative z-20 block h-[60vh] w-full overflow-hidden lg:h-[70vh]">
         <Link
           href={`/galeria/${nextAlbum.id}`}
-          className="absolute inset-0 w-full h-full block"
+          className="absolute inset-0 block h-full w-full"
         >
           <div className="absolute inset-0 z-0">
             <Image
               src={nextAlbum.image}
               alt={nextAlbum.title}
               fill
-              className="object-cover opacity-50 transition-transform duration-3000 ease-out scale-100 group-hover:scale-105"
+              className="scale-100 object-cover opacity-50 transition-transform duration-3000 ease-out group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-oxfordBlue/60 transition-colors duration-700 group-hover:bg-oxfordBlue/80" />
+            <div className="bg-oxfordBlue/60 group-hover:bg-oxfordBlue/80 absolute inset-0 transition-colors duration-700" />
           </div>
-          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center p-6">
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-6 text-center">
             <FadeIn>
-              <span className="font-montserrat text-[0.65rem] font-bold uppercase tracking-[0.4em] text-arylideYellow mb-6 block">
+              <span className="font-montserrat text-arylideYellow mb-6 block text-[0.65rem] font-bold tracking-[0.4em] uppercase">
                 Zobacz następny album
               </span>
             </FadeIn>
             <FadeIn delay="200ms">
-              <h2 className="font-montserrat text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight mb-4 transition-transform duration-700 group-hover:-translate-y-2">
+              <h2 className="font-montserrat mb-4 text-4xl leading-tight font-black text-white transition-transform duration-700 group-hover:-translate-y-2 sm:text-5xl md:text-6xl lg:text-7xl">
                 {nextAlbum.title}
               </h2>
-              <span className="font-youngest text-3xl md:text-4xl text-white/50 transition-colors duration-700 group-hover:text-arylideYellow">
+              <span className="font-youngest group-hover:text-arylideYellow text-3xl text-white/50 transition-colors duration-700 md:text-4xl">
                 {nextAlbum.category}
               </span>
             </FadeIn>
           </div>
-          <div className="absolute bottom-0 left-0 w-full h-2 bg-raisinBlack/50">
-            <div className="h-full bg-arylideYellow w-0 transition-all duration-1500 ease-out group-hover:w-full" />
+          <div className="bg-raisinBlack/50 absolute bottom-0 left-0 h-2 w-full">
+            <div className="bg-arylideYellow h-full w-0 transition-all duration-1500 ease-out group-hover:w-full" />
           </div>
         </Link>
       </section>
@@ -337,11 +337,11 @@ export default function GalleryAlbumPage({
       {/* LIGHTBOX OVERLAY */}
       {/* ============================================================================ */}
       {lightboxOpen && (
-        <div className="fixed inset-0 z-100 flex items-center justify-center bg-raisinBlack/95 backdrop-blur-md transition-opacity">
+        <div className="bg-raisinBlack/95 fixed inset-0 z-100 flex items-center justify-center backdrop-blur-md transition-opacity">
           {/* Niewidoczne tło służące do zamykania po kliknięciu poza obrazek */}
           <button
             type="button"
-            className="absolute inset-0 h-full w-full cursor-default appearance-none border-none bg-transparent m-0 p-0 outline-none"
+            className="absolute inset-0 m-0 h-full w-full cursor-default appearance-none border-none bg-transparent p-0 outline-none"
             onClick={closeLightbox}
             aria-label="Zamknij galerię (kliknięcie w tło)"
             tabIndex={-1}
@@ -351,7 +351,7 @@ export default function GalleryAlbumPage({
           <button
             type="button"
             onClick={closeLightbox}
-            className="absolute right-6 top-6 z-110 flex h-12 w-12 items-center justify-center rounded-full bg-white/5 text-white transition-all hover:bg-arylideYellow hover:text-raisinBlack"
+            className="hover:bg-arylideYellow hover:text-raisinBlack absolute top-6 right-6 z-110 flex h-12 w-12 items-center justify-center rounded-full bg-white/5 text-white transition-all"
             aria-label="Zamknij galerię"
           >
             <svg
@@ -371,7 +371,7 @@ export default function GalleryAlbumPage({
           </button>
 
           {/* Licznik zdjęć */}
-          <div className="absolute left-6 top-8 z-110 font-montserrat text-[0.7rem] font-bold uppercase tracking-[0.3em] text-white/50">
+          <div className="font-montserrat absolute top-8 left-6 z-110 text-[0.7rem] font-bold tracking-[0.3em] text-white/50 uppercase">
             {currentIndex + 1} <span className="mx-2 text-white/20">/</span>{" "}
             {album.photos.length}
           </div>
@@ -383,7 +383,7 @@ export default function GalleryAlbumPage({
               e.stopPropagation();
               prevImage();
             }}
-            className="absolute left-4 top-1/2 z-110 -translate-y-1/2 hidden h-14 w-14 items-center justify-center rounded-full bg-white/5 text-white transition-all hover:bg-arylideYellow hover:text-raisinBlack md:flex"
+            className="hover:bg-arylideYellow hover:text-raisinBlack absolute top-1/2 left-4 z-110 hidden h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full bg-white/5 text-white transition-all md:flex"
             aria-label="Poprzednie zdjęcie"
           >
             <svg
@@ -409,7 +409,7 @@ export default function GalleryAlbumPage({
               e.stopPropagation();
               nextImage();
             }}
-            className="absolute right-4 top-1/2 z-110 -translate-y-1/2 hidden h-14 w-14 items-center justify-center rounded-full bg-white/5 text-white transition-all hover:bg-arylideYellow hover:text-raisinBlack md:flex"
+            className="hover:bg-arylideYellow hover:text-raisinBlack absolute top-1/2 right-4 z-110 hidden h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full bg-white/5 text-white transition-all md:flex"
             aria-label="Następne zdjęcie"
           >
             <svg
@@ -429,19 +429,19 @@ export default function GalleryAlbumPage({
           </button>
 
           {/* Główny kontener zdjęcia (Z elementami blokującymi kliknięcia w tło w obrysie obrazka) */}
-          <div className="relative z-10 flex h-full w-full max-h-[85vh] max-w-[90vw] items-center justify-center pointer-events-none">
+          <div className="pointer-events-none relative z-10 flex h-full max-h-[85vh] w-full max-w-[90vw] items-center justify-center">
             <Image
               src={album.photos[currentIndex].src}
               alt={`Zdjęcie powiększone ${currentIndex + 1}`}
               fill
-              className="object-contain select-none pointer-events-auto"
+              className="pointer-events-auto object-contain select-none"
               sizes="100vw"
               priority
             />
           </div>
 
           {/* Mobilna nawigacja (widoczna tylko na małych ekranach na dole) */}
-          <div className="absolute bottom-6 left-0 right-0 z-110 flex justify-center gap-6 md:hidden">
+          <div className="absolute right-0 bottom-6 left-0 z-110 flex justify-center gap-6 md:hidden">
             <button
               type="button"
               onClick={prevImage}

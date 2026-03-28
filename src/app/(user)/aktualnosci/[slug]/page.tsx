@@ -19,8 +19,8 @@ const mockArticle = {
   image: "/video-poster.webp",
   content: (
     <>
-      <p className="lead text-xl md:text-2xl font-light text-white/90 leading-relaxed mb-12">
-        <span className="float-left text-[6rem] leading-[0.8] font-black text-arylideYellow mr-6 mt-2">
+      <p className="lead mb-12 text-xl leading-relaxed font-light text-white/90 md:text-2xl">
+        <span className="text-arylideYellow float-left mt-2 mr-6 text-[6rem] leading-[0.8] font-black">
           S
         </span>
         pędziliśmy ostatnie tygodnie na intensywnych próbach w odciętej od
@@ -30,17 +30,17 @@ const mockArticle = {
         która napędza muzyków do przekraczania własnych granic.
       </p>
 
-      <h2 className="text-3xl font-bold text-white mt-16 mb-6">
+      <h2 className="mt-16 mb-6 text-3xl font-bold text-white">
         Wizja staje się rzeczywistością
       </h2>
-      <p className="text-white/70 font-light leading-loose mb-8">
+      <p className="mb-8 leading-loose font-light text-white/70">
         Kiedy po raz pierwszy spojrzeliśmy na partytury przygotowane na ten
         sezon, w sali zapadła kompletna cisza. To nie były po prostu kolejne
         kompozycje – to był manifest. Nasz dyrygent, analizując każdy
         najmniejszy detal, od razu zaznaczył: "Tym razem nie gramy dla
         publiczności. Gramy z nią".
       </p>
-      <p className="text-white/70 font-light leading-loose mb-12">
+      <p className="mb-12 leading-loose font-light text-white/70">
         Każda sekcja orkiestry musiała przemyśleć swoje podejście. Smyczki
         dostały zadanie wyciągnięcia z instrumentów barw, których wcześniej
         unikaliśmy jako "zbyt surowych". Z kolei sekcja dęta musiała połączyć
@@ -50,26 +50,26 @@ const mockArticle = {
 
       {/* EDYTORIALNY CYTAT (BLOCKQUOTE) */}
       <div className="relative my-20 py-10">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-full bg-white/5" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15rem] font-youngest text-white/3 pointer-events-none">
+        <div className="absolute top-0 left-1/2 h-full w-px -translate-x-1/2 bg-white/5" />
+        <div className="font-youngest pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15rem] text-white/3">
           "
         </div>
-        <blockquote className="relative z-10 text-center px-4 md:px-12">
-          <p className="font-youngest text-4xl md:text-5xl lg:text-6xl text-arylideYellow mb-6 leading-tight">
+        <blockquote className="relative z-10 px-4 text-center md:px-12">
+          <p className="font-youngest text-arylideYellow mb-6 text-4xl leading-tight md:text-5xl lg:text-6xl">
             Nie szukamy perfekcji technicznej.{" "}
             <br className="hidden md:block" />
             Szukamy prawdy w każdym uderzeniu smyczka.
           </p>
-          <footer className="font-montserrat text-xs font-bold uppercase tracking-[0.3em] text-white/50">
+          <footer className="font-montserrat text-xs font-bold tracking-[0.3em] text-white/50 uppercase">
             — Główny Dyrygent, Maxime
           </footer>
         </blockquote>
       </div>
 
-      <h2 className="text-3xl font-bold text-white mt-16 mb-6">
+      <h2 className="mt-16 mb-6 text-3xl font-bold text-white">
         Próby w całkowitej ciemności
       </h2>
-      <p className="text-white/70 font-light leading-loose mb-8">
+      <p className="mb-8 leading-loose font-light text-white/70">
         Jednym z najbardziej niekonwencjonalnych etapów naszych przygotowań były
         "próby ślepe". Przez trzy dni muzycy ćwiczyli w całkowicie wyciemnionej
         sali. Chodziło o odcięcie zmysłu wzroku i całkowite poleganie na słuchu
@@ -77,23 +77,23 @@ const mockArticle = {
       </p>
 
       {/* ASYMETRYCZNE ZDJĘCIE W TEKŚCIE */}
-      <div className="my-16 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+      <div className="my-16 grid grid-cols-1 items-center gap-8 md:grid-cols-12">
         <div className="md:col-span-8">
-          <div className="relative aspect-video w-full bg-raisinBlack overflow-hidden">
+          <div className="bg-raisinBlack relative aspect-video w-full overflow-hidden">
             <Image
               src="/video-poster.webp"
               alt="Próba orkiestry w ciemności"
               fill
-              className="object-cover opacity-80 mix-blend-luminosity hover:mix-blend-normal transition-all duration-1000"
+              className="object-cover opacity-80 mix-blend-luminosity transition-all duration-1000 hover:mix-blend-normal"
             />
           </div>
         </div>
-        <div className="md:col-span-4 md:-ml-12 relative z-10">
+        <div className="relative z-10 md:col-span-4 md:-ml-12">
           <div className="bg-oxfordBlue p-8 shadow-2xl">
-            <span className="font-montserrat text-[0.6rem] font-bold uppercase tracking-[0.3em] text-arylideYellow mb-2 block">
+            <span className="font-montserrat text-arylideYellow mb-2 block text-[0.6rem] font-bold tracking-[0.3em] uppercase">
               Notatka z prób
             </span>
-            <p className="text-white text-sm font-light leading-relaxed">
+            <p className="text-sm leading-relaxed font-light text-white">
               "Kiedy gasną światła, znika ego artysty. Zostaje tylko surowa
               harmonia kolektywu."
             </p>
@@ -101,14 +101,14 @@ const mockArticle = {
         </div>
       </div>
 
-      <p className="text-white/70 font-light leading-loose mb-8">
+      <p className="mb-8 leading-loose font-light text-white/70">
         Rezultat przeszedł nasze najśmielsze oczekiwania. Zespół zyskał nową
         świadomość rytmiczną, a zaufanie między poszczególnymi sekcjami
         instrumentów stało się absolutne. Kiedy w końcu zapaliliśmy światła, to
         co usłyszeliśmy, brzmiało zupełnie inaczej. Było żywe.
       </p>
 
-      <p className="text-white/70 font-light leading-loose mb-16">
+      <p className="mb-16 leading-loose font-light text-white/70">
         Sezon 2026 to dla Stowarzyszenia Maxime podróż w nieznane. Wierzymy, że
         to, co narodziło się podczas tych wyczerpujących, zakulisowych
         przygotowań, poruszy Was tak samo mocno, jak poruszyło nas. Do
@@ -144,13 +144,13 @@ export default function NewsArticlePage({
   const article = mockArticle;
 
   return (
-    <main className="relative min-h-screen w-full overflow-x-hidden bg-raisinBlack selection:bg-arylideYellow selection:text-raisinBlack">
+    <main className="bg-raisinBlack selection:bg-arylideYellow selection:text-raisinBlack relative min-h-screen w-full overflow-x-hidden">
       {/* ============================================================================ */}
       {/* WSKAŹNIK POSTĘPU CZYTANIA (SCROLL PROGRESS BAR) */}
       {/* ============================================================================ */}
-      <div className="fixed top-0 left-0 w-full h-1 bg-white/5 z-120">
+      <div className="fixed top-0 left-0 z-120 h-1 w-full bg-white/5">
         <div
-          className="h-full bg-arylideYellow w-0 animate-[scroll-progress_linear_both]"
+          className="bg-arylideYellow h-full w-0 animate-[scroll-progress_linear_both]"
           style={{ animationTimeline: "scroll()" }}
         />
       </div>
@@ -158,7 +158,7 @@ export default function NewsArticlePage({
       {/* ============================================================================ */}
       {/* KINOWY HERO SECTION ARTYKUŁU */}
       {/* ============================================================================ */}
-      <section className="relative flex min-h-[75vh] w-full flex-col justify-end overflow-hidden pb-16 pt-40 px-6 lg:px-12">
+      <section className="relative flex min-h-[75vh] w-full flex-col justify-end overflow-hidden px-6 pt-40 pb-16 lg:px-12">
         {/* TŁO: Zdjęcie główne z mocnym gradientem */}
         <div className="absolute inset-0 z-0">
           <Image
@@ -166,18 +166,18 @@ export default function NewsArticlePage({
             alt={article.title}
             fill
             priority
-            className="object-cover opacity-50 scale-105"
+            className="scale-105 object-cover opacity-50"
           />
           {/* Przejście z czarnego na dole, do przezroczystego na górze */}
-          <div className="absolute inset-0 bg-linear-to-t from-raisinBlack via-raisinBlack/80 to-transparent" />
-          <div className="absolute inset-0 bg-linear-to-r from-raisinBlack/90 via-raisinBlack/40 to-transparent" />
+          <div className="from-raisinBlack via-raisinBlack/80 absolute inset-0 bg-linear-to-t to-transparent" />
+          <div className="from-raisinBlack/90 via-raisinBlack/40 absolute inset-0 bg-linear-to-r to-transparent" />
         </div>
 
         <div className="relative z-10 mx-auto w-full max-w-4xl">
           <FadeIn>
             <Link
               href="/aktualnosci"
-              className="group mb-12 lg:mb-16 inline-flex items-center gap-3 font-montserrat text-[0.65rem] font-bold uppercase tracking-[0.3em] text-white/50 transition-colors hover:text-arylideYellow"
+              className="group font-montserrat hover:text-arylideYellow mb-12 inline-flex items-center gap-3 text-[0.65rem] font-bold tracking-[0.3em] text-white/50 uppercase transition-colors lg:mb-16"
             >
               <svg
                 aria-hidden="true"
@@ -198,18 +198,18 @@ export default function NewsArticlePage({
           </FadeIn>
 
           <FadeIn delay="100ms">
-            <div className="mb-6 flex flex-wrap items-center gap-4 font-montserrat text-[0.65rem] font-bold uppercase tracking-[0.3em] text-arylideYellow">
+            <div className="font-montserrat text-arylideYellow mb-6 flex flex-wrap items-center gap-4 text-[0.65rem] font-bold tracking-[0.3em] uppercase">
               <span>{article.category}</span>
-              <span className="w-1 h-1 rounded-full bg-white/20" />
+              <span className="h-1 w-1 rounded-full bg-white/20" />
               <span className="text-white/50">{article.readTime}</span>
             </div>
           </FadeIn>
 
           <FadeIn delay="300ms">
-            <h1 className="font-montserrat text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.05] tracking-tight text-white mb-6">
+            <h1 className="font-montserrat mb-6 text-4xl leading-[1.05] font-black tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
               {article.title}
             </h1>
-            <p className="font-youngest text-3xl md:text-4xl text-white/80">
+            <p className="font-youngest text-3xl text-white/80 md:text-4xl">
               {article.subtitle}
             </p>
           </FadeIn>
@@ -217,16 +217,16 @@ export default function NewsArticlePage({
           <FadeIn delay="500ms">
             <div className="mt-12 flex items-center gap-6 border-t border-white/10 pt-8">
               <div className="flex flex-col">
-                <span className="font-montserrat text-[0.6rem] font-bold uppercase tracking-[0.3em] text-white/40 mb-1">
+                <span className="font-montserrat mb-1 text-[0.6rem] font-bold tracking-[0.3em] text-white/40 uppercase">
                   Autor
                 </span>
                 <span className="font-montserrat text-sm font-medium text-white">
                   {article.author}
                 </span>
               </div>
-              <div className="w-px h-8 bg-white/10" />
+              <div className="h-8 w-px bg-white/10" />
               <div className="flex flex-col">
-                <span className="font-montserrat text-[0.6rem] font-bold uppercase tracking-[0.3em] text-white/40 mb-1">
+                <span className="font-montserrat mb-1 text-[0.6rem] font-bold tracking-[0.3em] text-white/40 uppercase">
                   Data publikacji
                 </span>
                 <span className="font-montserrat text-sm font-medium text-white">
@@ -243,7 +243,7 @@ export default function NewsArticlePage({
       {/* ============================================================================ */}
       <section className="relative z-20 w-full px-6 py-16 lg:py-24">
         {/* Dekoracyjne, pływające nuty w tle treści */}
-        <div className="pointer-events-none absolute left-0 top-32 z-0 h-150 w-150 opacity-[0.03] -translate-x-1/2">
+        <div className="pointer-events-none absolute top-32 left-0 z-0 h-150 w-150 -translate-x-1/2 opacity-[0.03]">
           <Image
             src="/Asset-1.svg"
             alt=""
@@ -251,7 +251,7 @@ export default function NewsArticlePage({
             className="object-contain brightness-0 invert"
           />
         </div>
-        <div className="pointer-events-none absolute right-0 bottom-32 z-0 h-200 w-200 opacity-[0.02] translate-x-1/3">
+        <div className="pointer-events-none absolute right-0 bottom-32 z-0 h-200 w-200 translate-x-1/3 opacity-[0.02]">
           <Image
             src="/Asset-2.svg"
             alt=""
@@ -269,9 +269,9 @@ export default function NewsArticlePage({
 
           {/* STOPKA ARTYKUŁU (UDOSTĘPNIJ) */}
           <FadeIn delay="300ms">
-            <div className="mt-20 flex flex-col sm:flex-row items-center justify-between border-t border-b border-white/10 py-8 gap-6">
+            <div className="mt-20 flex flex-col items-center justify-between gap-6 border-t border-b border-white/10 py-8 sm:flex-row">
               <div className="flex items-center gap-4">
-                <span className="font-montserrat text-[0.65rem] font-bold uppercase tracking-[0.3em] text-white/40">
+                <span className="font-montserrat text-[0.65rem] font-bold tracking-[0.3em] text-white/40 uppercase">
                   Udostępnij artykuł
                 </span>
               </div>
@@ -280,7 +280,7 @@ export default function NewsArticlePage({
                   <button
                     key={social}
                     type="button"
-                    className="group relative px-6 py-3 border border-white/20 rounded-full text-[0.65rem] font-bold uppercase tracking-widest text-white transition-all hover:bg-arylideYellow hover:border-arylideYellow hover:text-raisinBlack"
+                    className="group hover:bg-arylideYellow hover:border-arylideYellow hover:text-raisinBlack relative rounded-full border border-white/20 px-6 py-3 text-[0.65rem] font-bold tracking-widest text-white uppercase transition-all"
                   >
                     {social}
                   </button>
@@ -297,20 +297,20 @@ export default function NewsArticlePage({
       <section className="relative z-10 w-full bg-[#1c1c1c] py-24 lg:py-32">
         <div className="mx-auto w-full max-w-7xl px-6 lg:px-12">
           <FadeIn>
-            <div className="flex items-center gap-6 mb-16 lg:mb-24">
-              <div className="h-px w-16 bg-arylideYellow" />
-              <h3 className="font-youngest text-4xl lg:text-5xl text-white">
+            <div className="mb-16 flex items-center gap-6 lg:mb-24">
+              <div className="bg-arylideYellow h-px w-16" />
+              <h3 className="font-youngest text-4xl text-white lg:text-5xl">
                 Czytaj dalej
               </h3>
             </div>
           </FadeIn>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-12">
             {relatedPosts.map((post, i) => (
               <FadeIn key={post.id} delay={`${i * 200}ms`}>
                 <Link
                   href={`/aktualnosci/${post.id}`}
-                  className="group flex flex-col border border-white/5 bg-[#222222] overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:border-white/10"
+                  className="group flex flex-col overflow-hidden border border-white/5 bg-[#222222] transition-all duration-500 hover:-translate-y-2 hover:border-white/10 hover:shadow-2xl"
                 >
                   <div className="relative aspect-video w-full overflow-hidden">
                     <Image
@@ -319,15 +319,15 @@ export default function NewsArticlePage({
                       fill
                       className="object-cover opacity-70 transition-transform duration-2000 group-hover:scale-105 group-hover:opacity-100"
                     />
-                    <div className="absolute top-4 left-4 bg-oxfordBlue px-4 py-2 text-[0.6rem] font-bold uppercase tracking-[0.2em] text-white">
+                    <div className="bg-oxfordBlue absolute top-4 left-4 px-4 py-2 text-[0.6rem] font-bold tracking-[0.2em] text-white uppercase">
                       {post.category}
                     </div>
                   </div>
-                  <div className="p-8 lg:p-10 flex flex-col grow justify-between">
-                    <h4 className="font-montserrat text-xl lg:text-2xl font-bold text-white leading-tight mb-8 transition-colors group-hover:text-arylideYellow">
+                  <div className="flex grow flex-col justify-between p-8 lg:p-10">
+                    <h4 className="font-montserrat group-hover:text-arylideYellow mb-8 text-xl leading-tight font-bold text-white transition-colors lg:text-2xl">
                       {post.title}
                     </h4>
-                    <span className="font-montserrat text-xs font-bold uppercase tracking-[0.2em] text-white/40 group-hover:text-white transition-colors flex items-center gap-3">
+                    <span className="font-montserrat flex items-center gap-3 text-xs font-bold tracking-[0.2em] text-white/40 uppercase transition-colors group-hover:text-white">
                       Przejdź do wpisu
                       <svg
                         className="h-4 w-4 transition-transform duration-500 group-hover:translate-x-2"

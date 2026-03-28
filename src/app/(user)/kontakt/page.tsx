@@ -40,11 +40,11 @@ export default function ContactPage() {
   };
 
   return (
-    <main className="relative min-h-screen w-full overflow-hidden bg-raisinBlack selection:bg-arylideYellow selection:text-raisinBlack">
+    <main className="bg-raisinBlack selection:bg-arylideYellow selection:text-raisinBlack relative min-h-screen w-full overflow-hidden">
       {/* ============================================================================ */}
       {/* TŁO: WOLNO OBRACAJĄCY SIĘ ZNAK WODNY (BRAND ASSET) */}
       {/* ============================================================================ */}
-      <div className="pointer-events-none fixed -right-64 -top-64 z-0 h-200 w-200 opacity-3 lg:-right-40 lg:-top-40 lg:h-300 lg:w-300">
+      <div className="pointer-events-none fixed -top-64 -right-64 z-0 h-200 w-200 opacity-3 lg:-top-40 lg:-right-40 lg:h-300 lg:w-300">
         <Image
           src="/Asset-2.svg"
           alt=""
@@ -56,10 +56,10 @@ export default function ContactPage() {
       {/* ============================================================================ */}
       {/* HERO SECTION - KINOWA TYPOGRAFIA */}
       {/* ============================================================================ */}
-      <section className="relative z-10 flex min-h-[70vh] w-full flex-col justify-end px-6 pb-24 pt-40 lg:min-h-[85vh] lg:px-12 lg:pb-32">
+      <section className="relative z-10 flex min-h-[70vh] w-full flex-col justify-end px-6 pt-40 pb-24 lg:min-h-[85vh] lg:px-12 lg:pb-32">
         {/* Przeźroczysty gigantyczny napis z tyłu */}
-        <div className="pointer-events-none absolute left-0 top-1/2 z-0 -translate-y-1/2 select-none opacity-2 mix-blend-overlay">
-          <span className="whitespace-nowrap font-montserrat text-[25vw] font-black leading-none text-white">
+        <div className="pointer-events-none absolute top-1/2 left-0 z-0 -translate-y-1/2 opacity-2 mix-blend-overlay select-none">
+          <span className="font-montserrat text-[25vw] leading-none font-black whitespace-nowrap text-white">
             CONTACT
           </span>
         </div>
@@ -70,16 +70,16 @@ export default function ContactPage() {
             <div className="lg:col-span-9">
               <FadeIn>
                 <div className="mb-6 flex items-center gap-4">
-                  <div className="h-px w-12 bg-arylideYellow" />
-                  <span className="font-montserrat text-[0.65rem] font-bold uppercase tracking-[0.4em] text-arylideYellow">
+                  <div className="bg-arylideYellow h-px w-12" />
+                  <span className="font-montserrat text-arylideYellow text-[0.65rem] font-bold tracking-[0.4em] uppercase">
                     Rozmowa
                   </span>
                 </div>
               </FadeIn>
               <FadeIn delay="200ms">
-                <h1 className="font-montserrat text-5xl font-black leading-[1.05] tracking-tight text-white md:text-7xl lg:text-[7.5rem]">
+                <h1 className="font-montserrat text-5xl leading-[1.05] font-black tracking-tight text-white md:text-7xl lg:text-[7.5rem]">
                   Zacznijmy od <br />
-                  <span className="relative top-2 inline-block -rotate-2 font-youngest text-6xl font-normal text-philippineSilver md:text-8xl lg:text-[10rem]">
+                  <span className="font-youngest text-philippineSilver relative top-2 inline-block -rotate-2 text-6xl font-normal md:text-8xl lg:text-[10rem]">
                     pierwszego
                   </span>{" "}
                   akordu.
@@ -88,7 +88,7 @@ export default function ContactPage() {
 
               {/* ZMIANA: Przeniesiony, wyśrodkowany tekst podrzędny */}
               <FadeIn delay="400ms">
-                <p className="mt-12 max-w-2xl font-montserrat text-base font-light leading-relaxed text-white/70 md:text-lg lg:mt-20">
+                <p className="font-montserrat mt-12 max-w-2xl text-base leading-relaxed font-light text-white/70 md:text-lg lg:mt-20">
                   Niezależnie od tego, czy chcesz zorganizować wspólne
                   wydarzenie, dołączyć do zespołu, czy po prostu porozmawiać o
                   sztuce – jesteśmy tutaj.
@@ -98,8 +98,8 @@ export default function ContactPage() {
           </div>
         </div>
 
-        <div className="absolute bottom-0 left-1/2 h-24 w-px -translate-x-1/2 overflow-hidden bg-white/10 hidden md:block">
-          <div className="absolute left-0 top-0 h-full w-full animate-scroll-line bg-arylideYellow" />
+        <div className="absolute bottom-0 left-1/2 hidden h-24 w-px -translate-x-1/2 overflow-hidden bg-white/10 md:block">
+          <div className="animate-scroll-line bg-arylideYellow absolute top-0 left-0 h-full w-full" />
         </div>
       </section>
 
@@ -112,10 +112,10 @@ export default function ContactPage() {
             {/* LEWA KOLUMNA: Tytuł */}
             <div className="lg:col-span-4">
               <FadeIn>
-                <h2 className="font-youngest text-4xl text-arylideYellow md:text-5xl lg:text-6xl">
+                <h2 className="font-youngest text-arylideYellow text-4xl md:text-5xl lg:text-6xl">
                   Nasze Namiary
                 </h2>
-                <p className="mt-8 font-montserrat text-sm font-light leading-relaxed text-white/50 max-w-xs">
+                <p className="font-montserrat mt-8 max-w-xs text-sm leading-relaxed font-light text-white/50">
                   Kliknij w adres e-mail lub numer telefonu, aby natychmiast
                   skopiować je do schowka.
                 </p>
@@ -129,27 +129,27 @@ export default function ContactPage() {
                 delay="200ms"
                 className="group relative border-b border-white/10 pb-8"
               >
-                <span className="mb-4 block font-montserrat text-[0.6rem] font-bold uppercase tracking-[0.4em] text-white/30">
+                <span className="font-montserrat mb-4 block text-[0.6rem] font-bold tracking-[0.4em] text-white/30 uppercase">
                   Dział Ogólny / E-mail
                 </span>
                 <button
                   type="button"
                   onClick={() => handleCopy(siteConfig.contact.email, "email")}
                   // ZMIANA: items-center, gap-4
-                  className="relative flex w-full items-center justify-between gap-4 text-left transition-colors duration-500 hover:text-arylideYellow"
+                  className="hover:text-arylideYellow relative flex w-full items-center justify-between gap-4 text-left transition-colors duration-500"
                 >
                   {/* ZMIANA: break-all dla bardzo małych ekranów i dynamiczne fonty */}
-                  <span className="break-all font-montserrat text-[5vw] min-[450px]:text-2xl font-light tracking-wide text-white transition-colors duration-500 group-hover:text-arylideYellow sm:text-3xl md:text-4xl">
+                  <span className="font-montserrat group-hover:text-arylideYellow text-[5vw] font-light tracking-wide break-all text-white transition-colors duration-500 min-[450px]:text-2xl sm:text-3xl md:text-4xl">
                     {siteConfig.contact.email}
                   </span>
 
                   {/* ZMIANA: shrink-0 ratuje ikonę przed wyrzuceniem poza ekran */}
-                  <div className="shrink-0 overflow-hidden h-8">
+                  <div className="h-8 shrink-0 overflow-hidden">
                     <div
                       className={`flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${copiedItem === "email" ? "-translate-y-8" : "translate-y-0"}`}
                     >
-                      <div className="flex h-8 items-center justify-end gap-3 text-white transition-colors duration-500 group-hover:text-arylideYellow">
-                        <span className="hidden md:block font-montserrat text-xs font-bold uppercase tracking-widest opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                      <div className="group-hover:text-arylideYellow flex h-8 items-center justify-end gap-3 text-white transition-colors duration-500">
+                        <span className="font-montserrat hidden text-xs font-bold tracking-widest uppercase opacity-0 transition-opacity duration-300 group-hover:opacity-100 md:block">
                           Kopiuj
                         </span>
                         <svg
@@ -167,8 +167,8 @@ export default function ContactPage() {
                           />
                         </svg>
                       </div>
-                      <div className="flex h-8 items-center justify-end gap-2 text-arylideYellow">
-                        <span className="hidden sm:block font-montserrat text-xs font-bold uppercase tracking-widest">
+                      <div className="text-arylideYellow flex h-8 items-center justify-end gap-2">
+                        <span className="font-montserrat hidden text-xs font-bold tracking-widest uppercase sm:block">
                           Skopiowano!
                         </span>
                         <svg
@@ -189,7 +189,7 @@ export default function ContactPage() {
                     </div>
                   </div>
                 </button>
-                <div className="absolute bottom-0 left-0 h-px w-0 bg-arylideYellow transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-full" />
+                <div className="bg-arylideYellow absolute bottom-0 left-0 h-px w-0 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-full" />
               </FadeIn>
 
               {/* TELEFON */}
@@ -197,25 +197,25 @@ export default function ContactPage() {
                 delay="300ms"
                 className="group relative border-b border-white/10 pb-8"
               >
-                <span className="mb-4 block font-montserrat text-[0.6rem] font-bold uppercase tracking-[0.4em] text-white/30">
+                <span className="font-montserrat mb-4 block text-[0.6rem] font-bold tracking-[0.4em] text-white/30 uppercase">
                   Biuro / Rezerwacje
                 </span>
                 <button
                   type="button"
                   onClick={() => handleCopy(siteConfig.contact.phone, "phone")}
-                  className="relative flex w-full items-center justify-between gap-4 text-left transition-colors duration-500 hover:text-arylideYellow"
+                  className="hover:text-arylideYellow relative flex w-full items-center justify-between gap-4 text-left transition-colors duration-500"
                 >
-                  <span className="whitespace-nowrap font-montserrat text-[6vw] min-[450px]:text-3xl font-light tracking-wide text-white transition-colors duration-500 group-hover:text-arylideYellow sm:text-4xl">
+                  <span className="font-montserrat group-hover:text-arylideYellow text-[6vw] font-light tracking-wide whitespace-nowrap text-white transition-colors duration-500 min-[450px]:text-3xl sm:text-4xl">
                     {siteConfig.contact.phone}
                   </span>
 
                   {/* ZMIANA: shrink-0 */}
-                  <div className="shrink-0 overflow-hidden h-8">
+                  <div className="h-8 shrink-0 overflow-hidden">
                     <div
                       className={`flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${copiedItem === "phone" ? "-translate-y-8" : "translate-y-0"}`}
                     >
-                      <div className="flex h-8 items-center justify-end gap-3 text-white transition-colors duration-500 group-hover:text-arylideYellow">
-                        <span className="hidden md:block font-montserrat text-xs font-bold uppercase tracking-widest opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                      <div className="group-hover:text-arylideYellow flex h-8 items-center justify-end gap-3 text-white transition-colors duration-500">
+                        <span className="font-montserrat hidden text-xs font-bold tracking-widest uppercase opacity-0 transition-opacity duration-300 group-hover:opacity-100 md:block">
                           Kopiuj
                         </span>
                         <svg
@@ -233,8 +233,8 @@ export default function ContactPage() {
                           />
                         </svg>
                       </div>
-                      <div className="flex h-8 items-center justify-end gap-2 text-arylideYellow">
-                        <span className="hidden sm:block font-montserrat text-xs font-bold uppercase tracking-widest">
+                      <div className="text-arylideYellow flex h-8 items-center justify-end gap-2">
+                        <span className="font-montserrat hidden text-xs font-bold tracking-widest uppercase sm:block">
                           Skopiowano!
                         </span>
                         <svg
@@ -255,7 +255,7 @@ export default function ContactPage() {
                     </div>
                   </div>
                 </button>
-                <div className="absolute bottom-0 left-0 h-px w-0 bg-arylideYellow transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-full" />
+                <div className="bg-arylideYellow absolute bottom-0 left-0 h-px w-0 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-full" />
               </FadeIn>
 
               {/* ADRES KORESPONDENCYJNY */}
@@ -263,24 +263,24 @@ export default function ContactPage() {
                 delay="400ms"
                 className="group relative border-b border-white/10 pb-8"
               >
-                <span className="mb-4 block font-montserrat text-[0.6rem] font-bold uppercase tracking-[0.4em] text-white/30">
+                <span className="font-montserrat mb-4 block text-[0.6rem] font-bold tracking-[0.4em] text-white/30 uppercase">
                   Adres Korespondencyjny / Studio
                 </span>
                 <a
                   href="https://maps.google.com"
                   target="_blank"
                   rel="noreferrer"
-                  className="relative flex w-full items-center justify-between gap-4 transition-colors duration-500 hover:text-arylideYellow"
+                  className="hover:text-arylideYellow relative flex w-full items-center justify-between gap-4 transition-colors duration-500"
                 >
                   {/* ZMIANA: dynamiczny tekst */}
-                  <span className="whitespace-pre-line font-montserrat text-[5vw] min-[450px]:text-xl font-light tracking-wide text-white transition-colors duration-500 group-hover:text-arylideYellow sm:text-2xl md:text-3xl lg:text-4xl">
+                  <span className="font-montserrat group-hover:text-arylideYellow text-[5vw] font-light tracking-wide whitespace-pre-line text-white transition-colors duration-500 min-[450px]:text-xl sm:text-2xl md:text-3xl lg:text-4xl">
                     {siteConfig.contact.address}
                   </span>
 
                   {/* ZMIANA: shrink-0 */}
-                  <div className="shrink-0 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 transition-all duration-500 group-hover:border-arylideYellow group-hover:bg-arylideYellow group-hover:text-raisinBlack md:h-12 md:w-12">
+                  <div className="group-hover:border-arylideYellow group-hover:bg-arylideYellow group-hover:text-raisinBlack flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/20 transition-all duration-500 md:h-12 md:w-12">
                     <svg
-                      className="h-4 w-4 md:h-5 md:w-5 transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1"
+                      className="h-4 w-4 transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1 md:h-5 md:w-5"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -295,7 +295,7 @@ export default function ContactPage() {
                     </svg>
                   </div>
                 </a>
-                <div className="absolute bottom-0 left-0 h-px w-0 bg-arylideYellow transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-full" />
+                <div className="bg-arylideYellow absolute bottom-0 left-0 h-px w-0 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-full" />
               </FadeIn>
             </div>
           </div>
@@ -305,9 +305,9 @@ export default function ContactPage() {
       {/* ============================================================================ */}
       {/* HIGH-END FORMULARZ KONTAKTOWY */}
       {/* ============================================================================ */}
-      <section className="relative z-10 w-full bg-oxfordBlue px-6 py-24 lg:px-12 lg:py-40 overflow-hidden">
+      <section className="bg-oxfordBlue relative z-10 w-full overflow-hidden px-6 py-24 lg:px-12 lg:py-40">
         {/* Dekoracyjne nuty w Oxford Blue section */}
-        <div className="pointer-events-none absolute left-[-10%] top-1/2 z-0 h-150 w-150 -translate-y-1/2 opacity-2">
+        <div className="pointer-events-none absolute top-1/2 left-[-10%] z-0 h-150 w-150 -translate-y-1/2 opacity-2">
           <Image
             src="/Asset-1.svg"
             alt=""
@@ -318,21 +318,21 @@ export default function ContactPage() {
 
         <div className="relative z-10 mx-auto w-full max-w-5xl">
           <FadeIn>
-            <div className="text-center mb-16 lg:mb-24">
-              <span className="mb-4 block font-montserrat text-[0.65rem] font-bold uppercase tracking-[0.4em] text-arylideYellow">
+            <div className="mb-16 text-center lg:mb-24">
+              <span className="font-montserrat text-arylideYellow mb-4 block text-[0.65rem] font-bold tracking-[0.4em] uppercase">
                 Bezpośrednia wiadomość
               </span>
-              <h2 className="font-montserrat text-4xl font-bold leading-tight text-white md:text-5xl lg:text-6xl">
+              <h2 className="font-montserrat text-4xl leading-tight font-bold text-white md:text-5xl lg:text-6xl">
                 Napisz do nas.
               </h2>
             </div>
           </FadeIn>
 
-          <div className="relative bg-white/3 backdrop-blur-md border border-white/10 p-8 md:p-12 lg:p-16 shadow-2xl rounded-3xl">
+          <div className="relative rounded-3xl border border-white/10 bg-white/3 p-8 shadow-2xl backdrop-blur-md md:p-12 lg:p-16">
             {isSubmitted ? (
               // EKRAN SUKCESU (Po wysłaniu)
-              <div className="flex flex-col items-center justify-center py-20 text-center animate-fade-in-up">
-                <div className="mb-8 flex h-24 w-24 items-center justify-center rounded-full bg-arylideYellow text-oxfordBlue">
+              <div className="animate-fade-in-up flex flex-col items-center justify-center py-20 text-center">
+                <div className="bg-arylideYellow text-oxfordBlue mb-8 flex h-24 w-24 items-center justify-center rounded-full">
                   <svg
                     className="h-10 w-10"
                     fill="none"
@@ -348,10 +348,10 @@ export default function ContactPage() {
                     />
                   </svg>
                 </div>
-                <h3 className="mb-4 font-youngest text-4xl text-white md:text-5xl">
+                <h3 className="font-youngest mb-4 text-4xl text-white md:text-5xl">
                   Dziękujemy za wiadomość!
                 </h3>
-                <p className="font-montserrat text-white/70 font-light max-w-md">
+                <p className="font-montserrat max-w-md font-light text-white/70">
                   Twoja wiadomość trafiła w odpowiednie ręce. Odpowiemy
                   najszybciej, jak to możliwe (zazwyczaj w ciągu 24 godzin).
                 </p>
@@ -361,7 +361,7 @@ export default function ContactPage() {
               <form onSubmit={handleSubmit} className="flex flex-col gap-12">
                 {/* 1. INTERAKTYWNY WYBÓR TEMATU + POLE DLA "INNE" */}
                 <FadeIn delay="100ms">
-                  <span className="mb-4 block font-montserrat text-xs font-bold uppercase tracking-[0.2em] text-white/50">
+                  <span className="font-montserrat mb-4 block text-xs font-bold tracking-[0.2em] text-white/50 uppercase">
                     01. W jakiej sprawie piszesz?
                   </span>
 
@@ -371,7 +371,7 @@ export default function ContactPage() {
                         key={subject}
                         type="button"
                         onClick={() => setActiveSubject(subject)}
-                        className={`rounded-full border px-6 py-3 font-montserrat text-xs font-bold uppercase tracking-widest transition-all duration-300 ${
+                        className={`font-montserrat rounded-full border px-6 py-3 text-xs font-bold tracking-widest uppercase transition-all duration-300 ${
                           activeSubject === subject
                             ? "border-arylideYellow bg-arylideYellow text-raisinBlack"
                             : "border-white/20 bg-transparent text-white/60 hover:border-white/50 hover:text-white"
@@ -386,8 +386,8 @@ export default function ContactPage() {
                   <div
                     className={`grid transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                       activeSubject === "Inne"
-                        ? "grid-rows-[1fr] opacity-100 mt-6"
-                        : "grid-rows-[0fr] opacity-0 mt-0"
+                        ? "mt-6 grid-rows-[1fr] opacity-100"
+                        : "mt-0 grid-rows-[0fr] opacity-0"
                     }`}
                   >
                     <div className="overflow-hidden">
@@ -395,10 +395,10 @@ export default function ContactPage() {
                         <input
                           type="text"
                           placeholder="Wpisz krótko swój temat..."
-                          className="w-full border-b border-white/20 bg-transparent py-3 font-montserrat text-lg font-light text-white outline-none placeholder:text-white/20 transition-colors focus:border-arylideYellow md:text-xl"
+                          className="font-montserrat focus:border-arylideYellow w-full border-b border-white/20 bg-transparent py-3 text-lg font-light text-white transition-colors outline-none placeholder:text-white/20 md:text-xl"
                           required={activeSubject === "Inne"}
                         />
-                        <div className="absolute bottom-0 left-0 h-0.5 w-0 bg-arylideYellow transition-all duration-500 ease-out group-focus-within:w-full" />
+                        <div className="bg-arylideYellow absolute bottom-0 left-0 h-0.5 w-0 transition-all duration-500 ease-out group-focus-within:w-full" />
                       </div>
                     </div>
                   </div>
@@ -407,46 +407,46 @@ export default function ContactPage() {
                 <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-8">
                   {/* 2. IMIĘ I NAZWISKO */}
                   <FadeIn delay="200ms" className="group relative">
-                    <span className="mb-2 block font-montserrat text-xs font-bold uppercase tracking-[0.2em] text-white/50 transition-colors group-focus-within:text-arylideYellow">
+                    <span className="font-montserrat group-focus-within:text-arylideYellow mb-2 block text-xs font-bold tracking-[0.2em] text-white/50 uppercase transition-colors">
                       02. Twoje Imię i Nazwisko
                     </span>
                     <input
                       type="text"
                       required
                       placeholder="Jan Kowalski"
-                      className="w-full border-b border-white/20 bg-transparent py-4 font-montserrat text-xl font-light text-white outline-none placeholder:text-white/20 transition-colors focus:border-arylideYellow md:text-2xl"
+                      className="font-montserrat focus:border-arylideYellow w-full border-b border-white/20 bg-transparent py-4 text-xl font-light text-white transition-colors outline-none placeholder:text-white/20 md:text-2xl"
                     />
                     {/* Złota linia wjeżdżająca na focus */}
-                    <div className="absolute bottom-0 left-0 h-0.5 w-0 bg-arylideYellow transition-all duration-500 ease-out group-focus-within:w-full" />
+                    <div className="bg-arylideYellow absolute bottom-0 left-0 h-0.5 w-0 transition-all duration-500 ease-out group-focus-within:w-full" />
                   </FadeIn>
 
                   {/* 3. ADRES E-MAIL */}
                   <FadeIn delay="300ms" className="group relative">
-                    <span className="mb-2 block font-montserrat text-xs font-bold uppercase tracking-[0.2em] text-white/50 transition-colors group-focus-within:text-arylideYellow">
+                    <span className="font-montserrat group-focus-within:text-arylideYellow mb-2 block text-xs font-bold tracking-[0.2em] text-white/50 uppercase transition-colors">
                       03. Twój e-mail
                     </span>
                     <input
                       type="email"
                       required
                       placeholder="jan@domena.pl"
-                      className="w-full border-b border-white/20 bg-transparent py-4 font-montserrat text-xl font-light text-white outline-none placeholder:text-white/20 transition-colors focus:border-arylideYellow md:text-2xl"
+                      className="font-montserrat focus:border-arylideYellow w-full border-b border-white/20 bg-transparent py-4 text-xl font-light text-white transition-colors outline-none placeholder:text-white/20 md:text-2xl"
                     />
-                    <div className="absolute bottom-0 left-0 h-0.5 w-0 bg-arylideYellow transition-all duration-500 ease-out group-focus-within:w-full" />
+                    <div className="bg-arylideYellow absolute bottom-0 left-0 h-0.5 w-0 transition-all duration-500 ease-out group-focus-within:w-full" />
                   </FadeIn>
                 </div>
 
                 {/* 4. TREŚĆ WIADOMOŚCI */}
                 <FadeIn delay="400ms" className="group relative">
-                  <span className="mb-4 block font-montserrat text-xs font-bold uppercase tracking-[0.2em] text-white/50 transition-colors group-focus-within:text-arylideYellow">
+                  <span className="font-montserrat group-focus-within:text-arylideYellow mb-4 block text-xs font-bold tracking-[0.2em] text-white/50 uppercase transition-colors">
                     04. Treść wiadomości
                   </span>
                   <textarea
                     required
                     rows={4}
                     placeholder="Opisz nam szczegóły..."
-                    className="w-full resize-none border-b border-white/20 bg-transparent py-4 font-montserrat text-xl font-light leading-relaxed text-white outline-none placeholder:text-white/20 transition-colors focus:border-arylideYellow md:text-2xl"
+                    className="font-montserrat focus:border-arylideYellow w-full resize-none border-b border-white/20 bg-transparent py-4 text-xl leading-relaxed font-light text-white transition-colors outline-none placeholder:text-white/20 md:text-2xl"
                   />
-                  <div className="absolute bottom-0 left-0 h-0.5 w-0 bg-arylideYellow transition-all duration-500 ease-out group-focus-within:w-full" />
+                  <div className="bg-arylideYellow absolute bottom-0 left-0 h-0.5 w-0 transition-all duration-500 ease-out group-focus-within:w-full" />
                 </FadeIn>
 
                 {/* 5. SUBMIT */}
@@ -454,7 +454,7 @@ export default function ContactPage() {
                   delay="500ms"
                   className="mt-4 flex flex-col items-center justify-between gap-6 sm:flex-row sm:items-end"
                 >
-                  <span className="font-montserrat text-[0.6rem] font-medium uppercase tracking-widest text-white/40 max-w-xs text-center sm:text-left">
+                  <span className="font-montserrat max-w-xs text-center text-[0.6rem] font-medium tracking-widest text-white/40 uppercase sm:text-left">
                     * Zgodnie z naszą polityką prywatności, Twoje dane są
                     bezpieczne i służą wyłącznie do kontaktu.
                   </span>
@@ -462,7 +462,7 @@ export default function ContactPage() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="group relative flex w-full sm:w-auto items-center justify-center gap-4 overflow-hidden rounded-full bg-arylideYellow px-10 py-5 font-montserrat text-xs font-bold uppercase tracking-[0.2em] text-oxfordBlue transition-all duration-700 hover:scale-[1.03] hover:shadow-[0_0_40px_-10px_rgba(239,203,111,0.5)] disabled:opacity-70 disabled:hover:scale-100"
+                    className="group bg-arylideYellow font-montserrat text-oxfordBlue relative flex w-full items-center justify-center gap-4 overflow-hidden rounded-full px-10 py-5 text-xs font-bold tracking-[0.2em] uppercase transition-all duration-700 hover:scale-[1.03] hover:shadow-[0_0_40px_-10px_rgba(239,203,111,0.5)] disabled:opacity-70 disabled:hover:scale-100 sm:w-auto"
                   >
                     <span className="relative z-10 flex items-center gap-3">
                       {isSubmitting ? "Wysyłanie..." : "Wyślij wiadomość"}
@@ -509,7 +509,7 @@ export default function ContactPage() {
                 href={social.url}
                 target="_blank"
                 rel="noreferrer"
-                className="group flex items-center gap-3 rounded-full border border-white/10 bg-transparent px-8 py-4 font-montserrat text-sm font-bold uppercase tracking-widest text-white transition-all duration-500 hover:-translate-y-1 hover:border-arylideYellow hover:bg-arylideYellow hover:text-raisinBlack md:px-10 md:py-5 md:text-base"
+                className="group font-montserrat hover:border-arylideYellow hover:bg-arylideYellow hover:text-raisinBlack flex items-center gap-3 rounded-full border border-white/10 bg-transparent px-8 py-4 text-sm font-bold tracking-widest text-white uppercase transition-all duration-500 hover:-translate-y-1 md:px-10 md:py-5 md:text-base"
               >
                 <div className="scale-125 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-12">
                   {social.icon}

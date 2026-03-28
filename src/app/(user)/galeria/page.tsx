@@ -72,13 +72,13 @@ export default function GalleryPage() {
       : galleryAlbums.filter((album) => album.category === activeCategory);
 
   return (
-    <main className="relative min-h-screen w-full overflow-x-hidden bg-raisinBlack selection:bg-arylideYellow selection:text-raisinBlack">
+    <main className="bg-raisinBlack selection:bg-arylideYellow selection:text-raisinBlack relative min-h-screen w-full overflow-x-hidden">
       {/* ============================================================================ */}
       {/* HERO SECTION - KINOWA EKSPOZYCJA */}
       {/* ============================================================================ */}
       <section className="relative z-10 flex min-h-[65vh] w-full flex-col justify-center px-6 pt-32 lg:px-12 lg:pt-40">
         {/* Potężny, lewitujący asset instrumentu z Brandbooka w tle */}
-        <div className="pointer-events-none absolute -left-32 top-10 z-0 h-150 w-150 opacity-[0.03] lg:-left-20 lg:-top-10 lg:h-250 lg:w-250">
+        <div className="pointer-events-none absolute top-10 -left-32 z-0 h-150 w-150 opacity-[0.03] lg:-top-10 lg:-left-20 lg:h-250 lg:w-250">
           <Image
             src="/Asset-2.svg"
             alt=""
@@ -88,8 +88,8 @@ export default function GalleryPage() {
         </div>
 
         {/* Ogromny, przenikający napis "GALLERY" */}
-        <div className="pointer-events-none absolute right-0 top-1/2 z-0 -translate-y-1/2 translate-x-[10%] select-none opacity-[0.02] mix-blend-overlay">
-          <span className="whitespace-nowrap font-montserrat text-[22vw] font-black leading-none text-white">
+        <div className="pointer-events-none absolute top-1/2 right-0 z-0 translate-x-[10%] -translate-y-1/2 opacity-[0.02] mix-blend-overlay select-none">
+          <span className="font-montserrat text-[22vw] leading-none font-black whitespace-nowrap text-white">
             GALLERY
           </span>
         </div>
@@ -97,22 +97,22 @@ export default function GalleryPage() {
         <div className="relative z-10 mx-auto w-full max-w-7xl">
           <FadeIn delay="100ms">
             <div className="mb-6 flex items-center gap-4">
-              <div className="h-px w-12 bg-arylideYellow" />
-              <span className="font-montserrat text-[0.65rem] font-bold uppercase tracking-[0.4em] text-arylideYellow">
+              <div className="bg-arylideYellow h-px w-12" />
+              <span className="font-montserrat text-arylideYellow text-[0.65rem] font-bold tracking-[0.4em] uppercase">
                 Nasze portfolio
               </span>
             </div>
           </FadeIn>
           <FadeIn delay="300ms">
-            <h1 className="font-montserrat text-5xl font-bold leading-[1.05] tracking-tight text-white md:text-7xl lg:text-[7rem]">
+            <h1 className="font-montserrat text-5xl leading-[1.05] font-bold tracking-tight text-white md:text-7xl lg:text-[7rem]">
               Zatrzymane <br />
-              <span className="relative top-4 inline-block -rotate-2 font-youngest text-6xl font-normal text-arylideYellow md:text-8xl lg:top-8 lg:text-[10rem]">
+              <span className="font-youngest text-arylideYellow relative top-4 inline-block -rotate-2 text-6xl font-normal md:text-8xl lg:top-8 lg:text-[10rem]">
                 w kadrze.
               </span>
             </h1>
           </FadeIn>
           <FadeIn delay="500ms" className="mt-12 max-w-xl lg:mt-24">
-            <p className="font-montserrat text-lg font-light leading-relaxed tracking-wide text-white/70">
+            <p className="font-montserrat text-lg leading-relaxed font-light tracking-wide text-white/70">
               Muzyka to emocje, które znikają wraz z wyciszeniem ostatniego
               akordu. Fotografia pozwala nam uwiecznić pot, łzy i euforię, które
               towarzyszą nam na scenie i poza nią. Odkryj naszą wizualną podróż.
@@ -128,7 +128,7 @@ export default function GalleryPage() {
         <div className="mx-auto w-full max-w-7xl border-y border-white/10 py-6">
           <FadeIn>
             <ul className="flex flex-wrap items-center gap-6 md:gap-12">
-              <li className="font-montserrat text-[0.6rem] font-bold uppercase tracking-[0.3em] text-white/30 hidden md:block">
+              <li className="font-montserrat hidden text-[0.6rem] font-bold tracking-[0.3em] text-white/30 uppercase md:block">
                 Filtruj albumy:
               </li>
               {categories.map((category) => (
@@ -139,16 +139,16 @@ export default function GalleryPage() {
                     className="group relative flex flex-col items-center"
                   >
                     <span
-                      className={`font-montserrat text-[0.7rem] uppercase tracking-widest transition-colors duration-300 md:text-xs ${
+                      className={`font-montserrat text-[0.7rem] tracking-widest uppercase transition-colors duration-300 md:text-xs ${
                         activeCategory === category
-                          ? "font-bold text-arylideYellow"
+                          ? "text-arylideYellow font-bold"
                           : "font-medium text-white/50 hover:text-white"
                       }`}
                     >
                       {category}
                     </span>
                     <div
-                      className={`absolute -bottom-3 h-0.5 bg-arylideYellow transition-all duration-500 ${
+                      className={`bg-arylideYellow absolute -bottom-3 h-0.5 transition-all duration-500 ${
                         activeCategory === category
                           ? "w-full"
                           : "w-0 group-hover:w-1/2"
@@ -184,7 +184,7 @@ export default function GalleryPage() {
                 >
                   <Link
                     href={`/galeria/${album.id}`} // Przykładowy link do detali albumu
-                    className="group relative block w-full overflow-hidden bg-raisinBlack h-100 md:h-125 lg:h-162.5"
+                    className="group bg-raisinBlack relative block h-100 w-full overflow-hidden md:h-125 lg:h-162.5"
                   >
                     {/* ZDJĘCIE Z WOLNYM SCALOWANIEM */}
                     <Image
@@ -195,14 +195,14 @@ export default function GalleryPage() {
                     />
 
                     {/* CIEMNY GRADIENT Z DOŁU */}
-                    <div className="absolute inset-0 bg-linear-to-t from-raisinBlack via-raisinBlack/40 to-transparent opacity-80 transition-opacity duration-700 group-hover:opacity-60" />
+                    <div className="from-raisinBlack via-raisinBlack/40 absolute inset-0 bg-linear-to-t to-transparent opacity-80 transition-opacity duration-700 group-hover:opacity-60" />
 
                     {/* ZNACZNIK ROKU W ROGU */}
-                    <div className="absolute right-6 top-6 overflow-hidden">
-                      <span className="block font-montserrat text-xl font-black text-white mix-blend-overlay transition-transform duration-700 group-hover:-translate-y-full">
+                    <div className="absolute top-6 right-6 overflow-hidden">
+                      <span className="font-montserrat block text-xl font-black text-white mix-blend-overlay transition-transform duration-700 group-hover:-translate-y-full">
                         {album.year}
                       </span>
-                      <span className="absolute left-0 top-0 block translate-y-full font-montserrat text-xl font-black text-arylideYellow transition-transform duration-700 group-hover:translate-y-0">
+                      <span className="font-montserrat text-arylideYellow absolute top-0 left-0 block translate-y-full text-xl font-black transition-transform duration-700 group-hover:translate-y-0">
                         {album.year}
                       </span>
                     </div>
@@ -211,25 +211,25 @@ export default function GalleryPage() {
                     <div className="absolute inset-0 flex flex-col justify-end p-8 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] lg:p-12">
                       <div className="translate-y-8 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0">
                         <div className="mb-4 flex items-center gap-4">
-                          <span className="font-montserrat text-[0.55rem] font-bold uppercase tracking-[0.3em] text-arylideYellow">
+                          <span className="font-montserrat text-arylideYellow text-[0.55rem] font-bold tracking-[0.3em] uppercase">
                             {album.category}
                           </span>
                           <span className="h-1 w-1 rounded-full bg-white/20" />
-                          <span className="font-montserrat text-[0.55rem] font-bold uppercase tracking-[0.3em] text-white/50">
+                          <span className="font-montserrat text-[0.55rem] font-bold tracking-[0.3em] text-white/50 uppercase">
                             Zdjęć: {album.count}
                           </span>
                         </div>
 
-                        <h3 className="mb-6 font-montserrat text-2xl font-bold leading-tight text-white md:text-3xl lg:text-4xl">
+                        <h3 className="font-montserrat mb-6 text-2xl leading-tight font-bold text-white md:text-3xl lg:text-4xl">
                           {album.title}
                         </h3>
 
                         {/* PRZYCISK UKRYTY POZA KADREM, WJEŻDŻA NA HOVER */}
                         <div className="flex items-center gap-3 opacity-0 transition-all duration-700 group-hover:opacity-100">
-                          <span className="font-montserrat text-[0.65rem] font-bold uppercase tracking-[0.2em] text-white">
+                          <span className="font-montserrat text-[0.65rem] font-bold tracking-[0.2em] text-white uppercase">
                             Otwórz galerię
                           </span>
-                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-arylideYellow text-raisinBlack transition-transform duration-500 group-hover:translate-x-2">
+                          <div className="bg-arylideYellow text-raisinBlack flex h-8 w-8 items-center justify-center rounded-full transition-transform duration-500 group-hover:translate-x-2">
                             <svg
                               className="h-3 w-3"
                               fill="none"
@@ -267,26 +267,26 @@ export default function GalleryPage() {
       {/* ============================================================================ */}
       {/* CTA PRESS PACK / KONTAKT */}
       {/* ============================================================================ */}
-      <section className="relative z-10 w-full overflow-hidden bg-oxfordBlue py-24 lg:py-32 text-center">
+      <section className="bg-oxfordBlue relative z-10 w-full overflow-hidden py-24 text-center lg:py-32">
         <div className="pointer-events-none absolute inset-0 z-0">
-          <div className="absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(circle_at_center,rgba(239,203,111,0.08)_0%,transparent_70%)]" />
+          <div className="absolute top-1/2 left-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(circle_at_center,rgba(239,203,111,0.08)_0%,transparent_70%)]" />
         </div>
 
         <div className="relative z-10 mx-auto max-w-4xl px-6">
           <FadeIn>
-            <span className="font-youngest text-4xl text-arylideYellow md:text-5xl">
+            <span className="font-youngest text-arylideYellow text-4xl md:text-5xl">
               Dla prasy i mediów
             </span>
           </FadeIn>
           <FadeIn delay="200ms" className="mt-6">
-            <h2 className="font-montserrat text-3xl font-bold leading-tight text-white md:text-5xl">
+            <h2 className="font-montserrat text-3xl leading-tight font-bold text-white md:text-5xl">
               Potrzebujesz naszych zdjęć <br className="hidden md:block" />w
               wysokiej rozdzielczości?
             </h2>
           </FadeIn>
           <FadeIn
             delay="400ms"
-            className="mt-8 text-white/60 font-light max-w-2xl mx-auto"
+            className="mx-auto mt-8 max-w-2xl font-light text-white/60"
           >
             <p>
               Udostępniamy oficjalny Press Pack (materiały prasowe, logotypy,
@@ -297,7 +297,7 @@ export default function GalleryPage() {
           <FadeIn delay="600ms" className="mt-12 flex justify-center">
             <Link
               href="/kontakt"
-              className="group relative inline-flex items-center justify-center gap-4 rounded-full border border-white/20 bg-transparent px-10 py-5 font-montserrat text-[0.7rem] font-bold uppercase tracking-[0.2em] text-white transition-all duration-500 hover:border-arylideYellow hover:text-arylideYellow"
+              className="group font-montserrat hover:border-arylideYellow hover:text-arylideYellow relative inline-flex items-center justify-center gap-4 rounded-full border border-white/20 bg-transparent px-10 py-5 text-[0.7rem] font-bold tracking-[0.2em] text-white uppercase transition-all duration-500"
             >
               Poproś o materiały
               <svg

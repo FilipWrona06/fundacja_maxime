@@ -101,12 +101,12 @@ export default function NewsPage() {
   };
 
   return (
-    <main className="relative min-h-screen w-full overflow-x-hidden bg-raisinBlack selection:bg-arylideYellow selection:text-raisinBlack">
+    <main className="bg-raisinBlack selection:bg-arylideYellow selection:text-raisinBlack relative min-h-screen w-full overflow-x-hidden">
       {/* ============================================================================ */}
       {/* HERO SECTION */}
       {/* ============================================================================ */}
       <section className="relative z-10 flex min-h-[60vh] w-full flex-col justify-center px-6 pt-32 lg:px-12 lg:pt-40">
-        <div className="pointer-events-none absolute -right-20 top-20 z-0 h-150 w-150 opacity-5 lg:-right-32 lg:-top-20 lg:h-225 lg:w-225 xl:h-275 xl:w-275">
+        <div className="pointer-events-none absolute top-20 -right-20 z-0 h-150 w-150 opacity-5 lg:-top-20 lg:-right-32 lg:h-225 lg:w-225 xl:h-275 xl:w-275">
           <Image
             src="/Asset-1.svg"
             alt=""
@@ -115,8 +115,8 @@ export default function NewsPage() {
           />
         </div>
 
-        <div className="pointer-events-none absolute left-0 top-1/2 z-0 -translate-y-1/2 select-none opacity-[0.02] mix-blend-overlay">
-          <span className="whitespace-nowrap font-montserrat text-[25vw] font-black leading-none text-white">
+        <div className="pointer-events-none absolute top-1/2 left-0 z-0 -translate-y-1/2 opacity-[0.02] mix-blend-overlay select-none">
+          <span className="font-montserrat text-[25vw] leading-none font-black whitespace-nowrap text-white">
             NEWS
           </span>
         </div>
@@ -124,22 +124,22 @@ export default function NewsPage() {
         <div className="relative z-10 mx-auto w-full max-w-7xl">
           <FadeIn delay="100ms">
             <div className="mb-6 flex items-center gap-4">
-              <div className="h-px w-12 bg-arylideYellow" />
-              <span className="font-montserrat text-[0.65rem] font-bold uppercase tracking-[0.4em] text-arylideYellow">
+              <div className="bg-arylideYellow h-px w-12" />
+              <span className="font-montserrat text-arylideYellow text-[0.65rem] font-bold tracking-[0.4em] uppercase">
                 Aktualności
               </span>
             </div>
           </FadeIn>
           <FadeIn delay="300ms">
-            <h1 className="font-montserrat text-5xl font-bold leading-[1.05] tracking-tight text-white md:text-7xl lg:text-[7rem]">
+            <h1 className="font-montserrat text-5xl leading-[1.05] font-bold tracking-tight text-white md:text-7xl lg:text-[7rem]">
               Pulsujący <br />
-              <span className="relative top-4 inline-block -rotate-2 font-youngest text-6xl font-normal text-arylideYellow md:text-8xl lg:top-8 lg:text-[10rem]">
+              <span className="font-youngest text-arylideYellow relative top-4 inline-block -rotate-2 text-6xl font-normal md:text-8xl lg:top-8 lg:text-[10rem]">
                 rytm.
               </span>
             </h1>
           </FadeIn>
           <FadeIn delay="500ms" className="mt-12 max-w-xl lg:mt-24">
-            <p className="font-montserrat text-lg font-light leading-relaxed tracking-wide text-white/70">
+            <p className="font-montserrat text-lg leading-relaxed font-light tracking-wide text-white/70">
               Historie zza kulis, zapowiedzi projektów i dźwięki, które
               zmieniają zasady gry. Zanurz się w świecie Maxime i bądź na
               bieżąco z każdym naszym ruchem.
@@ -168,9 +168,9 @@ export default function NewsPage() {
                   priority
                   className="object-cover opacity-80 transition-transform duration-2000 ease-out group-hover:scale-105 group-hover:opacity-100"
                 />
-                <div className="absolute inset-0 bg-oxfordBlue/20 mix-blend-multiply transition-colors duration-700 group-hover:bg-transparent" />
+                <div className="bg-oxfordBlue/20 absolute inset-0 mix-blend-multiply transition-colors duration-700 group-hover:bg-transparent" />
 
-                <div className="absolute left-6 top-6 bg-arylideYellow px-4 py-2 font-montserrat text-[0.6rem] font-bold uppercase tracking-[0.3em] text-raisinBlack">
+                <div className="bg-arylideYellow font-montserrat text-raisinBlack absolute top-6 left-6 px-4 py-2 text-[0.6rem] font-bold tracking-[0.3em] uppercase">
                   Najnowszy wpis
                 </div>
               </Link>
@@ -179,17 +179,17 @@ export default function NewsPage() {
             {/* ZMIANA: przeniesienie lg:* na xl:* */}
             <FadeIn
               delay="300ms"
-              className="relative -mt-20 w-[90%] border border-white/10 bg-oxfordBlue/95 p-8 shadow-2xl backdrop-blur-xl sm:p-12 xl:absolute xl:-bottom-12 xl:right-0 xl:mt-0 xl:w-[50%] xl:p-16"
+              className="bg-oxfordBlue/95 relative -mt-20 w-[90%] border border-white/10 p-8 shadow-2xl backdrop-blur-xl sm:p-12 xl:absolute xl:right-0 xl:-bottom-12 xl:mt-0 xl:w-[50%] xl:p-16"
             >
               <div className="mb-6 flex items-end gap-6">
-                <span className="font-montserrat text-6xl font-black leading-none text-white lg:text-7xl">
+                <span className="font-montserrat text-6xl leading-none font-black text-white lg:text-7xl">
                   {featuredPost.date}
                 </span>
                 <div className="flex flex-col pb-1">
-                  <span className="font-youngest text-2xl text-arylideYellow">
+                  <span className="font-youngest text-arylideYellow text-2xl">
                     {featuredPost.month}
                   </span>
-                  <span className="font-montserrat text-[0.6rem] font-bold uppercase tracking-widest text-white/40">
+                  <span className="font-montserrat text-[0.6rem] font-bold tracking-widest text-white/40 uppercase">
                     {featuredPost.year}
                   </span>
                 </div>
@@ -197,26 +197,26 @@ export default function NewsPage() {
 
               <div className="mb-6 h-px w-full bg-white/10" />
 
-              <span className="mb-4 block font-montserrat text-[0.65rem] font-bold uppercase tracking-[0.4em] text-arylideYellow">
+              <span className="font-montserrat text-arylideYellow mb-4 block text-[0.65rem] font-bold tracking-[0.4em] uppercase">
                 {featuredPost.category}
               </span>
 
               <Link href={`/aktualnosci/${featuredPost.id}`}>
-                <h2 className="mb-6 font-montserrat text-2xl font-bold leading-tight text-white transition-colors duration-300 hover:text-arylideYellow lg:text-4xl">
+                <h2 className="font-montserrat hover:text-arylideYellow mb-6 text-2xl leading-tight font-bold text-white transition-colors duration-300 lg:text-4xl">
                   {featuredPost.title}
                 </h2>
               </Link>
 
-              <p className="mb-8 font-montserrat text-sm font-light leading-relaxed text-white/60 lg:text-base lg:leading-loose">
+              <p className="font-montserrat mb-8 text-sm leading-relaxed font-light text-white/60 lg:text-base lg:leading-loose">
                 {featuredPost.excerpt}
               </p>
 
               <Link
                 href={`/aktualnosci/${featuredPost.id}`}
-                className="group flex items-center gap-4 font-montserrat text-xs font-bold uppercase tracking-[0.2em] text-white transition-colors hover:text-arylideYellow"
+                className="group font-montserrat hover:text-arylideYellow flex items-center gap-4 text-xs font-bold tracking-[0.2em] text-white uppercase transition-colors"
               >
                 Czytaj pełny wywiad
-                <div className="relative flex h-8 w-8 items-center justify-center rounded-full border border-white/20 transition-all duration-300 group-hover:border-arylideYellow group-hover:bg-arylideYellow group-hover:text-raisinBlack">
+                <div className="group-hover:border-arylideYellow group-hover:bg-arylideYellow group-hover:text-raisinBlack relative flex h-8 w-8 items-center justify-center rounded-full border border-white/20 transition-all duration-300">
                   <svg
                     className="h-3 w-3 transition-transform duration-300 group-hover:translate-x-0.5"
                     fill="none"
@@ -248,7 +248,7 @@ export default function NewsPage() {
               <h3 className="font-youngest text-4xl text-white lg:text-6xl">
                 Wcześniejsze wpisy
               </h3>
-              <span className="hidden font-montserrat text-[0.65rem] font-bold uppercase tracking-[0.3em] text-white/30 md:block">
+              <span className="font-montserrat hidden text-[0.65rem] font-bold tracking-[0.3em] text-white/30 uppercase md:block">
                 Wyświetlono {displayedPosts.length} z {regularPosts.length}
               </span>
             </div>
@@ -262,22 +262,22 @@ export default function NewsPage() {
                   className="group relative flex flex-col items-start gap-8 border-b border-white/10 px-4 py-12 transition-all duration-500 hover:bg-white/2 md:flex-row md:items-center lg:gap-8 lg:px-10 lg:py-16"
                 >
                   {/* Gigantyczny numer w tle (na hover) */}
-                  <div className="pointer-events-none absolute left-0 top-1/2 z-0 -translate-y-1/2 select-none opacity-0 transition-all duration-700 group-hover:translate-x-10 group-hover:opacity-[0.03] lg:left-[10%]">
-                    <span className="font-montserrat text-[15rem] font-black leading-none text-white">
+                  <div className="pointer-events-none absolute top-1/2 left-0 z-0 -translate-y-1/2 opacity-0 transition-all duration-700 select-none group-hover:translate-x-10 group-hover:opacity-[0.03] lg:left-[10%]">
+                    <span className="font-montserrat text-[15rem] leading-none font-black text-white">
                       {post.date}
                     </span>
                   </div>
 
                   {/* ZMIANA: Zoptymalizowane szerokości md:w-32 lg:w-48 xl:w-64 */}
                   <div className="relative z-10 flex w-full shrink-0 flex-row items-center gap-6 md:w-32 md:flex-col md:items-start md:gap-1 lg:w-48 xl:w-64">
-                    <span className="font-montserrat text-5xl font-black text-white transition-colors duration-500 group-hover:text-arylideYellow lg:text-6xl">
+                    <span className="font-montserrat group-hover:text-arylideYellow text-5xl font-black text-white transition-colors duration-500 lg:text-6xl">
                       {post.date}
                     </span>
                     <div className="flex flex-col md:mt-2">
-                      <span className="font-youngest text-2xl text-philippineSilver transition-colors duration-500 group-hover:text-white">
+                      <span className="font-youngest text-philippineSilver text-2xl transition-colors duration-500 group-hover:text-white">
                         {post.month}
                       </span>
-                      <span className="font-montserrat text-[0.6rem] font-bold uppercase tracking-[0.2em] text-white/30">
+                      <span className="font-montserrat text-[0.6rem] font-bold tracking-[0.2em] text-white/30 uppercase">
                         {post.year}
                       </span>
                     </div>
@@ -285,13 +285,13 @@ export default function NewsPage() {
 
                   {/* ZMIANA: Zamiast sztywnych max-w, używamy md:flex-1 aby treść oddychała */}
                   <div className="relative z-10 flex w-full flex-col md:flex-1">
-                    <span className="mb-3 block font-montserrat text-[0.6rem] font-bold uppercase tracking-[0.4em] text-arylideYellow">
+                    <span className="font-montserrat text-arylideYellow mb-3 block text-[0.6rem] font-bold tracking-[0.4em] uppercase">
                       {post.category}
                     </span>
-                    <h4 className="mb-4 font-montserrat text-2xl font-bold leading-tight text-white transition-colors duration-300 group-hover:text-white lg:text-3xl">
+                    <h4 className="font-montserrat mb-4 text-2xl leading-tight font-bold text-white transition-colors duration-300 group-hover:text-white lg:text-3xl">
                       {post.title}
                     </h4>
-                    <p className="font-montserrat text-sm font-light leading-relaxed text-white/50 transition-colors duration-300 group-hover:text-white/70 lg:text-base">
+                    <p className="font-montserrat text-sm leading-relaxed font-light text-white/50 transition-colors duration-300 group-hover:text-white/70 lg:text-base">
                       {post.excerpt}
                     </p>
                   </div>
@@ -299,7 +299,7 @@ export default function NewsPage() {
                   {/* ZMIANA: md:shrink-0 oraz obrazek widoczny od lg w mniejszym rozmiarze */}
                   <div className="relative z-10 mt-6 flex w-full shrink-0 items-center justify-between gap-6 md:mt-0 md:w-auto md:justify-end lg:gap-8">
                     {/* ZMIANA: hidden lg:block, mniejsze wymiary na lg, większe na xl */}
-                    <div className="hidden h-24 w-36 shrink-0 overflow-hidden rounded-lg bg-raisinBlack lg:block xl:h-32 xl:w-48">
+                    <div className="bg-raisinBlack hidden h-24 w-36 shrink-0 overflow-hidden rounded-lg lg:block xl:h-32 xl:w-48">
                       <div className="relative h-full w-full scale-110 opacity-0 transition-all duration-700 ease-out group-hover:scale-100 group-hover:opacity-100">
                         <Image
                           src={post.image}
@@ -310,7 +310,7 @@ export default function NewsPage() {
                       </div>
                     </div>
 
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/20 text-white transition-all duration-500 group-hover:border-arylideYellow group-hover:bg-arylideYellow group-hover:text-raisinBlack lg:h-16 lg:w-16">
+                    <div className="group-hover:border-arylideYellow group-hover:bg-arylideYellow group-hover:text-raisinBlack flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/20 text-white transition-all duration-500 lg:h-16 lg:w-16">
                       <svg
                         className="h-4 w-4 transition-transform duration-500 group-hover:translate-x-1 lg:h-5 lg:w-5"
                         fill="none"
@@ -337,7 +337,7 @@ export default function NewsPage() {
               <button
                 type="button"
                 onClick={handleLoadMore}
-                className="group relative inline-flex items-center justify-center gap-3 rounded-full border border-white/20 bg-transparent px-8 py-4 font-montserrat text-[0.65rem] font-bold uppercase tracking-[0.2em] text-white transition-all duration-500 hover:border-arylideYellow hover:text-arylideYellow"
+                className="group font-montserrat hover:border-arylideYellow hover:text-arylideYellow relative inline-flex items-center justify-center gap-3 rounded-full border border-white/20 bg-transparent px-8 py-4 text-[0.65rem] font-bold tracking-[0.2em] text-white uppercase transition-all duration-500"
               >
                 Załaduj starsze wpisy
                 <svg
@@ -361,7 +361,7 @@ export default function NewsPage() {
               <button
                 type="button"
                 onClick={handleCollapse}
-                className="group relative inline-flex items-center justify-center gap-3 rounded-full border border-transparent bg-white/5 px-8 py-4 font-montserrat text-[0.65rem] font-bold uppercase tracking-[0.2em] text-white/60 transition-all duration-500 hover:border-white/20 hover:bg-white/10 hover:text-white"
+                className="group font-montserrat relative inline-flex items-center justify-center gap-3 rounded-full border border-transparent bg-white/5 px-8 py-4 text-[0.65rem] font-bold tracking-[0.2em] text-white/60 uppercase transition-all duration-500 hover:border-white/20 hover:bg-white/10 hover:text-white"
               >
                 Zwiń listę
                 <svg
@@ -395,27 +395,27 @@ export default function NewsPage() {
       {/* ============================================================================ */}
       {/* SEKCJA ZAMYKAJĄCA / NEWSLETTER CTA */}
       {/* ============================================================================ */}
-      <section className="relative z-10 w-full overflow-hidden bg-arylideYellow py-24 lg:py-32">
+      <section className="bg-arylideYellow relative z-10 w-full overflow-hidden py-24 lg:py-32">
         <div className="pointer-events-none absolute inset-0 z-0 opacity-10">
           <Image src="/Asset-2.svg" alt="" fill className="object-contain" />
         </div>
 
         <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
           <FadeIn>
-            <span className="font-youngest text-4xl text-oxfordBlue md:text-5xl">
+            <span className="font-youngest text-oxfordBlue text-4xl md:text-5xl">
               Nie przegap żadnego dźwięku.
             </span>
           </FadeIn>
 
           <FadeIn delay="200ms" className="mt-6">
-            <h2 className="font-montserrat text-3xl font-black leading-tight text-raisinBlack md:text-5xl lg:text-6xl">
+            <h2 className="font-montserrat text-raisinBlack text-3xl leading-tight font-black md:text-5xl lg:text-6xl">
               Dołącz do naszego <br className="hidden md:block" />
               ekskluzywnego newslettera.
             </h2>
           </FadeIn>
 
           <FadeIn delay="300ms" className="mx-auto mt-6 max-w-xl">
-            <p className="font-montserrat text-sm font-medium leading-relaxed text-raisinBlack/70 md:text-base">
+            <p className="font-montserrat text-raisinBlack/70 text-sm leading-relaxed font-medium md:text-base">
               Zapisz się, aby jako pierwszy otrzymywać informacje o tajnych
               próbach, zakulisowych relacjach i specjalnych zniżkach na
               premiery.
@@ -430,18 +430,18 @@ export default function NewsPage() {
               onSubmit={(e) => e.preventDefault()}
               className="group relative flex w-full max-w-lg items-end"
             >
-              <div className="relative w-full border-b-2 border-raisinBlack/20 pb-4 transition-colors duration-500 hover:border-raisinBlack/50 group-focus-within:border-raisinBlack">
+              <div className="border-raisinBlack/20 hover:border-raisinBlack/50 group-focus-within:border-raisinBlack relative w-full border-b-2 pb-4 transition-colors duration-500">
                 <input
                   type="email"
                   placeholder="Twój adres e-mail"
                   required
-                  className="w-full bg-transparent font-montserrat text-xl font-bold text-raisinBlack outline-none placeholder:font-light placeholder:text-raisinBlack/40 lg:text-2xl"
+                  className="font-montserrat text-raisinBlack placeholder:text-raisinBlack/40 w-full bg-transparent text-xl font-bold outline-none placeholder:font-light lg:text-2xl"
                 />
               </div>
               <button
                 type="submit"
                 aria-label="Zapisz się"
-                className="absolute bottom-3 right-0 flex h-12 w-12 items-center justify-center rounded-full bg-raisinBlack text-arylideYellow shadow-xl transition-all duration-500 hover:scale-110 hover:bg-oxfordBlue hover:text-white"
+                className="bg-raisinBlack text-arylideYellow hover:bg-oxfordBlue absolute right-0 bottom-3 flex h-12 w-12 items-center justify-center rounded-full shadow-xl transition-all duration-500 hover:scale-110 hover:text-white"
               >
                 <svg
                   className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"
@@ -459,7 +459,7 @@ export default function NewsPage() {
                 </svg>
               </button>
             </form>
-            <span className="mt-6 block font-montserrat text-[0.55rem] font-bold uppercase tracking-widest text-raisinBlack/40">
+            <span className="font-montserrat text-raisinBlack/40 mt-6 block text-[0.55rem] font-bold tracking-widest uppercase">
               * Bez spamu. Tylko czysta sztuka prosto na Twoją skrzynkę.
             </span>
           </FadeIn>

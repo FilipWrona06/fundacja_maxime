@@ -23,7 +23,7 @@ export default async function Hero() {
   const secondaryLink = data?.heroButtonSecondaryLink || "/kontakt";
 
   return (
-    <section className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-raisinBlack">
+    <section className="bg-raisinBlack relative flex min-h-screen w-full items-center justify-center overflow-hidden">
       {/* TŁO WIDEO I NAKŁADKI */}
       <div className="absolute inset-0 h-full w-full">
         <video
@@ -34,16 +34,16 @@ export default async function Hero() {
           className="animate-cinematic-zoom absolute inset-0 h-full w-full object-cover opacity-0"
           src="/bg-video.mp4"
         />
-        <div className="absolute inset-0 bg-raisinBlack/30 mix-blend-multiply" />
+        <div className="bg-raisinBlack/30 absolute inset-0 mix-blend-multiply" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(38,38,38,0.85)_100%)]" />
-        <div className="absolute inset-0 bg-linear-to-t from-raisinBlack via-transparent to-transparent opacity-95" />
+        <div className="from-raisinBlack absolute inset-0 bg-linear-to-t via-transparent to-transparent opacity-95" />
       </div>
 
       {/* GŁÓWNA TREŚĆ */}
       <div className="relative z-10 flex w-full max-w-6xl flex-col items-center justify-center px-4 pt-12 pb-28 text-center sm:py-0">
         {/* NAGŁÓWEK (Z SANITY) */}
         <h1
-          className="animate-fade-in-up mb-2 py-4 font-youngest text-[4.2rem] leading-[0.85] text-white opacity-0 sm:leading-tight sm:text-[5.5rem] md:text-[8rem] lg:mb-4 lg:text-[11.5rem]"
+          className="animate-fade-in-up font-youngest mb-2 py-4 text-[4.2rem] leading-[0.85] text-white opacity-0 sm:text-[5.5rem] sm:leading-tight md:text-[8rem] lg:mb-4 lg:text-[11.5rem]"
           style={{
             animationDelay: "200ms",
             textShadow:
@@ -55,7 +55,7 @@ export default async function Hero() {
 
         {/* PODTYTUŁ (Z SANITY) */}
         <p
-          className="animate-fade-in-up mb-8 max-w-3xl font-montserrat text-sm font-light whitespace-pre-line leading-relaxed tracking-widest text-white/80 opacity-0 sm:text-base md:mb-10 md:text-xl lg:text-2xl"
+          className="animate-fade-in-up font-montserrat mb-8 max-w-3xl text-sm leading-relaxed font-light tracking-widest whitespace-pre-line text-white/80 opacity-0 sm:text-base md:mb-10 md:text-xl lg:text-2xl"
           style={{ animationDelay: "500ms" }}
         >
           {subheading}
@@ -63,13 +63,13 @@ export default async function Hero() {
 
         {/* PRZYCISKI (Z SANITY) */}
         <div
-          className="animate-fade-in-up flex w-full max-w-[20rem] flex-col items-center justify-center gap-4 opacity-0 sm:max-w-none sm:w-auto sm:flex-row sm:gap-8"
+          className="animate-fade-in-up flex w-full max-w-[20rem] flex-col items-center justify-center gap-4 opacity-0 sm:w-auto sm:max-w-none sm:flex-row sm:gap-8"
           style={{ animationDelay: "800ms" }}
         >
           {/* PRZYCISK GŁÓWNY (Żółty) */}
           <Link
             href={primaryLink}
-            className="group relative flex w-full items-center justify-center gap-4 overflow-hidden rounded-full bg-arylideYellow px-8 py-4 font-montserrat text-xs font-bold uppercase tracking-[0.2em] text-raisinBlack transition-all duration-700 hover:scale-[1.03] hover:shadow-[0_0_30px_-10px_rgba(239,203,111,0.6)] sm:w-auto sm:px-12"
+            className="group bg-arylideYellow font-montserrat text-raisinBlack relative flex w-full items-center justify-center gap-4 overflow-hidden rounded-full px-8 py-4 text-xs font-bold tracking-[0.2em] uppercase transition-all duration-700 hover:scale-[1.03] hover:shadow-[0_0_30px_-10px_rgba(239,203,111,0.6)] sm:w-auto sm:px-12"
           >
             <span className="relative z-10 flex items-center gap-3">
               {primaryText}
@@ -94,7 +94,7 @@ export default async function Hero() {
           {/* PRZYCISK POBOCZNY (Przezroczysty) */}
           <Link
             href={secondaryLink}
-            className="group flex w-full items-center justify-center rounded-full border border-white/20 bg-white/5 px-8 py-4 font-montserrat text-xs font-bold uppercase tracking-[0.2em] text-white backdrop-blur-xl transition-all duration-700 hover:scale-[1.03] hover:bg-white hover:text-raisinBlack sm:w-auto sm:px-12"
+            className="group font-montserrat hover:text-raisinBlack flex w-full items-center justify-center rounded-full border border-white/20 bg-white/5 px-8 py-4 text-xs font-bold tracking-[0.2em] text-white uppercase backdrop-blur-xl transition-all duration-700 hover:scale-[1.03] hover:bg-white sm:w-auto sm:px-12"
           >
             {secondaryText}
           </Link>
@@ -106,11 +106,11 @@ export default async function Hero() {
         className="animate-fade-in-up absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-2 opacity-0 md:bottom-8 md:gap-3 [@media(max-height:600px)]:hidden md:[@media(max-height:800px)]:hidden lg:[@media(max-height:900px)]:hidden"
         style={{ animationDelay: "1200ms" }}
       >
-        <span className="font-montserrat text-[0.55rem] font-semibold uppercase tracking-[0.4em] text-white/50">
+        <span className="font-montserrat text-[0.55rem] font-semibold tracking-[0.4em] text-white/50 uppercase">
           Odkryj
         </span>
         <div className="relative h-10 w-px overflow-hidden bg-white/10 md:h-16">
-          <div className="animate-scroll-line absolute left-0 top-0 h-full w-full bg-arylideYellow" />
+          <div className="animate-scroll-line bg-arylideYellow absolute top-0 left-0 h-full w-full" />
         </div>
       </div>
     </section>

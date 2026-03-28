@@ -29,16 +29,7 @@ export default function RootLayout({
   return (
     <html lang="pl">
       <body
-        className={`
-          ${montserrat.variable} 
-          ${fontYoungest.variable} 
-          bg-raisinBlack 
-          font-montserrat 
-          text-white 
-          antialiased 
-          selection:bg-arylideYellow 
-          selection:text-raisinBlack
-        `}
+        className={` ${montserrat.variable} ${fontYoungest.variable} bg-raisinBlack font-montserrat selection:bg-arylideYellow selection:text-raisinBlack text-white antialiased`}
       >
         {/* Usunęliśmy stąd Navbar i Footer! Tutaj wpadają wszystkie strony (i strona, i Sanity) */}
         {children}

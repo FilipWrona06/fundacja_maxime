@@ -19,12 +19,12 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative z-50 w-full overflow-hidden bg-raisinBlack pt-24 lg:pt-32">
+    <footer className="bg-raisinBlack relative z-50 w-full overflow-hidden pt-24 lg:pt-32">
       {/* --- GIGANTYCZNY ZNAK WODNY NA SAMYM DOLE --- */}
       {/* Zmiana: -bottom-2 i -bottom-4 dla lepszego dopasowania na telefonach */}
-      <div className="pointer-events-none absolute -bottom-2 sm:-bottom-4 lg:-bottom-10 left-1/2 z-0 w-full -translate-x-1/2 select-none text-center opacity-[0.03]">
+      <div className="pointer-events-none absolute -bottom-2 left-1/2 z-0 w-full -translate-x-1/2 text-center opacity-[0.03] select-none sm:-bottom-4 lg:-bottom-10">
         {/* Zmiana: text-[20vw] na mobile, powrót do większych na desktopie */}
-        <span className="block w-full font-montserrat text-[20vw] md:text-[22vw] lg:text-[22vw] font-black leading-none text-white">
+        <span className="font-montserrat block w-full text-[20vw] leading-none font-black text-white md:text-[22vw] lg:text-[22vw]">
           MAXIME
         </span>
       </div>
@@ -43,38 +43,38 @@ export default function Footer() {
                   className="h-10 w-auto brightness-0 invert lg:h-12"
                 />
               </Link>
-              <span className="mb-12 block font-youngest text-4xl text-arylideYellow">
+              <span className="font-youngest text-arylideYellow mb-12 block text-4xl">
                 Z pasji do muzyki.
               </span>
 
               <div className="flex flex-col gap-6">
                 <div className="group flex flex-col">
-                  <span className="mb-1 font-montserrat text-[0.6rem] font-bold uppercase tracking-[0.3em] text-white/40">
+                  <span className="font-montserrat mb-1 text-[0.6rem] font-bold tracking-[0.3em] text-white/40 uppercase">
                     Adres
                   </span>
                   <a
                     href="https://maps.google.com"
                     target="_blank"
                     rel="noreferrer"
-                    className="whitespace-pre-line font-montserrat text-sm font-light leading-relaxed text-white/80 transition-colors group-hover:text-arylideYellow"
+                    className="font-montserrat group-hover:text-arylideYellow text-sm leading-relaxed font-light whitespace-pre-line text-white/80 transition-colors"
                   >
                     {siteConfig.contact.address}
                   </a>
                 </div>
 
                 <div className="group flex flex-col">
-                  <span className="mb-1 font-montserrat text-[0.6rem] font-bold uppercase tracking-[0.3em] text-white/40">
+                  <span className="font-montserrat mb-1 text-[0.6rem] font-bold tracking-[0.3em] text-white/40 uppercase">
                     Kontakt
                   </span>
                   <a
                     href={`mailto:${siteConfig.contact.email}`}
-                    className="font-montserrat text-sm font-light text-white/80 transition-colors group-hover:text-arylideYellow"
+                    className="font-montserrat group-hover:text-arylideYellow text-sm font-light text-white/80 transition-colors"
                   >
                     {siteConfig.contact.email}
                   </a>
                   <a
                     href={`tel:${siteConfig.contact.phone.replace(/\s+/g, "")}`}
-                    className="mt-1 font-montserrat text-sm font-light text-white/80 transition-colors group-hover:text-arylideYellow"
+                    className="font-montserrat group-hover:text-arylideYellow mt-1 text-sm font-light text-white/80 transition-colors"
                   >
                     {siteConfig.contact.phone}
                   </a>
@@ -86,7 +86,7 @@ export default function Footer() {
           {/* KOLUMNA 2: NAWIGACJA */}
           <div className="flex flex-col lg:col-span-3 lg:col-start-6">
             <FadeIn delay="200ms">
-              <span className="mb-8 block font-montserrat text-[0.65rem] font-bold uppercase tracking-[0.4em] text-white/30">
+              <span className="font-montserrat mb-8 block text-[0.65rem] font-bold tracking-[0.4em] text-white/30 uppercase">
                 Eksploruj
               </span>
               <ul className="flex flex-col gap-4">
@@ -99,16 +99,16 @@ export default function Footer() {
                         className="group flex items-center gap-3"
                       >
                         <div
-                          className={`h-1.5 w-1.5 rounded-full bg-arylideYellow transition-all duration-300 ${
+                          className={`bg-arylideYellow h-1.5 w-1.5 rounded-full transition-all duration-300 ${
                             isActive
                               ? "scale-100 opacity-100"
                               : "scale-0 opacity-0 group-hover:scale-50 group-hover:opacity-50"
                           }`}
                         />
                         <span
-                          className={`font-montserrat text-sm uppercase tracking-widest transition-all duration-300 ${
+                          className={`font-montserrat text-sm tracking-widest uppercase transition-all duration-300 ${
                             isActive
-                              ? "translate-x-1 font-bold text-arylideYellow"
+                              ? "text-arylideYellow translate-x-1 font-bold"
                               : "font-medium text-white/70 group-hover:translate-x-2 group-hover:text-white"
                           }`}
                         >
@@ -125,10 +125,10 @@ export default function Footer() {
           {/* KOLUMNA 3: NEWSLETTER I SOCIAL MEDIA */}
           <div className="flex flex-col lg:col-span-4">
             <FadeIn delay="400ms">
-              <span className="mb-8 block font-montserrat text-[0.65rem] font-bold uppercase tracking-[0.4em] text-white/30">
+              <span className="font-montserrat mb-8 block text-[0.65rem] font-bold tracking-[0.4em] text-white/30 uppercase">
                 Newsletter
               </span>
-              <p className="mb-6 font-montserrat text-sm font-light leading-relaxed text-white/60">
+              <p className="font-montserrat mb-6 text-sm leading-relaxed font-light text-white/60">
                 Odbieraj zaproszenia na koncerty i ekskluzywne materiały
                 zakulisowe.
               </p>
@@ -137,18 +137,18 @@ export default function Footer() {
                 onSubmit={(e) => e.preventDefault()}
                 className="group relative flex w-full items-end"
               >
-                <div className="relative w-full border-b border-white/20 pb-3 transition-colors duration-500 hover:border-white/50 group-focus-within:border-arylideYellow">
+                <div className="group-focus-within:border-arylideYellow relative w-full border-b border-white/20 pb-3 transition-colors duration-500 hover:border-white/50">
                   <input
                     type="email"
                     placeholder="Twój adres e-mail"
                     required
-                    className="w-full bg-transparent font-montserrat text-sm font-medium text-white outline-none placeholder:font-light placeholder:text-white/30"
+                    className="font-montserrat w-full bg-transparent text-sm font-medium text-white outline-none placeholder:font-light placeholder:text-white/30"
                   />
                 </div>
                 <button
                   type="submit"
                   aria-label="Zapisz się"
-                  className="absolute bottom-2 right-0 text-white/50 transition-colors duration-300 group-hover:text-arylideYellow"
+                  className="group-hover:text-arylideYellow absolute right-0 bottom-2 text-white/50 transition-colors duration-300"
                 >
                   <svg
                     className="h-5 w-5"
@@ -169,7 +169,7 @@ export default function Footer() {
 
               {/* SOCIAL MEDIA */}
               <div className="mt-16">
-                <span className="mb-6 block font-montserrat text-[0.65rem] font-bold uppercase tracking-[0.4em] text-white/30">
+                <span className="font-montserrat mb-6 block text-[0.65rem] font-bold tracking-[0.4em] text-white/30 uppercase">
                   Społeczność
                 </span>
                 <ul className="flex flex-wrap gap-4">
@@ -179,7 +179,7 @@ export default function Footer() {
                         href={social.url}
                         target="_blank"
                         rel="noreferrer"
-                        className="group flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-all duration-300 hover:-translate-y-1 hover:border-arylideYellow hover:bg-arylideYellow hover:text-raisinBlack"
+                        className="group hover:border-arylideYellow hover:bg-arylideYellow hover:text-raisinBlack flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-all duration-300 hover:-translate-y-1"
                         aria-label={social.name}
                       >
                         {social.icon}
@@ -206,7 +206,7 @@ export default function Footer() {
                 <Link
                   key={link.name}
                   href={link.path}
-                  className="font-montserrat text-[0.65rem] font-medium uppercase tracking-widest text-white/30 transition-colors hover:text-white"
+                  className="font-montserrat text-[0.65rem] font-medium tracking-widest text-white/30 uppercase transition-colors hover:text-white"
                 >
                   {link.name}
                 </Link>
@@ -221,7 +221,7 @@ export default function Footer() {
                 href={siteConfig.author.url}
                 target="_blank"
                 rel="noreferrer"
-                className="font-medium text-white transition-colors hover:text-arylideYellow"
+                className="hover:text-arylideYellow font-medium text-white transition-colors"
               >
                 {siteConfig.author.name}
               </a>
@@ -230,11 +230,11 @@ export default function Footer() {
             <button
               type="button"
               onClick={scrollToTop}
-              className="group flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5 transition-all duration-500 hover:border-arylideYellow hover:bg-arylideYellow"
+              className="group hover:border-arylideYellow hover:bg-arylideYellow flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5 transition-all duration-500"
               aria-label="Wróć na górę"
             >
               <svg
-                className="h-5 w-5 text-white transition-transform duration-500 group-hover:-translate-y-1 group-hover:text-raisinBlack"
+                className="group-hover:text-raisinBlack h-5 w-5 text-white transition-transform duration-500 group-hover:-translate-y-1"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
