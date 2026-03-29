@@ -1,35 +1,56 @@
 import Image from "next/image";
 import Link from "next/link";
 import FadeIn from "@/components/ui/FadeIn";
+import { sanityFetch } from "@/sanity/lib/live"; // Upewnij się, że ścieżka do Twojego sanityFetch jest prawidłowa
+import { defineQuery } from "next-sanity";
 
-const timelineData = [
+// Zapytanie GROQ: Pobierz wszystkie kamienie milowe i posortuj je rosnąco według pola 'order'
+const MILESTONES_QUERY = defineQuery(`
+  *[_type == "milestone"] | order(order asc) {
+    _id,
+    year,
+    title,
+    description,
+    "imageUrl": image.asset->url
+  }
+`);
+
+// Typowanie
+type TimelineItem = {
+  _id: string;
+  year: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+};
+
+// Dane zapasowe w razie pustej bazy w Sanity
+const fallbackTimeline = [
   {
+    _id: "fallback-1",
     year: "2013",
     title: "Narodziny idei",
-    desc: "Zaczęło się od kilku pasjonatów i jednego marzenia. Chcieliśmy stworzyć przestrzeń, w której muzyka nie jest tylko odtwarzana, ale przeżywana.",
-    img: "/video-poster.webp",
+    description:
+      "Zaczęło się od kilku pasjonatów i jednego marzenia. Chcieliśmy stworzyć przestrzeń, w której muzyka nie jest tylko odtwarzana, ale przeżywana.",
+    imageUrl: "/video-poster.webp",
   },
   {
-    year: "2016",
-    title: "Pierwsze wielkie sceny",
-    desc: "Wyszliśmy z cienia. Stowarzyszenie zorganizowało swój pierwszy, w pełni autorski projekt operowy, który przyciągnął setki widzów.",
-    img: "/video-poster.webp",
-  },
-  {
-    year: "2020",
-    title: "Sztuka w czasach ciszy",
-    desc: "Gdy świat się zatrzymał, my szukaliśmy nowych dróg. Przenieśliśmy nasze projekty w sferę cyfrową, nagrywając wyjątkowe koncerty w pustych salach.",
-    img: "/video-poster.webp",
-  },
-  {
+    _id: "fallback-2",
     year: "2026",
     title: "Nowa era Maxime",
-    desc: "Dzisiaj to dziesiątki zrealizowanych projektów, setki artystów i niezliczone emocje. Nie zatrzymujemy się. Budujemy nowe fundamenty.",
-    img: "/video-poster.webp",
+    description:
+      "Dzisiaj to dziesiątki zrealizowanych projektów, setki artystów i niezliczone emocje. Nie zatrzymujemy się. Budujemy nowe fundamenty.",
+    imageUrl: "/video-poster.webp",
   },
 ];
 
-export default function AboutUsPage() {
+export default async function AboutUsPage() {
+  // Pobieramy dane jako Server Component
+  const { data } = await sanityFetch({ query: MILESTONES_QUERY });
+
+  // Decydujemy czy użyć danych z Sanity czy Fallbacku
+  const timelineData: TimelineItem[] = data?.length ? data : fallbackTimeline;
+
   return (
     <main className="bg-raisinBlack selection:bg-arylideYellow selection:text-raisinBlack relative min-h-screen w-full overflow-hidden">
       {/* Pływające Assety SVG w tle */}
@@ -135,7 +156,7 @@ export default function AboutUsPage() {
         </div>
       </section>
 
-      {/* --- MEGA TIMELINE (OŚ CZASU) --- */}
+      {/* --- MEGA TIMELINE (OŚ CZASU Z SANITY) --- */}
       <section className="relative z-10 w-full border-y border-white/5 bg-[#1c1c1c] py-32 lg:py-48">
         <div className="mx-auto w-full max-w-7xl px-6 lg:px-12">
           <FadeIn>
@@ -150,7 +171,7 @@ export default function AboutUsPage() {
           <div className="flex flex-col gap-32 lg:gap-48">
             {timelineData.map((item, index) => (
               <div
-                key={item.year}
+                key={item._id}
                 className="group relative grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-8"
               >
                 <div className="relative lg:col-span-3">
@@ -171,13 +192,13 @@ export default function AboutUsPage() {
                       {item.title}
                     </h3>
                     <p className="font-montserrat mb-12 max-w-2xl text-base leading-relaxed font-light text-white/60">
-                      {item.desc}
+                      {item.description}
                     </p>
                   </FadeIn>
                   <FadeIn delay="400ms">
                     <div className="bg-raisinBlack relative aspect-video w-full overflow-hidden">
                       <Image
-                        src={item.img}
+                        src={item.imageUrl}
                         alt={item.title}
                         fill
                         className="object-cover opacity-80 transition-all duration-1500 group-hover:scale-105 group-hover:opacity-100"
