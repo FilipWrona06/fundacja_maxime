@@ -3,162 +3,169 @@
 
 import Link from "next/link";
 import FadeIn from "@/components/ui/FadeIn";
-import { siteConfig } from "@/data/navigation";
-
-const sections = [
-  {
-    id: "01",
-    title: "Postanowienia Ogólne",
-    content: (
-      <>
-        <p className="mb-6">
-          Niniejszy Regulamin określa zasady korzystania z serwisu internetowego
-          oraz zasady uczestnictwa w wydarzeniach organizowanych przez{" "}
-          <strong>Stowarzyszenie Maxime</strong>.
-        </p>
-        <p className="mb-6">
-          Dane Stowarzyszenia: <br />
-          Siedziba:{" "}
-          <span className="font-medium text-white">
-            {siteConfig.contact.address.replace("\n", ", ")}
-          </span>
-          <br />
-          Kontakt e-mail:{" "}
-          <a
-            href={`mailto:${siteConfig.contact.email}`}
-            className="text-arylideYellow hover:underline"
-          >
-            {siteConfig.contact.email}
-          </a>
-        </p>
-        <p>
-          Korzystanie z witryny internetowej, zapis do Newslettera oraz zakup i
-          rezerwacja biletów oznaczają pełną akceptację niniejszego Regulaminu.
-        </p>
-      </>
-    ),
-  },
-  {
-    id: "02",
-    title: "Rezerwacja i Bilety",
-    content: (
-      <>
-        <p className="mb-6">
-          Uczestnictwo w naszych wydarzeniach może wymagać posiadania ważnego
-          biletu lub darmowej wejściówki.
-        </p>
-        <ul className="mb-6 flex flex-col gap-4 border-l border-white/10 pl-6">
-          <li className="relative">
-            <span className="bg-arylideYellow absolute top-2 -left-[1.9rem] h-1.5 w-1.5 rounded-full" />
-            <strong>Zewnętrzni operatorzy:</strong> Sprzedaż biletów na
-            wydarzenia płatne (tzw. Gale i Koncerty Główne) może być realizowana
-            za pośrednictwem zewnętrznych operatorów systemów biletowych. W
-            takim przypadku obowiązuje również regulamin operatora.
-          </li>
-          <li className="relative">
-            <span className="bg-arylideYellow absolute top-2 -left-[1.9rem] h-1.5 w-1.5 rounded-full" />
-            <strong>Darmowe wejściówki:</strong> Rezerwacja wejściówek darmowych
-            realizowana przez formularz kontaktowy wymaga podania poprawnych
-            danych osobowych. Pula miejsc jest ograniczona, a Stowarzyszenie
-            zastrzega sobie prawo do weryfikacji tożsamości uczestnika przed
-            wejściem na salę.
-          </li>
-        </ul>
-      </>
-    ),
-  },
-  {
-    id: "03",
-    title: "Zasady Uczestnictwa w Koncertach",
-    content: (
-      <>
-        <p className="mb-6">
-          Szacunek do sztuki i artystów to nasz priorytet. W trosce o komfort
-          wszystkich słuchaczy oraz muzyków Stowarzyszenia Maxime, prosimy o
-          przestrzeganie poniższych zasad:
-        </p>
-        <div className="mb-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
-          <div className="border border-white/10 bg-white/5 p-6">
-            <h4 className="text-arylideYellow mb-2 text-sm font-bold tracking-widest uppercase">
-              Punktualność
-            </h4>
-            <p className="text-sm font-light text-white/70">
-              Osoby spóźnione będą wpuszczane na widownię wyłącznie podczas
-              przerw między utworami.
-            </p>
-          </div>
-          <div className="border border-white/10 bg-white/5 p-6">
-            <h4 className="text-arylideYellow mb-2 text-sm font-bold tracking-widest uppercase">
-              Elektronika
-            </h4>
-            <p className="text-sm font-light text-white/70">
-              Prosimy o bezwzględne wyciszenie telefonów komórkowych oraz
-              powiadomień dźwiękowych na czas trwania spektaklu.
-            </p>
-          </div>
-          <div className="border border-white/10 bg-white/5 p-6">
-            <h4 className="text-arylideYellow mb-2 text-sm font-bold tracking-widest uppercase">
-              Fotografowanie
-            </h4>
-            <p className="text-sm font-light text-white/70">
-              Robienie zdjęć z użyciem lampy błyskowej (flesza) oraz nagrywanie
-              profesjonalnym sprzętem audio-video bez akredytacji jest zakazane.
-            </p>
-          </div>
-          <div className="border border-white/10 bg-white/5 p-6">
-            <h4 className="text-arylideYellow mb-2 text-sm font-bold tracking-widest uppercase">
-              Prawa autorskie
-            </h4>
-            <p className="text-sm font-light text-white/70">
-              Wykonywane utwory oraz aranżacje stanowią własność intelektualną
-              twórców i podlegają ochronie prawnej.
-            </p>
-          </div>
-        </div>
-      </>
-    ),
-  },
-  {
-    id: "04",
-    title: "Własność Intelektualna i Galeria",
-    content: (
-      <>
-        <p className="mb-6">
-          Wszelkie materiały udostępniane na tej stronie, w tym fotografie w
-          dziale <strong>Galeria</strong>, teksty, logotypy, nazwa
-          "Stowarzyszenie Maxime" oraz aranżacje graficzne podlegają ochronie
-          praw autorskich.
-        </p>
-        <p className="mb-6">
-          Ich kopiowanie, powielanie, modyfikacja lub wykorzystywanie w celach
-          komercyjnych bez pisemnej zgody (tzw. <em>Press Pack</em> dostępny po
-          kontakcie) jest zabronione. W celu nawiązania współpracy medialnej
-          zachęcamy do wizyty w zakładce Kontakt.
-        </p>
-      </>
-    ),
-  },
-  {
-    id: "05",
-    title: "Postanowienia Końcowe",
-    content: (
-      <>
-        <p className="mb-6">
-          Stowarzyszenie zastrzega sobie prawo do wprowadzania zmian w
-          Regulaminie z ważnych przyczyn prawnych lub organizacyjnych. O
-          wszelkich zmianach w procesach biletowych czy działaniu Newslettera
-          poinformujemy drogą mailową.
-        </p>
-        <p>
-          W sprawach nieuregulowanych niniejszym Regulaminem zastosowanie mają
-          odpowiednie przepisy prawa polskiego.
-        </p>
-      </>
-    ),
-  },
-];
+import { useSiteSettings } from "@/components/providers/SettingsProvider";
 
 export default function TermsPage() {
+  // Pobieramy dane kontaktowe z Sanity
+  const { contact } = useSiteSettings();
+
+  // Tablica przeniesiona do wewnątrz komponentu
+  const sections = [
+    {
+      id: "01",
+      title: "Postanowienia Ogólne",
+      content: (
+        <>
+          <p className="mb-6">
+            Niniejszy Regulamin określa zasady korzystania z serwisu
+            internetowego oraz zasady uczestnictwa w wydarzeniach organizowanych
+            przez <strong>Stowarzyszenie Maxime</strong>.
+          </p>
+          <p className="mb-6">
+            Dane Stowarzyszenia: <br />
+            Siedziba:{" "}
+            <span className="font-medium text-white">
+              {contact.address.replace("\n", ", ")}
+            </span>
+            <br />
+            Kontakt e-mail:{" "}
+            <a
+              href={`mailto:${contact.email}`}
+              className="text-arylideYellow hover:underline"
+            >
+              {contact.email}
+            </a>
+          </p>
+          <p>
+            Korzystanie z witryny internetowej, zapis do Newslettera oraz zakup
+            i rezerwacja biletów oznaczają pełną akceptację niniejszego
+            Regulaminu.
+          </p>
+        </>
+      ),
+    },
+    {
+      id: "02",
+      title: "Rezerwacja i Bilety",
+      content: (
+        <>
+          <p className="mb-6">
+            Uczestnictwo w naszych wydarzeniach może wymagać posiadania ważnego
+            biletu lub darmowej wejściówki.
+          </p>
+          <ul className="mb-6 flex flex-col gap-4 border-l border-white/10 pl-6">
+            <li className="relative">
+              <span className="bg-arylideYellow absolute top-2 -left-[1.9rem] h-1.5 w-1.5 rounded-full" />
+              <strong>Zewnętrzni operatorzy:</strong> Sprzedaż biletów na
+              wydarzenia płatne (tzw. Gale i Koncerty Główne) może być
+              realizowana za pośrednictwem zewnętrznych operatorów systemów
+              biletowych. W takim przypadku obowiązuje również regulamin
+              operatora.
+            </li>
+            <li className="relative">
+              <span className="bg-arylideYellow absolute top-2 -left-[1.9rem] h-1.5 w-1.5 rounded-full" />
+              <strong>Darmowe wejściówki:</strong> Rezerwacja wejściówek
+              darmowych realizowana przez formularz kontaktowy wymaga podania
+              poprawnych danych osobowych. Pula miejsc jest ograniczona, a
+              Stowarzyszenie zastrzega sobie prawo do weryfikacji tożsamości
+              uczestnika przed wejściem na salę.
+            </li>
+          </ul>
+        </>
+      ),
+    },
+    {
+      id: "03",
+      title: "Zasady Uczestnictwa w Koncertach",
+      content: (
+        <>
+          <p className="mb-6">
+            Szacunek do sztuki i artystów to nasz priorytet. W trosce o komfort
+            wszystkich słuchaczy oraz muzyków Stowarzyszenia Maxime, prosimy o
+            przestrzeganie poniższych zasad:
+          </p>
+          <div className="mb-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <div className="border border-white/10 bg-white/5 p-6">
+              <h4 className="text-arylideYellow mb-2 text-sm font-bold tracking-widest uppercase">
+                Punktualność
+              </h4>
+              <p className="text-sm font-light text-white/70">
+                Osoby spóźnione będą wpuszczane na widownię wyłącznie podczas
+                przerw między utworami.
+              </p>
+            </div>
+            <div className="border border-white/10 bg-white/5 p-6">
+              <h4 className="text-arylideYellow mb-2 text-sm font-bold tracking-widest uppercase">
+                Elektronika
+              </h4>
+              <p className="text-sm font-light text-white/70">
+                Prosimy o bezwzględne wyciszenie telefonów komórkowych oraz
+                powiadomień dźwiękowych na czas trwania spektaklu.
+              </p>
+            </div>
+            <div className="border border-white/10 bg-white/5 p-6">
+              <h4 className="text-arylideYellow mb-2 text-sm font-bold tracking-widest uppercase">
+                Fotografowanie
+              </h4>
+              <p className="text-sm font-light text-white/70">
+                Robienie zdjęć z użyciem lampy błyskowej (flesza) oraz
+                nagrywanie profesjonalnym sprzętem audio-video bez akredytacji
+                jest zakazane.
+              </p>
+            </div>
+            <div className="border border-white/10 bg-white/5 p-6">
+              <h4 className="text-arylideYellow mb-2 text-sm font-bold tracking-widest uppercase">
+                Prawa autorskie
+              </h4>
+              <p className="text-sm font-light text-white/70">
+                Wykonywane utwory oraz aranżacje stanowią własność intelektualną
+                twórców i podlegają ochronie prawnej.
+              </p>
+            </div>
+          </div>
+        </>
+      ),
+    },
+    {
+      id: "04",
+      title: "Własność Intelektualna i Galeria",
+      content: (
+        <>
+          <p className="mb-6">
+            Wszelkie materiały udostępniane na tej stronie, w tym fotografie w
+            dziale <strong>Galeria</strong>, teksty, logotypy, nazwa
+            "Stowarzyszenie Maxime" oraz aranżacje graficzne podlegają ochronie
+            praw autorskich.
+          </p>
+          <p className="mb-6">
+            Ich kopiowanie, powielanie, modyfikacja lub wykorzystywanie w celach
+            komercyjnych bez pisemnej zgody (tzw. <em>Press Pack</em> dostępny
+            po kontakcie) jest zabronione. W celu nawiązania współpracy
+            medialnej zachęcamy do wizyty w zakładce Kontakt.
+          </p>
+        </>
+      ),
+    },
+    {
+      id: "05",
+      title: "Postanowienia Końcowe",
+      content: (
+        <>
+          <p className="mb-6">
+            Stowarzyszenie zastrzega sobie prawo do wprowadzania zmian w
+            Regulaminie z ważnych przyczyn prawnych lub organizacyjnych. O
+            wszelkich zmianach w procesach biletowych czy działaniu Newslettera
+            poinformujemy drogą mailową.
+          </p>
+          <p>
+            W sprawach nieuregulowanych niniejszym Regulaminem zastosowanie mają
+            odpowiednie przepisy prawa polskiego.
+          </p>
+        </>
+      ),
+    },
+  ];
+
   return (
     <main className="bg-raisinBlack selection:bg-arylideYellow selection:text-raisinBlack relative min-h-screen w-full overflow-x-hidden">
       {/* ============================================================================ */}
@@ -239,6 +246,43 @@ export default function TermsPage() {
                 </div>
               </FadeIn>
             ))}
+          </div>
+
+          {/* ============================================================================ */}
+          {/* PRZYCISK POBIERANIA PEŁNEJ WERSJI (PDF) */}
+          {/* ============================================================================ */}
+          <div className="mt-20 flex justify-center border-t border-white/10 pt-16 lg:mt-32 lg:pt-24">
+            <FadeIn className="flex flex-col items-center text-center">
+              <span className="font-montserrat mb-6 block text-[0.65rem] font-bold tracking-[0.4em] text-white/40 uppercase">
+                Wymogi formalne
+              </span>
+              <a
+                href="/docs/regulamin.pdf" // Podmień na prawdziwą ścieżkę do pliku PDF w folderze public
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group font-montserrat hover:border-arylideYellow hover:bg-arylideYellow hover:text-raisinBlack flex items-center gap-4 rounded-full border border-white/20 bg-transparent px-8 py-4 text-[0.7rem] font-bold tracking-[0.2em] text-white uppercase transition-all duration-500"
+              >
+                <svg
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
+                  />
+                </svg>
+                <span>Pobierz pełną wersję prawną (PDF)</span>
+              </a>
+              <p className="font-montserrat mt-6 max-w-sm text-xs font-light text-white/50">
+                Dokument ten obejmuje m.in. klauzule dotyczące rezygnacji,
+                procedury reklamacyjne oraz szczegółowe dane rejestrowe i wymogi
+                techniczne.
+              </p>
+            </FadeIn>
           </div>
         </div>
       </section>

@@ -3,147 +3,153 @@
 
 import Link from "next/link";
 import FadeIn from "@/components/ui/FadeIn";
-import { siteConfig } from "@/data/navigation";
-
-const sections = [
-  {
-    id: "01",
-    title: "Administrator Danych",
-    content: (
-      <>
-        <p className="mb-6">
-          Administratorem Twoich danych osobowych jest{" "}
-          <strong>Stowarzyszenie Maxime</strong> z siedzibą pod adresem: <br />
-          <span className="text-arylideYellow">
-            {siteConfig.contact.address.replace("\n", ", ")}
-          </span>
-          .
-        </p>
-        <p>
-          W sprawach związanych z przetwarzaniem danych osobowych możesz
-          skontaktować się z nami drogą elektroniczną pod adresem:{" "}
-          <a
-            href={`mailto:${siteConfig.contact.email}`}
-            className="text-arylideYellow hover:underline"
-          >
-            {siteConfig.contact.email}
-          </a>{" "}
-          lub telefonicznie: {siteConfig.contact.phone}.
-        </p>
-      </>
-    ),
-  },
-  {
-    id: "02",
-    title: "Gromadzenie i Cel",
-    content: (
-      <>
-        <p className="mb-6">
-          W Stowarzyszeniu Maxime wierzymy, że zaufanie to fundament każdej
-          relacji – zarówno na scenie, jak i poza nią. Zbieramy tylko te dane,
-          które są absolutnie niezbędne do świadczenia naszych usług na
-          najwyższym poziomie.
-        </p>
-        <ul className="mb-6 flex flex-col gap-4 border-l border-white/10 pl-6">
-          <li className="relative">
-            <span className="bg-arylideYellow absolute top-2 -left-[1.9rem] h-1.5 w-1.5 rounded-full" />
-            <strong>Newsletter:</strong> Przetwarzamy Twój adres e-mail w celu
-            dostarczania ekskluzywnych informacji o tajnych próbach, zniżkach i
-            nadchodzących premierach.
-          </li>
-          <li className="relative">
-            <span className="bg-arylideYellow absolute top-2 -left-[1.9rem] h-1.5 w-1.5 rounded-full" />
-            <strong>Kontakt i Rezerwacje:</strong> Przetwarzamy Twoje imię,
-            nazwisko, adres e-mail oraz (opcjonalnie) numer telefonu w celu
-            obsługi zapytań z formularza kontaktowego oraz w procesie rezerwacji
-            darmowych lub płatnych wejściówek na nasze wydarzenia.
-          </li>
-        </ul>
-      </>
-    ),
-  },
-  {
-    id: "03",
-    title: "Odbiorcy Danych",
-    content: (
-      <>
-        <p className="mb-6">
-          Sztuka nie lubi kompromisów, podobnie jak bezpieczeństwo. Twoje dane
-          nie są sprzedawane żadnym podmiotom trzecim.
-        </p>
-        <p>
-          Odbiorcami danych mogą być wyłącznie zaufani podwykonawcy (tzw.
-          procesorzy), tacy jak: dostawcy infrastruktury IT, systemy mailingowe
-          wspierające nasz Newsletter oraz operatorzy systemów biletowych, w
-          zakresie w jakim jest to konieczne do realizacji Twojego zamówienia na
-          koncert.
-        </p>
-      </>
-    ),
-  },
-  {
-    id: "04",
-    title: "Twoje Prawa",
-    content: (
-      <>
-        <p className="mb-6">
-          Szanujemy Twoją prywatność. W każdej chwili przysługuje Ci prawo do:
-        </p>
-        <div className="mb-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
-          <div className="border border-white/10 bg-white/5 p-6">
-            <h4 className="text-arylideYellow mb-2 text-sm font-bold tracking-widest uppercase">
-              Dostęp i Edycja
-            </h4>
-            <p className="text-sm font-light text-white/70">
-              Wglądu do swoich danych, ich sprostowania oraz aktualizacji.
-            </p>
-          </div>
-          <div className="border border-white/10 bg-white/5 p-6">
-            <h4 className="text-arylideYellow mb-2 text-sm font-bold tracking-widest uppercase">
-              Usunięcie
-            </h4>
-            <p className="text-sm font-light text-white/70">
-              Prawo do bycia zapomnianym. Usuniemy Twoje dane na Twoje żądanie.
-            </p>
-          </div>
-          <div className="border border-white/10 bg-white/5 p-6">
-            <h4 className="text-arylideYellow mb-2 text-sm font-bold tracking-widest uppercase">
-              Cofnięcie zgody
-            </h4>
-            <p className="text-sm font-light text-white/70">
-              W dowolnym momencie możesz wypisać się z Newslettera.
-            </p>
-          </div>
-          <div className="border border-white/10 bg-white/5 p-6">
-            <h4 className="text-arylideYellow mb-2 text-sm font-bold tracking-widest uppercase">
-              Skarga
-            </h4>
-            <p className="text-sm font-light text-white/70">
-              Wniesienia skargi do Prezesa Urzędu Ochrony Danych Osobowych.
-            </p>
-          </div>
-        </div>
-      </>
-    ),
-  },
-  {
-    id: "05",
-    title: "Pliki Cookies",
-    content: (
-      <>
-        <p className="mb-6">
-          Nasza strona internetowa używa minimalnej ilości plików cookies.
-          Korzystamy z nich wyłącznie w celu zapewnienia prawidłowego działania
-          serwisu (cookies techniczne) oraz do anonimowej analityki, aby
-          zrozumieć, jak nasi odbiorcy poruszają się po witrynie i jakie
-          wydarzenia cieszą się największym zainteresowaniem.
-        </p>
-      </>
-    ),
-  },
-];
+import { useSiteSettings } from "@/components/providers/SettingsProvider";
 
 export default function PrivacyPolicyPage() {
+  // Pobieramy dane kontaktowe ze zintegrowanego kontekstu Sanity
+  const { contact } = useSiteSettings();
+
+  // Tablica sekcji wewnątrz komponentu, aby miała dostęp do `contact`
+  const sections = [
+    {
+      id: "01",
+      title: "Administrator Danych",
+      content: (
+        <>
+          <p className="mb-6">
+            Administratorem Twoich danych osobowych jest{" "}
+            <strong>Stowarzyszenie Maxime</strong> z siedzibą pod adresem:{" "}
+            <br />
+            <span className="text-arylideYellow">
+              {contact.address.replace("\n", ", ")}
+            </span>
+            .
+          </p>
+          <p>
+            W sprawach związanych z przetwarzaniem danych osobowych możesz
+            skontaktować się z nami drogą elektroniczną pod adresem:{" "}
+            <a
+              href={`mailto:${contact.email}`}
+              className="text-arylideYellow hover:underline"
+            >
+              {contact.email}
+            </a>{" "}
+            lub telefonicznie: {contact.phone}.
+          </p>
+        </>
+      ),
+    },
+    {
+      id: "02",
+      title: "Gromadzenie i Cel",
+      content: (
+        <>
+          <p className="mb-6">
+            W Stowarzyszeniu Maxime wierzymy, że zaufanie to fundament każdej
+            relacji – zarówno na scenie, jak i poza nią. Zbieramy tylko te dane,
+            które są absolutnie niezbędne do świadczenia naszych usług na
+            najwyższym poziomie.
+          </p>
+          <ul className="mb-6 flex flex-col gap-4 border-l border-white/10 pl-6">
+            <li className="relative">
+              <span className="bg-arylideYellow absolute top-2 -left-[1.9rem] h-1.5 w-1.5 rounded-full" />
+              <strong>Newsletter:</strong> Przetwarzamy Twój adres e-mail w celu
+              dostarczania ekskluzywnych informacji o tajnych próbach, zniżkach
+              i nadchodzących premierach.
+            </li>
+            <li className="relative">
+              <span className="bg-arylideYellow absolute top-2 -left-[1.9rem] h-1.5 w-1.5 rounded-full" />
+              <strong>Kontakt i Rezerwacje:</strong> Przetwarzamy Twoje imię,
+              nazwisko, adres e-mail oraz (opcjonalnie) numer telefonu w celu
+              obsługi zapytań z formularza kontaktowego oraz w procesie
+              rezerwacji darmowych lub płatnych wejściówek na nasze wydarzenia.
+            </li>
+          </ul>
+        </>
+      ),
+    },
+    {
+      id: "03",
+      title: "Odbiorcy Danych",
+      content: (
+        <>
+          <p className="mb-6">
+            Sztuka nie lubi kompromisów, podobnie jak bezpieczeństwo. Twoje dane
+            nie są sprzedawane żadnym podmiotom trzecim.
+          </p>
+          <p>
+            Odbiorcami danych mogą być wyłącznie zaufani podwykonawcy (tzw.
+            procesorzy), tacy jak: dostawcy infrastruktury IT, systemy
+            mailingowe wspierające nasz Newsletter oraz operatorzy systemów
+            biletowych, w zakresie w jakim jest to konieczne do realizacji
+            Twojego zamówienia na koncert.
+          </p>
+        </>
+      ),
+    },
+    {
+      id: "04",
+      title: "Twoje Prawa",
+      content: (
+        <>
+          <p className="mb-6">
+            Szanujemy Twoją prywatność. W każdej chwili przysługuje Ci prawo do:
+          </p>
+          <div className="mb-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <div className="border border-white/10 bg-white/5 p-6">
+              <h4 className="text-arylideYellow mb-2 text-sm font-bold tracking-widest uppercase">
+                Dostęp i Edycja
+              </h4>
+              <p className="text-sm font-light text-white/70">
+                Wglądu do swoich danych, ich sprostowania oraz aktualizacji.
+              </p>
+            </div>
+            <div className="border border-white/10 bg-white/5 p-6">
+              <h4 className="text-arylideYellow mb-2 text-sm font-bold tracking-widest uppercase">
+                Usunięcie
+              </h4>
+              <p className="text-sm font-light text-white/70">
+                Prawo do bycia zapomnianym. Usuniemy Twoje dane na Twoje
+                żądanie.
+              </p>
+            </div>
+            <div className="border border-white/10 bg-white/5 p-6">
+              <h4 className="text-arylideYellow mb-2 text-sm font-bold tracking-widest uppercase">
+                Cofnięcie zgody
+              </h4>
+              <p className="text-sm font-light text-white/70">
+                W dowolnym momencie możesz wypisać się z Newslettera.
+              </p>
+            </div>
+            <div className="border border-white/10 bg-white/5 p-6">
+              <h4 className="text-arylideYellow mb-2 text-sm font-bold tracking-widest uppercase">
+                Skarga
+              </h4>
+              <p className="text-sm font-light text-white/70">
+                Wniesienia skargi do Prezesa Urzędu Ochrony Danych Osobowych.
+              </p>
+            </div>
+          </div>
+        </>
+      ),
+    },
+    {
+      id: "05",
+      title: "Pliki Cookies",
+      content: (
+        <>
+          <p className="mb-6">
+            Nasza strona internetowa używa minimalnej ilości plików cookies.
+            Korzystamy z nich wyłącznie w celu zapewnienia prawidłowego
+            działania serwisu (cookies techniczne) oraz do anonimowej analityki,
+            aby zrozumieć, jak nasi odbiorcy poruszają się po witrynie i jakie
+            wydarzenia cieszą się największym zainteresowaniem.
+          </p>
+        </>
+      ),
+    },
+  ];
+
   return (
     <main className="bg-raisinBlack selection:bg-arylideYellow selection:text-raisinBlack relative min-h-screen w-full overflow-x-hidden">
       {/* ============================================================================ */}
@@ -224,6 +230,42 @@ export default function PrivacyPolicyPage() {
                 </div>
               </FadeIn>
             ))}
+          </div>
+
+          {/* ============================================================================ */}
+          {/* PRZYCISK POBIERANIA PEŁNEJ WERSJI (PDF) */}
+          {/* ============================================================================ */}
+          <div className="mt-20 flex justify-center border-t border-white/10 pt-16 lg:mt-32 lg:pt-24">
+            <FadeIn className="flex flex-col items-center text-center">
+              <span className="font-montserrat mb-6 block text-[0.65rem] font-bold tracking-[0.4em] text-white/40 uppercase">
+                Wymogi formalne
+              </span>
+              <a
+                href="/docs/polityka-prywatnosci.pdf" // Podmień na prawdziwą ścieżkę do pliku PDF w folderze public
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group font-montserrat hover:border-arylideYellow hover:bg-arylideYellow hover:text-raisinBlack flex items-center gap-4 rounded-full border border-white/20 bg-transparent px-8 py-4 text-[0.7rem] font-bold tracking-[0.2em] text-white uppercase transition-all duration-500"
+              >
+                <svg
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
+                  />
+                </svg>
+                <span>Pobierz pełną wersję prawną (PDF)</span>
+              </a>
+              <p className="font-montserrat mt-6 max-w-sm text-xs font-light text-white/50">
+                Dokument ten zawiera szczegółowe dane rejestrowe oraz wszystkie
+                niezbędne klauzule informacyjne wymagane przez RODO.
+              </p>
+            </FadeIn>
           </div>
         </div>
       </section>
