@@ -1,6 +1,86 @@
-import FadeIn from "@/components/ui/FadeIn";
+// src/components/home/Testimonials.tsx
 
-export default function Testimonials() {
+import Link from "next/link";
+import { defineQuery } from "next-sanity";
+import FadeIn from "@/components/ui/FadeIn";
+import { sanityFetch } from "@/sanity/lib/live";
+
+const REVIEWS_QUERY = defineQuery(`
+  *[_type == "review" && approved == true && featured == true][0...3] | order(_createdAt desc) {
+    _id,
+    name,
+    role,
+    text
+  }
+`);
+
+// Jeśli w systemie nie ma wystarczająco dużo zatwierdzonych + wyróżnionych opinii,
+// użyjemy placeholderów, aby utrzymać asymetryczny kinowy design na stronie głównej.
+const DEFAULT_REVIEWS = [
+  {
+    _id: "1",
+    text: "Stowarzyszenie Maxime to zjawisko. Dawno nie widziałem na scenie tak potężnej mieszanki młodzieńczej energii i absolutnego, rygorystycznego profesjonalizmu.",
+    name: "Michał K.",
+    role: "Krytyk Muzyczny",
+  },
+  {
+    _id: "2",
+    text: "Każdy detal, od doboru repertuaru po reżyserię światła, trzymał w napięciu. Oni nie po prostu grają muzykę klasyczną – oni ją na nowo wymyślają.",
+    name: "Anna S.",
+    role: "Dyrektor Festiwalu",
+  },
+  {
+    _id: "3",
+    text: "Sztuka, która autentycznie łączy pokolenia. Wzruszenie, zachwyt i owacje na stojąco, które wydawały się nie mieć końca. Absolutnie światowy poziom.",
+    name: "Piotr W.",
+    role: "Uczestnik koncertu",
+  },
+];
+
+export default async function Testimonials() {
+  const { data: fetchedReviews } = await sanityFetch({ query: REVIEWS_QUERY });
+
+  // Łączymy to co przyszło z bazy z defaultowymi, bierzemy równe 3
+  const displayReviews = [...fetchedReviews, ...DEFAULT_REVIEWS].slice(0, 3);
+
+  // Konfiguracja stylów asymetrycznego widoku dla dokładnie 3 kart
+  const cardConfigs = [
+    {
+      wrapperClass: "relative z-10 lg:col-span-6 lg:col-start-1",
+      cardClass:
+        "group bg-raisinBlack relative overflow-hidden p-10 shadow-2xl transition-all duration-700 hover:-translate-y-4 lg:p-14",
+      quoteColor: "text-arylideYellow",
+      textColor: "text-white",
+      lineColor: "bg-arylideYellow",
+      nameColor: "text-white",
+      roleColor: "text-white/50",
+      delay: "400ms",
+    },
+    {
+      wrapperClass:
+        "relative z-20 lg:col-span-7 lg:col-start-6 lg:-mt-24 lg:-ml-12",
+      cardClass:
+        "group relative overflow-hidden border border-white/60 bg-white/40 p-10 shadow-[0_30px_60px_rgba(0,0,0,0.1)] backdrop-blur-xl transition-all duration-700 hover:-translate-y-4 hover:bg-white/50 lg:p-14",
+      quoteColor: "text-oxfordBlue",
+      textColor: "text-raisinBlack",
+      lineColor: "bg-oxfordBlue",
+      nameColor: "text-raisinBlack",
+      roleColor: "text-raisinBlack/60",
+      delay: "600ms",
+    },
+    {
+      wrapperClass: "relative z-30 lg:col-span-6 lg:col-start-3 lg:-mt-16",
+      cardClass:
+        "group bg-oxfordBlue relative overflow-hidden p-10 shadow-2xl transition-all duration-700 hover:-translate-y-4 lg:p-14",
+      quoteColor: "text-white",
+      textColor: "text-white",
+      lineColor: "bg-philippineSilver",
+      nameColor: "text-white",
+      roleColor: "text-white/50",
+      delay: "800ms",
+    },
+  ];
+
   return (
     <section className="bg-philippineSilver relative z-10 w-full overflow-hidden py-32 lg:py-48">
       {/* --- GŁĘBIA W TLE --- */}
@@ -34,93 +114,61 @@ export default function Testimonials() {
 
         {/* --- ASYMETRYCZNY KOLAŻ KART --- */}
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-0">
-          {/* KARTA 1 */}
-          <FadeIn
-            delay="400ms"
-            className="relative z-10 lg:col-span-6 lg:col-start-1"
-          >
-            <div className="group bg-raisinBlack relative overflow-hidden p-10 shadow-2xl transition-all duration-700 hover:-translate-y-4 lg:p-14">
-              <div className="absolute -top-8 -right-4 opacity-10 transition-transform duration-700 group-hover:scale-110 group-hover:-rotate-12 group-hover:opacity-20">
-                <span className="font-youngest text-arylideYellow text-[12rem]">
-                  "
-                </span>
-              </div>
-              <p className="font-montserrat relative z-10 mb-10 text-lg leading-relaxed font-light text-white lg:text-xl">
-                Stowarzyszenie Maxime to zjawisko. Dawno nie widziałem na scenie
-                tak potężnej mieszanki młodzieńczej energii i absolutnego,
-                rygorystycznego profesjonalizmu.
-              </p>
-              <div className="relative z-10 flex items-center gap-4">
-                <div className="bg-arylideYellow h-px w-8" />
-                <div>
-                  <h4 className="font-montserrat text-sm font-bold text-white">
-                    Michał K.
-                  </h4>
-                  <span className="font-montserrat text-[0.65rem] tracking-widest text-white/50 uppercase">
-                    Krytyk Muzyczny
-                  </span>
+          {displayReviews.map((review, index) => {
+            const config = cardConfigs[index];
+            return (
+              <FadeIn
+                key={review._id}
+                delay={config.delay}
+                className={config.wrapperClass}
+              >
+                <div className={config.cardClass}>
+                  <div className="absolute -top-8 -right-4 opacity-10 transition-transform duration-700 group-hover:scale-110 group-hover:-rotate-12 group-hover:opacity-20">
+                    <span
+                      className={`font-youngest text-[12rem] ${config.quoteColor}`}
+                    >
+                      "
+                    </span>
+                  </div>
+                  <p
+                    className={`font-montserrat relative z-10 mb-10 text-lg leading-relaxed font-light ${config.textColor} lg:text-xl`}
+                  >
+                    {review.text}
+                  </p>
+                  <div className="relative z-10 flex items-center gap-4">
+                    <div className={`${config.lineColor} h-px w-8`} />
+                    <div>
+                      <h4
+                        className={`font-montserrat text-sm font-bold ${config.nameColor}`}
+                      >
+                        {review.name}
+                      </h4>
+                      <span
+                        className={`font-montserrat text-[0.65rem] tracking-widest uppercase ${config.roleColor}`}
+                      >
+                        {review.role}
+                      </span>
+                    </div>
+                  </div>
+                  {/* Dekoracyjna wjeżdżająca linia w ostatniej karcie - można ją zachować uwarunkowaną */}
+                  {index === 2 && (
+                    <div className="bg-arylideYellow absolute bottom-0 left-0 h-1 w-0 transition-all duration-700 group-hover:w-full" />
+                  )}
                 </div>
-              </div>
-            </div>
-          </FadeIn>
+              </FadeIn>
+            );
+          })}
+        </div>
 
-          {/* KARTA 2 */}
-          <FadeIn
-            delay="600ms"
-            className="relative z-20 lg:col-span-7 lg:col-start-6 lg:-mt-24 lg:-ml-12"
-          >
-            <div className="group relative overflow-hidden border border-white/60 bg-white/40 p-10 shadow-[0_30px_60px_rgba(0,0,0,0.1)] backdrop-blur-xl transition-all duration-700 hover:-translate-y-4 hover:bg-white/50 lg:p-14">
-              <div className="absolute -top-8 -right-4 opacity-[0.05] transition-transform duration-700 group-hover:scale-110 group-hover:-rotate-12 group-hover:opacity-10">
-                <span className="font-youngest text-oxfordBlue text-[12rem]">
-                  "
-                </span>
-              </div>
-              <p className="font-montserrat text-raisinBlack relative z-10 mb-10 text-lg leading-relaxed font-light lg:text-xl">
-                Każdy detal, od doboru repertuaru po reżyserię światła, trzymał
-                w napięciu. Oni nie po prostu grają muzykę klasyczną – oni ją na
-                nowo wymyślają.
-              </p>
-              <div className="relative z-10 flex items-center gap-4">
-                <div className="bg-oxfordBlue h-px w-8" />
-                <div>
-                  <h4 className="font-montserrat text-raisinBlack text-sm font-bold">
-                    Anna S.
-                  </h4>
-                  <span className="font-montserrat text-raisinBlack/60 text-[0.65rem] tracking-widest uppercase">
-                    Dyrektor Festiwalu
-                  </span>
-                </div>
-              </div>
-            </div>
-          </FadeIn>
-
-          {/* KARTA 3 */}
-          <FadeIn
-            delay="800ms"
-            className="relative z-30 lg:col-span-6 lg:col-start-3 lg:-mt-16"
-          >
-            <div className="group bg-oxfordBlue relative overflow-hidden p-10 shadow-2xl transition-all duration-700 hover:-translate-y-4 lg:p-14">
-              <div className="absolute -top-8 -right-4 opacity-10 transition-transform duration-700 group-hover:scale-110 group-hover:-rotate-12 group-hover:opacity-20">
-                <span className="font-youngest text-[12rem] text-white">"</span>
-              </div>
-              <p className="font-montserrat relative z-10 mb-10 text-lg leading-relaxed font-light text-white lg:text-xl">
-                Sztuka, która autentycznie łączy pokolenia. Wzruszenie, zachwyt
-                i owacje na stojąco, które wydawały się nie mieć końca.
-                Absolutnie światowy poziom.
-              </p>
-              <div className="relative z-10 flex items-center gap-4">
-                <div className="bg-philippineSilver h-px w-8" />
-                <div>
-                  <h4 className="font-montserrat text-sm font-bold text-white">
-                    Piotr W.
-                  </h4>
-                  <span className="font-montserrat text-[0.65rem] tracking-widest text-white/50 uppercase">
-                    Uczestnik koncertu
-                  </span>
-                </div>
-              </div>
-              <div className="bg-arylideYellow absolute bottom-0 left-0 h-1 w-0 transition-all duration-700 group-hover:w-full" />
-            </div>
+        {/* PRZYCISK PROWADZĄCY DO FORMULARZA OPINII */}
+        <div className="mt-24 flex justify-center lg:mt-32">
+          <FadeIn delay="400ms">
+            <Link
+              href="/opinie"
+              className="group border-raisinBlack font-montserrat text-raisinBlack hover:bg-raisinBlack relative inline-flex items-center justify-center gap-4 rounded-full border bg-transparent px-10 py-5 text-[0.65rem] font-bold tracking-[0.2em] uppercase transition-all duration-500 hover:text-white"
+            >
+              Przeczytaj więcej lub dodaj swoją
+            </Link>
           </FadeIn>
         </div>
       </div>

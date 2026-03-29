@@ -2,7 +2,8 @@ import type { SchemaTypeDefinition } from "sanity";
 import { eventType } from "./event";
 import { galleryType } from "./gallery";
 import { newsType } from "./news";
+import { reviewType } from "./review";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [eventType, newsType, galleryType],
+  types: [eventType, newsType, galleryType, reviewType],
 };
