@@ -3,8 +3,9 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { useSiteSettings } from "@/components/providers/SettingsProvider";
 import FadeIn from "@/components/ui/FadeIn";
-import { siteConfig, socialLinks } from "@/data/navigation";
+import { getSocialIcon } from "@/data/navigation";
 
 // Tematy wiadomości do interaktywnego wyboru
 const subjects = [
@@ -16,6 +17,9 @@ const subjects = [
 ];
 
 export default function ContactPage() {
+  // Pobieramy dynamiczne dane kontaktowe i social media prosto z kontekstu Sanity
+  const { contact, socials } = useSiteSettings();
+
   const [activeSubject, setActiveSubject] = useState(subjects[0]);
   const [copiedItem, setCopiedItem] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -66,7 +70,6 @@ export default function ContactPage() {
 
         <div className="relative z-10 mx-auto w-full max-w-7xl">
           <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
-            {/* ZMIANA: Zmiana siatki, aby napis spływał naturalnie pod spód */}
             <div className="lg:col-span-9">
               <FadeIn>
                 <div className="mb-6 flex items-center gap-4">
@@ -86,7 +89,6 @@ export default function ContactPage() {
                 </h1>
               </FadeIn>
 
-              {/* ZMIANA: Przeniesiony, wyśrodkowany tekst podrzędny */}
               <FadeIn delay="400ms">
                 <p className="font-montserrat mt-12 max-w-2xl text-base leading-relaxed font-light text-white/70 md:text-lg lg:mt-20">
                   Niezależnie od tego, czy chcesz zorganizować wspólne
@@ -122,7 +124,7 @@ export default function ContactPage() {
               </FadeIn>
             </div>
 
-            {/* PRAWA KOLUMNA: Interaktywne Dane Kontaktowe */}
+            {/* PRAWA KOLUMNA: Interaktywne Dane Kontaktowe (Dynamiczne z Sanity) */}
             <div className="flex flex-col gap-16 lg:col-span-8">
               {/* EMAIL */}
               <FadeIn
@@ -134,16 +136,13 @@ export default function ContactPage() {
                 </span>
                 <button
                   type="button"
-                  onClick={() => handleCopy(siteConfig.contact.email, "email")}
-                  // ZMIANA: items-center, gap-4
+                  onClick={() => handleCopy(contact.email, "email")}
                   className="hover:text-arylideYellow relative flex w-full items-center justify-between gap-4 text-left transition-colors duration-500"
                 >
-                  {/* ZMIANA: break-all dla bardzo małych ekranów i dynamiczne fonty */}
                   <span className="font-montserrat group-hover:text-arylideYellow text-[5vw] font-light tracking-wide break-all text-white transition-colors duration-500 min-[450px]:text-2xl sm:text-3xl md:text-4xl">
-                    {siteConfig.contact.email}
+                    {contact.email}
                   </span>
 
-                  {/* ZMIANA: shrink-0 ratuje ikonę przed wyrzuceniem poza ekran */}
                   <div className="h-8 shrink-0 overflow-hidden">
                     <div
                       className={`flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${copiedItem === "email" ? "-translate-y-8" : "translate-y-0"}`}
@@ -202,14 +201,13 @@ export default function ContactPage() {
                 </span>
                 <button
                   type="button"
-                  onClick={() => handleCopy(siteConfig.contact.phone, "phone")}
+                  onClick={() => handleCopy(contact.phone, "phone")}
                   className="hover:text-arylideYellow relative flex w-full items-center justify-between gap-4 text-left transition-colors duration-500"
                 >
                   <span className="font-montserrat group-hover:text-arylideYellow text-[6vw] font-light tracking-wide whitespace-nowrap text-white transition-colors duration-500 min-[450px]:text-3xl sm:text-4xl">
-                    {siteConfig.contact.phone}
+                    {contact.phone}
                   </span>
 
-                  {/* ZMIANA: shrink-0 */}
                   <div className="h-8 shrink-0 overflow-hidden">
                     <div
                       className={`flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${copiedItem === "phone" ? "-translate-y-8" : "translate-y-0"}`}
@@ -272,12 +270,10 @@ export default function ContactPage() {
                   rel="noreferrer"
                   className="hover:text-arylideYellow relative flex w-full items-center justify-between gap-4 transition-colors duration-500"
                 >
-                  {/* ZMIANA: dynamiczny tekst */}
                   <span className="font-montserrat group-hover:text-arylideYellow text-[5vw] font-light tracking-wide whitespace-pre-line text-white transition-colors duration-500 min-[450px]:text-xl sm:text-2xl md:text-3xl lg:text-4xl">
-                    {siteConfig.contact.address}
+                    {contact.address}
                   </span>
 
-                  {/* ZMIANA: shrink-0 */}
                   <div className="group-hover:border-arylideYellow group-hover:bg-arylideYellow group-hover:text-raisinBlack flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/20 transition-all duration-500 md:h-12 md:w-12">
                     <svg
                       className="h-4 w-4 transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1 md:h-5 md:w-5"
@@ -306,7 +302,6 @@ export default function ContactPage() {
       {/* HIGH-END FORMULARZ KONTAKTOWY */}
       {/* ============================================================================ */}
       <section className="bg-oxfordBlue relative z-10 w-full overflow-hidden px-6 py-24 lg:px-12 lg:py-40">
-        {/* Dekoracyjne nuty w Oxford Blue section */}
         <div className="pointer-events-none absolute top-1/2 left-[-10%] z-0 h-150 w-150 -translate-y-1/2 opacity-2">
           <Image
             src="/Asset-1.svg"
@@ -330,7 +325,6 @@ export default function ContactPage() {
 
           <div className="relative rounded-3xl border border-white/10 bg-white/3 p-8 shadow-2xl backdrop-blur-md md:p-12 lg:p-16">
             {isSubmitted ? (
-              // EKRAN SUKCESU (Po wysłaniu)
               <div className="animate-fade-in-up flex flex-col items-center justify-center py-20 text-center">
                 <div className="bg-arylideYellow text-oxfordBlue mb-8 flex h-24 w-24 items-center justify-center rounded-full">
                   <svg
@@ -357,9 +351,7 @@ export default function ContactPage() {
                 </p>
               </div>
             ) : (
-              // WŁAŚCIWY FORMULARZ
               <form onSubmit={handleSubmit} className="flex flex-col gap-12">
-                {/* 1. INTERAKTYWNY WYBÓR TEMATU + POLE DLA "INNE" */}
                 <FadeIn delay="100ms">
                   <span className="font-montserrat mb-4 block text-xs font-bold tracking-[0.2em] text-white/50 uppercase">
                     01. W jakiej sprawie piszesz?
@@ -382,7 +374,6 @@ export default function ContactPage() {
                     ))}
                   </div>
 
-                  {/* Dynamicznie pojawiające się pole tekstowe dla tematu "Inne" */}
                   <div
                     className={`grid transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                       activeSubject === "Inne"
@@ -405,7 +396,6 @@ export default function ContactPage() {
                 </FadeIn>
 
                 <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-8">
-                  {/* 2. IMIĘ I NAZWISKO */}
                   <FadeIn delay="200ms" className="group relative">
                     <span className="font-montserrat group-focus-within:text-arylideYellow mb-2 block text-xs font-bold tracking-[0.2em] text-white/50 uppercase transition-colors">
                       02. Twoje Imię i Nazwisko
@@ -416,11 +406,9 @@ export default function ContactPage() {
                       placeholder="Jan Kowalski"
                       className="font-montserrat focus:border-arylideYellow w-full border-b border-white/20 bg-transparent py-4 text-xl font-light text-white transition-colors outline-none placeholder:text-white/20 md:text-2xl"
                     />
-                    {/* Złota linia wjeżdżająca na focus */}
                     <div className="bg-arylideYellow absolute bottom-0 left-0 h-0.5 w-0 transition-all duration-500 ease-out group-focus-within:w-full" />
                   </FadeIn>
 
-                  {/* 3. ADRES E-MAIL */}
                   <FadeIn delay="300ms" className="group relative">
                     <span className="font-montserrat group-focus-within:text-arylideYellow mb-2 block text-xs font-bold tracking-[0.2em] text-white/50 uppercase transition-colors">
                       03. Twój e-mail
@@ -435,7 +423,6 @@ export default function ContactPage() {
                   </FadeIn>
                 </div>
 
-                {/* 4. TREŚĆ WIADOMOŚCI */}
                 <FadeIn delay="400ms" className="group relative">
                   <span className="font-montserrat group-focus-within:text-arylideYellow mb-4 block text-xs font-bold tracking-[0.2em] text-white/50 uppercase transition-colors">
                     04. Treść wiadomości
@@ -449,7 +436,6 @@ export default function ContactPage() {
                   <div className="bg-arylideYellow absolute bottom-0 left-0 h-0.5 w-0 transition-all duration-500 ease-out group-focus-within:w-full" />
                 </FadeIn>
 
-                {/* 5. SUBMIT */}
                 <FadeIn
                   delay="500ms"
                   className="mt-4 flex flex-col items-center justify-between gap-6 sm:flex-row sm:items-end"
@@ -493,7 +479,7 @@ export default function ContactPage() {
       </section>
 
       {/* ============================================================================ */}
-      {/* SOCIAL MEDIA - GIGANTYCZNE LINKI */}
+      {/* SOCIAL MEDIA - GIGANTYCZNE LINKI (Dynamiczne z Sanity) */}
       {/* ============================================================================ */}
       <section className="relative z-10 w-full bg-[#141414] py-24 text-center lg:py-32">
         <FadeIn>
@@ -503,8 +489,8 @@ export default function ContactPage() {
         </FadeIn>
 
         <div className="mx-auto mt-12 flex max-w-4xl flex-wrap justify-center gap-4 px-6 md:gap-8">
-          {socialLinks.map((social, index) => (
-            <FadeIn key={social.name} delay={`${index * 150}ms`}>
+          {socials.map((social, index) => (
+            <FadeIn key={social.platform} delay={`${index * 150}ms`}>
               <a
                 href={social.url}
                 target="_blank"
@@ -512,9 +498,9 @@ export default function ContactPage() {
                 className="group font-montserrat hover:border-arylideYellow hover:bg-arylideYellow hover:text-raisinBlack flex items-center gap-3 rounded-full border border-white/10 bg-transparent px-8 py-4 text-sm font-bold tracking-widest text-white uppercase transition-all duration-500 hover:-translate-y-1 md:px-10 md:py-5 md:text-base"
               >
                 <div className="scale-125 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-12">
-                  {social.icon}
+                  {getSocialIcon(social.platform)}
                 </div>
-                <span className="hidden sm:block">{social.name}</span>
+                <span className="hidden sm:block">{social.platform}</span>
               </a>
             </FadeIn>
           ))}

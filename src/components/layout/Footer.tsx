@@ -19,6 +19,9 @@ export default function Footer() {
   // Pobieramy dane kontaktowe, social media oraz autora prosto z kontekstu zasilanego przez Sanity!
   const { contact, socials, author } = useSiteSettings();
 
+  // DODANE: Rozszerzamy główne linki o zakładkę "Opinie" tylko dla stopki
+  const footerLinks = [...mainLinks, { name: "Opinie", path: "/opinie" }];
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -86,14 +89,14 @@ export default function Footer() {
             </FadeIn>
           </div>
 
-          {/* KOLUMNA 2: NAWIGACJA */}
+          {/* KOLUMNA 2: NAWIGACJA (Zaktualizowana o Opinie) */}
           <div className="flex flex-col lg:col-span-3 lg:col-start-6">
             <FadeIn delay="200ms">
               <span className="font-montserrat mb-8 block text-[0.65rem] font-bold tracking-[0.4em] text-white/30 uppercase">
                 Eksploruj
               </span>
               <ul className="flex flex-col gap-4">
-                {mainLinks.map((link) => {
+                {footerLinks.map((link) => {
                   const isActive = pathname === link.path;
                   return (
                     <li key={link.name}>
