@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+import { defineQuery } from "next-sanity";
 import FadeIn from "@/components/ui/FadeIn";
 import { sanityFetch } from "@/sanity/lib/live"; // Upewnij się, że ścieżka do Twojego sanityFetch jest prawidłowa
-import { defineQuery } from "next-sanity";
 
 // Zapytanie GROQ: Pobierz wszystkie kamienie milowe i posortuj je rosnąco według pola 'order'
 const MILESTONES_QUERY = defineQuery(`

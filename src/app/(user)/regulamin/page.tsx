@@ -2,8 +2,8 @@
 "use client";
 
 import Link from "next/link";
-import FadeIn from "@/components/ui/FadeIn";
 import { useSiteSettings } from "@/components/providers/SettingsProvider";
+import FadeIn from "@/components/ui/FadeIn";
 
 export default function TermsPage() {
   // Pobieramy dane kontaktowe z Sanity
