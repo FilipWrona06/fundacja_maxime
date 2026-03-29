@@ -1,34 +1,117 @@
 import Image from "next/image";
 import Link from "next/link";
+import { defineQuery } from "next-sanity";
 import FadeIn from "@/components/ui/FadeIn";
+import { sanityFetch } from "@/sanity/lib/live";
 
-const dynamicData = {
-  event: {
-    date: "24",
-    month: "MAJ",
-    year: "2026",
-    title: "Symfonia Światła: Wiosenne Przebudzenie",
-    location: "Filharmonia Narodowa, Warszawa",
-    image: "/video-poster.webp",
-    link: "/wydarzenia/symfonia-swiatla",
+// 1. GŁÓWNE ZAPYTANIE GROQ POBIERAJĄCE WSZYSTKO NA RAZ
+const HOME_DATA_QUERY = defineQuery(`{
+  "upcomingEvent": *[_type == "event" && date >= now()] | order(date asc)[0] {
+    "id": slug.current, title, date, location, "image": image.asset->url
   },
-  news: {
-    date: "15 Marca 2026",
-    title: "Za kulisami: Przygotowania do sezonu",
+  "pastEvent": *[_type == "event" && date < now()] | order(date desc)[0] {
+    "id": slug.current, title, date, location, "image": image.asset->url
+  },
+  "news": *[_type == "news"] | order(publishedAt desc)[0] {
+    "id": slug.current, title, excerpt, publishedAt, "image": image.asset->url
+  },
+  "gallery": *[_type == "gallery"] | order(date desc)[0] {
+    "id": slug.current, title, "image": coverImage.asset->url, "count": count(photos)
+  }
+}`);
+
+// Funkcja pomocnicza do poprawnej polskiej odmiany słowa "zdjęcie" (np. 1 zdjęcie, 2 zdjęcia, 5 zdjęć)
+function formatPhotosCount(count: number) {
+  if (count === 1) return "1 zdjęcie";
+  const remainder10 = count % 10;
+  const remainder100 = count % 100;
+  if (
+    remainder10 >= 2 &&
+    remainder10 <= 4 &&
+    (remainder100 < 10 || remainder100 >= 20)
+  ) {
+    return `${count} zdjęcia`;
+  }
+  return `${count} zdjęć`;
+}
+
+// 2. KOMPONENT SERWEROWY
+export default async function LatestUpdates() {
+  // Pobieramy dane z Sanity
+  const { data } = await sanityFetch({ query: HOME_DATA_QUERY });
+
+  // Jeśli jest nadchodzące wydarzenie, bierzemy je. Jeśli nie - bierzemy ostatnie historyczne.
+  const eventRaw = data.upcomingEvent || data.pastEvent;
+  const newsRaw = data.news;
+  const galleryRaw = data.gallery;
+
+  // --- FORMATOWANIE WYDARZENIA ---
+  const dEvent = eventRaw?.date ? new Date(eventRaw.date) : new Date();
+  const monthsPlShort = [
+    "STY",
+    "LUT",
+    "MAR",
+    "KWI",
+    "MAJ",
+    "CZE",
+    "LIP",
+    "SIE",
+    "WRZ",
+    "PAŹ",
+    "LIS",
+    "GRU",
+  ];
+
+  const eventData = {
+    date: eventRaw ? String(dEvent.getDate()).padStart(2, "0") : "00",
+    month: eventRaw ? monthsPlShort[dEvent.getMonth()] : "B/D",
+    year: eventRaw ? String(dEvent.getFullYear()) : "0000",
+    title: eventRaw?.title || "Brak zaplanowanych wydarzeń",
+    location: eventRaw?.location || "Miejsce do ustalenia",
+    image: eventRaw?.image || "/video-poster.webp",
+    link: eventRaw ? `/wydarzenia/${eventRaw.id}` : "/wydarzenia",
+  };
+
+  // --- FORMATOWANIE AKTUALNOŚCI ---
+  const dNews = newsRaw?.publishedAt
+    ? new Date(newsRaw.publishedAt)
+    : new Date();
+  const monthsPlGenitive = [
+    "Stycznia",
+    "Lutego",
+    "Marca",
+    "Kwietnia",
+    "Maja",
+    "Czerwca",
+    "Lipca",
+    "Sierpnia",
+    "Września",
+    "Października",
+    "Listopada",
+    "Grudnia",
+  ];
+
+  const newsData = {
+    date: newsRaw
+      ? `${dNews.getDate()} ${monthsPlGenitive[dNews.getMonth()]} ${dNews.getFullYear()}`
+      : "Brak daty",
+    title: newsRaw?.title || "Brak aktualności",
     excerpt:
-      "Spędziliśmy ostatnie tygodnie na intensywnych próbach. Zobacz, jak nasz zespół przygotowuje się do najważniejszych koncertów tego roku i co szykujemy.",
-    image: "/video-poster.webp",
-    link: "/aktualnosci/za-kulisami",
-  },
-  gallery: {
-    title: "Gala Jubileuszowa Maxime",
-    count: "42 zdjęcia",
-    image: "/video-poster.webp",
-    link: "/galeria/gala-jubileuszowa",
-  },
-};
+      newsRaw?.excerpt ||
+      "Zajrzyj tu wkrótce po nową dawkę informacji ze świata naszej muzyki.",
+    image: newsRaw?.image || "/video-poster.webp",
+    link: newsRaw ? `/aktualnosci/${newsRaw.id}` : "/aktualnosci",
+  };
 
-export default function LatestUpdates() {
+  // --- FORMATOWANIE GALERII ---
+  const galleryData = {
+    title: galleryRaw?.title || "Brak galerii",
+    count: formatPhotosCount(galleryRaw?.count || 0),
+    image: galleryRaw?.image || "/video-poster.webp",
+    link: galleryRaw ? `/galeria/${galleryRaw.id}` : "/galeria",
+  };
+
+  // 3. RENDEROWANIE UI Z UŻYCIEM DANYCH Z SANITY
   return (
     <section className="relative z-30 w-full overflow-hidden bg-[#F4F4F5] py-24 lg:py-32 xl:py-48">
       {/* --- TŁO: DOSŁOWNA PIĘCIOLINIA --- */}
@@ -65,13 +148,10 @@ export default function LatestUpdates() {
         </div>
 
         {/* --- ROZKŁADÓWKA --- */}
-        {/* Zmiana breakpointu z lg na xl dla układu 2-kolumnowego */}
         <div className="grid grid-cols-1 items-start gap-24 md:gap-32 xl:grid-cols-12 xl:gap-16">
-          {/* ----- KOLUMNA 1 (Lewa) ----- */}
-          {/* Wyśrodkowanie na tabletach (md/lg) */}
+          {/* ----- KOLUMNA 1 (Lewa) - WYDARZENIA ----- */}
           <div className="relative w-full md:mx-auto md:max-w-150 xl:col-span-6 xl:mx-0 xl:max-w-none">
             <FadeIn delay="200ms">
-              {/* Mniejsze napisy na mobile (text-[4.5rem] i text-[2.4rem]) */}
               <div className="mb-6 flex items-end gap-2 sm:mb-8">
                 <span className="text-transparent[-webkit-text-stroke:2px_rgba(38,38,38,0.2)] font-montserrat text-[4.5rem] leading-none font-black sm:text-[6rem] xl:text-[7rem]">
                   01
@@ -82,42 +162,41 @@ export default function LatestUpdates() {
               </div>
 
               <Link
-                href={dynamicData.event.link}
+                href={eventData.link}
                 className="group relative block w-full"
               >
                 <div className="bg-raisinBlack relative aspect-4/5 w-full overflow-hidden xl:w-[85%]">
                   <Image
-                    src={dynamicData.event.image}
-                    alt={dynamicData.event.title}
+                    src={eventData.image}
+                    alt={eventData.title}
                     fill
                     className="object-cover opacity-90 transition-transform duration-1500 group-hover:scale-105 group-hover:opacity-100"
                   />
                 </div>
 
-                {/* Zmniejszone nakładanie się elementów na telefonach (-left-2 zamiast -left-4) */}
                 <div className="bg-raisinBlack absolute top-16 -left-2 z-20 flex flex-col items-center justify-center px-6 py-8 shadow-2xl transition-transform duration-700 group-hover:-translate-y-4 sm:top-24 sm:-left-4 sm:px-8 sm:py-10 xl:-left-12 xl:px-12 xl:py-14">
                   <span className="font-montserrat text-5xl leading-none font-black tracking-tighter text-white sm:text-6xl xl:text-8xl">
-                    {dynamicData.event.date}
+                    {eventData.date}
                   </span>
                   <span className="font-montserrat text-arylideYellow mt-2 text-sm font-bold tracking-widest uppercase xl:text-lg">
-                    {dynamicData.event.month}
+                    {eventData.month}
                   </span>
                 </div>
 
                 <div className="absolute -right-2 -bottom-12 z-20 w-[95%] bg-white p-6 shadow-[0_30px_60px_rgba(0,0,0,0.1)] transition-transform duration-700 group-hover:-translate-y-2 sm:-right-4 sm:-bottom-16 sm:w-[90%] sm:p-8 xl:-right-8 xl:p-10">
                   <div className="bg-arylideYellow mb-4 h-1 w-12 xl:w-16" />
                   <h4 className="font-montserrat text-raisinBlack group-hover:text-oxfordBlue mb-3 text-xl leading-tight font-bold transition-colors sm:text-2xl xl:mb-4 xl:text-3xl">
-                    {dynamicData.event.title}
+                    {eventData.title}
                   </h4>
                   <span className="font-montserrat text-[0.6rem] font-bold tracking-widest text-gray-500 uppercase xl:text-[0.65rem]">
-                    {dynamicData.event.location}
+                    {eventData.location}
                   </span>
                 </div>
               </Link>
             </FadeIn>
           </div>
 
-          {/* ----- KOLUMNA 2 (Prawa) ----- */}
+          {/* ----- KOLUMNA 2 (Prawa) - AKTUALNOŚCI I GALERIA ----- */}
           <div className="flex flex-col gap-24 md:gap-32 xl:col-span-6 xl:mt-40">
             {/* ELEMENT: AKTUALNOŚCI */}
             <div className="w-full md:mx-auto md:max-w-150 xl:mx-0 xl:max-w-none">
@@ -134,24 +213,24 @@ export default function LatestUpdates() {
                 <div className="relative w-full">
                   <div className="bg-raisinBlack relative ml-auto aspect-4/3 w-[90%] overflow-hidden sm:w-[85%]">
                     <Image
-                      src={dynamicData.news.image}
-                      alt={dynamicData.news.title}
+                      src={newsData.image}
+                      alt={newsData.title}
                       fill
                       className="object-cover transition-transform duration-1500 hover:scale-105"
                     />
                   </div>
                   <div className="border-oxfordBlue relative z-10 -mt-16 w-[95%] border-t-4 bg-white p-6 shadow-[0_20px_50px_rgba(0,0,0,0.08)] sm:-mt-24 sm:w-[90%] sm:p-8 xl:-mt-32 xl:p-10">
                     <span className="font-montserrat mb-3 block text-[0.6rem] font-bold tracking-widest text-gray-400 uppercase xl:mb-4 xl:text-[0.65rem]">
-                      {dynamicData.news.date}
+                      {newsData.date}
                     </span>
                     <h4 className="font-montserrat text-raisinBlack mb-4 text-xl leading-tight font-bold sm:text-2xl xl:mb-6 xl:text-3xl">
-                      {dynamicData.news.title}
+                      {newsData.title}
                     </h4>
                     <p className="font-montserrat mb-6 line-clamp-3 text-xs leading-relaxed font-light text-gray-600 sm:text-sm xl:mb-8">
-                      {dynamicData.news.excerpt}
+                      {newsData.excerpt}
                     </p>
                     <Link
-                      href={dynamicData.news.link}
+                      href={newsData.link}
                       className="group font-montserrat text-oxfordBlue hover:text-arylideYellow inline-flex items-center gap-4 text-[0.65rem] font-bold tracking-widest uppercase transition-colors xl:text-[0.7rem]"
                     >
                       Czytaj wpis
@@ -162,7 +241,6 @@ export default function LatestUpdates() {
                         stroke="currentColor"
                         strokeWidth={2}
                       >
-                        <title>Strzałka czytaj dalej</title>
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -176,7 +254,6 @@ export default function LatestUpdates() {
             </div>
 
             {/* ELEMENT: GALERIA */}
-            {/* PRZESUNIĘCIE: xl:-ml-75 przesuwa Galerię do środka kompozycji! */}
             <div className="w-full md:mx-auto md:max-w-150 xl:mx-0 xl:-ml-75 xl:max-w-none">
               <FadeIn delay="600ms">
                 <div className="mb-6 flex items-end gap-2 sm:mb-8">
@@ -189,13 +266,13 @@ export default function LatestUpdates() {
                 </div>
 
                 <Link
-                  href={dynamicData.gallery.link}
+                  href={galleryData.link}
                   className="group relative block w-full"
                 >
                   <div className="bg-raisinBlack relative aspect-video w-full overflow-hidden">
                     <Image
-                      src={dynamicData.gallery.image}
-                      alt={dynamicData.gallery.title}
+                      src={galleryData.image}
+                      alt={galleryData.title}
                       fill
                       className="object-cover opacity-60 transition-transform duration-2000 group-hover:scale-105 group-hover:opacity-40"
                     />
@@ -206,10 +283,10 @@ export default function LatestUpdates() {
                       Galeria zdjęć
                     </span>
                     <h4 className="font-montserrat mb-2 text-lg leading-tight font-bold text-white sm:text-xl xl:text-2xl">
-                      {dynamicData.gallery.title}
+                      {galleryData.title}
                     </h4>
                     <span className="font-montserrat text-[0.6rem] font-semibold tracking-widest text-white/50 uppercase xl:text-[0.65rem]">
-                      {dynamicData.gallery.count}
+                      {galleryData.count}
                     </span>
                   </div>
                 </Link>
