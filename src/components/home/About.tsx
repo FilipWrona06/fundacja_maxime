@@ -27,13 +27,12 @@ export default function About() {
 
       {/* 2. GŁÓWNY KONTENER */}
       <div className="relative z-10 w-full max-w-7xl px-6 lg:px-8">
-        {/* ZMIANA: Układ w 12 kolumnach (obok siebie) odpala się dopiero od monitorów (xl) */}
         <div className="grid grid-cols-1 items-center gap-16 md:gap-20 xl:grid-cols-12 xl:gap-20">
           {/* LEWA STRONA: Zdjęcie + Statystyki */}
-          {/* Dla tabletów (w tym iPad Pro) nakładamy max-w-[550px] i wyśrodkowujemy */}
           <div className="relative w-full md:mx-auto md:max-w-137.5 xl:col-span-5 xl:mx-0 xl:max-w-none">
             <FadeIn delay="200ms">
-              <div className="group bg-raisinBlack relative aspect-3/4 w-full overflow-hidden">
+              {/* ZMIANA: Dodano border-white/10 oraz shadow-2xl do głównego kontenera */}
+              <div className="group bg-raisinBlack relative aspect-3/4 w-full overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
                 <div className="absolute inset-0 h-full w-full">
                   <Image
                     src="/video-poster.webp"
@@ -42,11 +41,15 @@ export default function About() {
                     className="object-cover transition-transform duration-1500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
                   />
                 </div>
+
+                {/* NOWOŚĆ: Delikatne, kinowe obramowanie wewnętrzne (passe-partout) */}
+                {/* Animuje się w przeciwnym kierunku do zdjęcia, dając niesamowitą głębię */}
+                <div className="pointer-events-none absolute inset-5 z-10 border border-white/20 opacity-60 transition-all duration-1500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[0.96] group-hover:border-arylideYellow/60 group-hover:opacity-100 sm:inset-6" />
+
                 <div className="bg-raisinBlack/20 absolute inset-0 transition-colors duration-700 group-hover:bg-transparent" />
               </div>
             </FadeIn>
 
-            {/* Skoro na lg mamy teraz dużo miejsca (bo jedno pod drugim), wracamy do dużych statystyk */}
             <FadeIn
               delay="400ms"
               className="bg-raisinBlack absolute -right-4 -bottom-6 z-20 flex border border-white/5 p-6 shadow-xl sm:-right-8 lg:-right-10 lg:-bottom-8 lg:p-8 xl:-right-12 xl:-bottom-8"
@@ -77,7 +80,6 @@ export default function About() {
           </div>
 
           {/* PRAWA STRONA: Treść */}
-          {/* Również wyśrodkowana na tabletach dla idealnej symetrii ze zdjęciem */}
           <div className="flex flex-col pt-12 md:mx-auto md:max-w-137.5 xl:col-span-6 xl:col-start-7 xl:mx-0 xl:max-w-none xl:pt-0">
             <FadeIn delay="300ms">
               <div className="mb-10 flex items-center gap-6">
@@ -97,7 +99,6 @@ export default function About() {
                   łączy
                 </span>
                 <br />
-                {/* Przywróciłem piękny, ogromny napis dla ekranów lg, bo teraz ma na to miejsce */}
                 <span className="font-youngest text-arylideYellow relative -top-2 block text-[5rem] leading-none font-normal lg:text-[6.5rem] xl:text-[7rem]">
                   pokolenia.
                 </span>
