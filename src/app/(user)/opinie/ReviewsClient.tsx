@@ -41,7 +41,7 @@ export default function ReviewsClient({ reviews }: { reviews: ReviewProps[] }) {
 
       setIsSubmitted(true);
       setFormData({ name: "", role: "", text: "", rating: 5 });
-    } catch (err) {
+    } catch (_err) {
       setError("Nie udało się wysłać opinii. Spróbuj ponownie później.");
     } finally {
       setIsSubmitting(false);
