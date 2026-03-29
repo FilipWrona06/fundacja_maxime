@@ -1,7 +1,12 @@
+// src/app/layout.tsx
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
+
+// 1. IMPORTUJEMY KOMPONENT SanityLive
+// (Zmień ścieżkę importu, jeśli plik `live.ts` masz w innej lokalizacji, np. "@/sanity/lib/live")
+import { SanityLive } from "@/sanity/lib/live";
 
 export const metadata: Metadata = {
   title: "Stowarzyszenie Maxime | Z pasji do muzyki",
@@ -16,7 +21,7 @@ const montserrat = Montserrat({
 });
 
 const fontYoungest = localFont({
-  src: "../fonts/the-youngest-script.woff2", // upewnij się, że ta ścieżka nadal działa, jeśli nie, zmień na "@/fonts/..."
+  src: "../fonts/the-youngest-script.woff2",
   variable: "--font-youngest",
   display: "swap",
 });
@@ -29,10 +34,13 @@ export default function RootLayout({
   return (
     <html lang="pl">
       <body
-        className={` ${montserrat.variable} ${fontYoungest.variable} bg-raisinBlack font-montserrat selection:bg-arylideYellow selection:text-raisinBlack text-white antialiased`}
+        className={`${montserrat.variable} ${fontYoungest.variable} bg-raisinBlack font-montserrat selection:bg-arylideYellow selection:text-raisinBlack text-white antialiased`}
       >
-        {/* Usunęliśmy stąd Navbar i Footer! Tutaj wpadają wszystkie strony (i strona, i Sanity) */}
         {children}
+
+        {/* 2. DODAJEMY KOMPONENT NA SAMYM DOLE BODY */}
+        {/* Odpowiada za nasłuchiwanie zmian (Real-time updates) */}
+        <SanityLive />
       </body>
     </html>
   );

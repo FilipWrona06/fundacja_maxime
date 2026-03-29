@@ -1,6 +1,6 @@
 import type { SchemaTypeDefinition } from "sanity";
-import { homePage } from "./homePage";
+import { eventType } from "./event";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [homePage],
+  types: [eventType],
 };

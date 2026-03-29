@@ -1,27 +1,7 @@
 // src/components/home/Hero.tsx
 import Link from "next/link";
-// Importujemy klienta Sanity (ścieżka zależy od tego, jak instalator utworzył foldery).
-// Zazwyczaj jest to "@/sanity/lib/client"
-import { client } from "@/sanity/lib/client";
 
-export default async function Hero() {
-  // 1. ZAPYTANIE DO SANITY (GROQ)
-  // Szukamy dokumentu typu "homePage" i pobieramy pierwszy z nich [0].
-  // revalidate: 10 sprawia, że zmiany pojawią się na stronie max 10 sekund po kliknięciu "Publish" w Sanity.
-  const query = `*[_type == "homePage"][0]`;
-  const data = await client.fetch(query, {}, { next: { revalidate: 10 } });
-
-  // 2. FALLBACKI (Zabezpieczenia)
-  // Jeśli w Sanity są dane, używamy ich. Jeśli nie ma (bo np. redaktor jeszcze nie opublikował), używamy domyślnych.
-  const heading = data?.heroHeading || "Z pasji do muzyki";
-  const subheading =
-    data?.heroSubheading ||
-    "Odkryj z nami piękno dźwięków. Talent, ambicja i profesjonalizm, które tworzą niezapomniane emocje.";
-  const primaryText = data?.heroButtonPrimaryText || "Zobacz wydarzenia";
-  const primaryLink = data?.heroButtonPrimaryLink || "/wydarzenia";
-  const secondaryText = data?.heroButtonSecondaryText || "Skontaktuj się";
-  const secondaryLink = data?.heroButtonSecondaryLink || "/kontakt";
-
+export default function Hero() {
   return (
     <section className="bg-raisinBlack relative flex min-h-screen w-full items-center justify-center overflow-hidden">
       {/* TŁO WIDEO I NAKŁADKI */}
@@ -41,7 +21,7 @@ export default async function Hero() {
 
       {/* GŁÓWNA TREŚĆ */}
       <div className="relative z-10 flex w-full max-w-6xl flex-col items-center justify-center px-4 pt-12 pb-28 text-center sm:py-0">
-        {/* NAGŁÓWEK (Z SANITY) */}
+        {/* NAGŁÓWEK */}
         <h1
           className="animate-fade-in-up font-youngest mb-2 py-4 text-[4.2rem] leading-[0.85] text-white opacity-0 sm:text-[5.5rem] sm:leading-tight md:text-[8rem] lg:mb-4 lg:text-[11.5rem]"
           style={{
@@ -50,29 +30,30 @@ export default async function Hero() {
               "0 10px 40px rgba(0,0,0,0.8), 0 0 120px rgba(255,255,255,0.15)",
           }}
         >
-          {heading}
+          Z pasji do muzyki
         </h1>
 
-        {/* PODTYTUŁ (Z SANITY) */}
+        {/* PODTYTUŁ */}
         <p
           className="animate-fade-in-up font-montserrat mb-8 max-w-3xl text-sm leading-relaxed font-light tracking-widest whitespace-pre-line text-white/80 opacity-0 sm:text-base md:mb-10 md:text-xl lg:text-2xl"
           style={{ animationDelay: "500ms" }}
         >
-          {subheading}
+          Odkryj z nami piękno dźwięków. Talent, ambicja i profesjonalizm, które
+          tworzą niezapomniane emocje.
         </p>
 
-        {/* PRZYCISKI (Z SANITY) */}
+        {/* PRZYCISKI */}
         <div
           className="animate-fade-in-up flex w-full max-w-[20rem] flex-col items-center justify-center gap-4 opacity-0 sm:w-auto sm:max-w-none sm:flex-row sm:gap-8"
           style={{ animationDelay: "800ms" }}
         >
           {/* PRZYCISK GŁÓWNY (Żółty) */}
           <Link
-            href={primaryLink}
+            href="/wydarzenia"
             className="group bg-arylideYellow font-montserrat text-raisinBlack relative flex w-full items-center justify-center gap-4 overflow-hidden rounded-full px-8 py-4 text-xs font-bold tracking-[0.2em] uppercase transition-all duration-700 hover:scale-[1.03] hover:shadow-[0_0_30px_-10px_rgba(239,203,111,0.6)] sm:w-auto sm:px-12"
           >
             <span className="relative z-10 flex items-center gap-3">
-              {primaryText}
+              Zobacz wydarzenia
               <svg
                 className="h-4 w-4 transition-transform duration-500 ease-out group-hover:translate-x-2"
                 fill="none"
@@ -93,10 +74,10 @@ export default async function Hero() {
 
           {/* PRZYCISK POBOCZNY (Przezroczysty) */}
           <Link
-            href={secondaryLink}
+            href="/kontakt"
             className="group font-montserrat hover:text-raisinBlack flex w-full items-center justify-center rounded-full border border-white/20 bg-white/5 px-8 py-4 text-xs font-bold tracking-[0.2em] text-white uppercase backdrop-blur-xl transition-all duration-700 hover:scale-[1.03] hover:bg-white sm:w-auto sm:px-12"
           >
-            {secondaryText}
+            Skontaktuj się
           </Link>
         </div>
       </div>
