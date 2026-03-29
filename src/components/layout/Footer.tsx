@@ -1,18 +1,23 @@
+// src/components/layout/Footer.tsx
 "use client";
 
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSiteSettings } from "@/components/providers/SettingsProvider";
 import FadeIn from "@/components/ui/FadeIn";
 import {
+  copyrightText,
+  getSocialIcon,
   legalLinks,
   mainLinks,
-  siteConfig,
-  socialLinks,
 } from "@/data/navigation";
 
 export default function Footer() {
   const pathname = usePathname();
+
+  // Pobieramy dane kontaktowe, social media oraz autora prosto z kontekstu zasilanego przez Sanity!
+  const { contact, socials, author } = useSiteSettings();
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -21,9 +26,7 @@ export default function Footer() {
   return (
     <footer className="bg-raisinBlack relative z-50 w-full overflow-hidden pt-24 lg:pt-32">
       {/* --- GIGANTYCZNY ZNAK WODNY NA SAMYM DOLE --- */}
-      {/* Zmiana: -bottom-2 i -bottom-4 dla lepszego dopasowania na telefonach */}
       <div className="pointer-events-none absolute -bottom-2 left-1/2 z-0 w-full -translate-x-1/2 text-center opacity-[0.03] select-none sm:-bottom-4 lg:-bottom-10">
-        {/* Zmiana: text-[20vw] na mobile, powrót do większych na desktopie */}
         <span className="font-montserrat block w-full text-[20vw] leading-none font-black text-white md:text-[22vw] lg:text-[22vw]">
           MAXIME
         </span>
@@ -58,7 +61,7 @@ export default function Footer() {
                     rel="noreferrer"
                     className="font-montserrat group-hover:text-arylideYellow text-sm leading-relaxed font-light whitespace-pre-line text-white/80 transition-colors"
                   >
-                    {siteConfig.contact.address}
+                    {contact.address}
                   </a>
                 </div>
 
@@ -67,16 +70,16 @@ export default function Footer() {
                     Kontakt
                   </span>
                   <a
-                    href={`mailto:${siteConfig.contact.email}`}
+                    href={`mailto:${contact.email}`}
                     className="font-montserrat group-hover:text-arylideYellow text-sm font-light text-white/80 transition-colors"
                   >
-                    {siteConfig.contact.email}
+                    {contact.email}
                   </a>
                   <a
-                    href={`tel:${siteConfig.contact.phone.replace(/\s+/g, "")}`}
+                    href={`tel:${contact.phone.replace(/\s+/g, "")}`}
                     className="font-montserrat group-hover:text-arylideYellow mt-1 text-sm font-light text-white/80 transition-colors"
                   >
-                    {siteConfig.contact.phone}
+                    {contact.phone}
                   </a>
                 </div>
               </div>
@@ -167,22 +170,22 @@ export default function Footer() {
                 </button>
               </form>
 
-              {/* SOCIAL MEDIA */}
+              {/* SOCIAL MEDIA (DYNAMICZNIE Z SANITY) */}
               <div className="mt-16">
                 <span className="font-montserrat mb-6 block text-[0.65rem] font-bold tracking-[0.4em] text-white/30 uppercase">
                   Społeczność
                 </span>
                 <ul className="flex flex-wrap gap-4">
-                  {socialLinks.map((social) => (
-                    <li key={social.name}>
+                  {socials.map((social) => (
+                    <li key={social.platform}>
                       <a
                         href={social.url}
                         target="_blank"
                         rel="noreferrer"
                         className="group hover:border-arylideYellow hover:bg-arylideYellow hover:text-raisinBlack flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-all duration-300 hover:-translate-y-1"
-                        aria-label={social.name}
+                        aria-label={social.platform}
                       >
-                        {social.icon}
+                        {getSocialIcon(social.platform)}
                       </a>
                     </li>
                   ))}
@@ -199,7 +202,7 @@ export default function Footer() {
             className="flex flex-col items-center gap-4 lg:items-start lg:gap-2"
           >
             <span className="font-montserrat text-xs font-light text-white/40">
-              {siteConfig.copyright}
+              {copyrightText}
             </span>
             <div className="flex gap-4">
               {legalLinks.map((link) => (
@@ -216,14 +219,14 @@ export default function Footer() {
 
           <FadeIn delay="800ms" className="flex items-center gap-8">
             <span className="font-montserrat text-xs font-light text-white/40">
-              Wykonanie:{" "}
+              Wykonanie: {/* DANE AUTORA POBIERANE Z SANITY */}
               <a
-                href={siteConfig.author.url}
+                href={author.url}
                 target="_blank"
                 rel="noreferrer"
                 className="hover:text-arylideYellow font-medium text-white transition-colors"
               >
-                {siteConfig.author.name}
+                {author.name}
               </a>
             </span>
 

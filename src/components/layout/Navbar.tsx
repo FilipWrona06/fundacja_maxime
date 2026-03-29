@@ -4,12 +4,21 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useSiteSettings } from "@/components/providers/SettingsProvider";
 import { mainLinks } from "@/data/navigation";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+
+  // Wyciągamy social media z kontekstu Sanity
+  const { socials } = useSiteSettings();
+
+  // Znajdujemy dynamicznie link do Patronite (jesli go brakuje, używamy bezpiecznego domyślnego)
+  const patroniteUrl =
+    socials.find((s) => s.platform.toLowerCase() === "patronite")?.url ||
+    "https://patronite.pl/stowarzyszeniemaxime";
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -20,7 +29,6 @@ export default function Navbar() {
   return (
     <>
       {/* GŁÓWNY WRAPPER NAWIGACJI */}
-      {/* Zmiana: z-50 na z-[100] aby navbar był absolutnie ZAWSZE na samej górze */}
       <header className="animate-slide-down fixed top-0 right-0 left-0 z-100 flex justify-center px-4 pt-4 lg:px-6 lg:pt-6">
         <nav
           className={`flex w-full items-center justify-between transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
@@ -67,10 +75,10 @@ export default function Navbar() {
             })}
           </ul>
 
-          {/* PRZYCISK WESPRZYJ */}
+          {/* PRZYCISK WESPRZYJ (DYNAMICZNY LINK Z SANITY) */}
           <div className="hidden shrink-0 lg:ml-4 lg:block xl:ml-8">
             <Link
-              href="https://patronite.pl/stowarzyszeniemaxime"
+              href={patroniteUrl}
               target="_blank"
               className="group border-arylideYellow font-montserrat text-arylideYellow hover:bg-arylideYellow hover:text-raisinBlack relative flex items-center justify-center rounded-full border bg-transparent px-8 py-3 text-[0.7rem] font-bold uppercase transition-all duration-500 lg:px-5 lg:py-2 lg:text-[0.65rem] lg:tracking-[0.15em] xl:px-8 xl:py-3 xl:text-[0.7rem] xl:tracking-[0.2em]"
             >
@@ -92,7 +100,6 @@ export default function Navbar() {
       </header>
 
       {/* MENU MOBILNE */}
-      {/* Zmiana: z-[60] na z-[110] aby menu po otwarciu przykryło navbar (który ma teraz 100) */}
       <div
         className={`fixed inset-0 z-110 flex justify-end transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           isMobileMenuOpen
@@ -158,7 +165,7 @@ export default function Navbar() {
 
           <div className="mt-auto pb-8">
             <Link
-              href="https://patronite.pl"
+              href={patroniteUrl}
               target="_blank"
               className="bg-arylideYellow font-montserrat text-raisinBlack flex w-full items-center justify-center rounded-full py-5 text-xs font-bold tracking-[0.2em] uppercase"
             >
