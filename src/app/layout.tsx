@@ -7,6 +7,10 @@ import { defineQuery } from "next-sanity";
 import { SettingsProvider } from "@/components/providers/SettingsProvider";
 import { SanityLive, sanityFetch } from "@/sanity/lib/live";
 
+// Importy Vercel Analytics i Speed Insights
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/react";
+
 const SETTINGS_QUERY = defineQuery(`
   *[_type == "siteSettings"][0] {
     contact { address, email, phone },
@@ -88,6 +92,8 @@ export default async function RootLayout({
       >
         <SettingsProvider settings={finalSettings}>{children}</SettingsProvider>
         <SanityLive />
+        <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );
