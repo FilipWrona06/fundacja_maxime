@@ -1,7 +1,7 @@
 // src/app/(user)/layout.tsx
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
-import NewsletterPopup from "@/components/ui/NewsletterPopup"; // <-- DODANY IMPORT
+import NewsletterPopup from "@/components/newsletter/NewsletterPopup"; // <-- DODANY IMPORT
 
 export default function SiteLayout({
   children,

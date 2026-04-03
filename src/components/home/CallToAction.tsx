@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import FadeIn from "@/components/ui/FadeIn";
-import NewsletterForm from "@/components/ui/NewsletterForm"; // <-- IMPORT NASZEGO NOWEGO KOMPONENTU
+import NewsletterForm from "@/components/newsletter/NewsletterForm"; // <-- IMPORT NASZEGO NOWEGO KOMPONENTU
 
 export default function CallToAction() {
   return (

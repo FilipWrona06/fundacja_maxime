@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSiteSettings } from "@/components/providers/SettingsProvider";
 import FadeIn from "@/components/ui/FadeIn";
-import NewsletterForm from "@/components/ui/NewsletterForm"; // <-- IMPORT NASZEGO NOWEGO KOMPONENTU
+import NewsletterForm from "@/components/newsletter/NewsletterForm"; // <-- IMPORT NASZEGO NOWEGO KOMPONENTU
 import {
   copyrightText,
   getSocialIcon,

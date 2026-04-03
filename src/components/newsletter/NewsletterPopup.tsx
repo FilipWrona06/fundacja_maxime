@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import NewsletterForm from "@/components/ui/NewsletterForm";
+import NewsletterForm from "@/components/newsletter/NewsletterForm";
 
 export default function NewsletterPopup() {
   const pathname = usePathname();

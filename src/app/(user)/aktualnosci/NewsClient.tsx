@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import FadeIn from "@/components/ui/FadeIn";
-import NewsletterForm from "@/components/ui/NewsletterForm"; // <-- IMPORT NASZEGO NOWEGO KOMPONENTU
+import NewsletterForm from "@/components/newsletter/NewsletterForm"; // <-- IMPORT NASZEGO NOWEGO KOMPONENTU
 
 export interface NewsProps {
   id: string;
