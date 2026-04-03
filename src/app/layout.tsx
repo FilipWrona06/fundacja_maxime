@@ -3,13 +3,12 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/react";
+// Importy Vercel Analytics i Speed Insights
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { defineQuery } from "next-sanity";
 import { SettingsProvider } from "@/components/providers/SettingsProvider";
 import { SanityLive, sanityFetch } from "@/sanity/lib/live";
-
-// Importy Vercel Analytics i Speed Insights
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Analytics } from "@vercel/analytics/react";
 
 const SETTINGS_QUERY = defineQuery(`
   *[_type == "siteSettings"][0] {

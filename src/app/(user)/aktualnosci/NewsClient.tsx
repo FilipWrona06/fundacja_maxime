@@ -4,13 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import FadeIn from "@/components/ui/FadeIn";
+import NewsletterForm from "@/components/ui/NewsletterForm"; // <-- IMPORT NASZEGO NOWEGO KOMPONENTU
 
 export interface NewsProps {
   id: string;
   date: string;
   month: string;
   year: string;
-  // USUNIĘTO: category
   title: string;
   excerpt: string;
   image: string;
@@ -136,8 +136,6 @@ export default function NewsClient({ newsData }: { newsData: NewsProps[] }) {
 
               <div className="mb-6 h-px w-full bg-white/10" />
 
-              {/* USUNIĘTO KATEGORIĘ TUTAJ */}
-
               <Link href={`/aktualnosci/${featuredPost.id}`}>
                 <h2 className="font-montserrat hover:text-arylideYellow mb-6 text-2xl leading-tight font-bold text-white transition-colors duration-300 lg:text-4xl">
                   {featuredPost.title}
@@ -216,7 +214,6 @@ export default function NewsClient({ newsData }: { newsData: NewsProps[] }) {
                   </div>
 
                   <div className="relative z-10 flex w-full flex-col md:flex-1">
-                    {/* USUNIĘTO KATEGORIĘ TUTAJ */}
                     <h4 className="font-montserrat mb-4 text-2xl leading-tight font-bold text-white transition-colors duration-300 group-hover:text-white lg:text-3xl">
                       {post.title}
                     </h4>
@@ -335,38 +332,9 @@ export default function NewsClient({ newsData }: { newsData: NewsProps[] }) {
             delay="500ms"
             className="mt-12 flex flex-col items-center justify-center"
           >
-            <form
-              onSubmit={(e) => e.preventDefault()}
-              className="group relative flex w-full max-w-lg items-end"
-            >
-              <div className="border-raisinBlack/20 hover:border-raisinBlack/50 group-focus-within:border-raisinBlack relative w-full border-b-2 pb-4 transition-colors duration-500">
-                <input
-                  type="email"
-                  placeholder="Twój adres e-mail"
-                  required
-                  className="font-montserrat text-raisinBlack placeholder:text-raisinBlack/40 w-full bg-transparent text-xl font-bold outline-none placeholder:font-light lg:text-2xl"
-                />
-              </div>
-              <button
-                type="submit"
-                aria-label="Zapisz się"
-                className="bg-raisinBlack text-arylideYellow hover:bg-oxfordBlue absolute right-0 bottom-3 flex h-12 w-12 items-center justify-center rounded-full shadow-xl transition-all duration-500 hover:scale-110 hover:text-white"
-              >
-                <svg
-                  className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2.5}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M14 5l7 7m0 0l-4 4m4-4H3"
-                  />
-                </svg>
-              </button>
-            </form>
+            {/* UŻYCIE USTANDARYZOWANEGO KOMPONENTU (wersja jasna) */}
+            <NewsletterForm variant="light" className="max-w-lg" />
+
             <span className="font-montserrat text-raisinBlack/40 mt-6 block text-[0.55rem] font-bold tracking-widest uppercase">
               * Bez spamu. Tylko czysta sztuka prosto na Twoją skrzynkę.
             </span>

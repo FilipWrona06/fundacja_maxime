@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import FadeIn from "@/components/ui/FadeIn";
+import NewsletterForm from "@/components/ui/NewsletterForm"; // <-- IMPORT NASZEGO NOWEGO KOMPONENTU
 
 export default function CallToAction() {
   return (
@@ -76,39 +77,9 @@ export default function CallToAction() {
 
             {/* HIGH-END NEWSLETTER INPUT */}
             <FadeIn delay="400ms">
-              <form
-                onSubmit={(e) => e.preventDefault()}
-                className="group relative flex w-full max-w-lg items-end"
-              >
-                <div className="border-raisinBlack/20 hover:border-raisinBlack/50 group-focus-within:border-raisinBlack relative w-full border-b-2 pb-4 transition-colors duration-500">
-                  <input
-                    type="email"
-                    placeholder="Twój adres e-mail"
-                    required
-                    className="font-montserrat text-raisinBlack placeholder:text-raisinBlack/40 w-full bg-transparent text-xl font-bold outline-none placeholder:font-light lg:text-2xl"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  aria-label="Zapisz się"
-                  className="bg-raisinBlack text-arylideYellow hover:bg-oxfordBlue absolute right-0 bottom-3 flex h-12 w-12 items-center justify-center rounded-full transition-all duration-500 hover:scale-110 hover:text-white"
-                >
-                  <svg
-                    className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2.5}
-                  >
-                    <title>Strzałka wyślij</title>
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M14 5l7 7m0 0l-7 7m7-7H3"
-                    />
-                  </svg>
-                </button>
-              </form>
+              {/* UŻYCIE USTANDARYZOWANEGO KOMPONENTU (wersja jasna) */}
+              <NewsletterForm variant="light" className="max-w-lg" />
+
               <span className="font-montserrat text-raisinBlack/40 mt-6 block text-[0.55rem] font-bold tracking-widest uppercase">
                 * Zapisując się, akceptujesz politykę prywatności. Żadnego
                 spamu, tylko sztuka.
@@ -119,7 +90,6 @@ export default function CallToAction() {
           {/* ============================================================== */}
           {/* PRAWA STRONA: GIGANTYCZNE PIGUŁY */}
           {/* ============================================================== */}
-          {/* Dodano wyśrodkowanie: w-full md:mx-auto lg:mx-0 */}
           <div className="flex w-full flex-col justify-center gap-6 md:mx-auto md:max-w-lg lg:col-span-6 lg:mx-0 lg:max-w-none lg:gap-8 lg:pl-8">
             {/* PRZYCISK 1 */}
             <FadeIn delay="400ms">

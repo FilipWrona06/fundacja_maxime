@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSiteSettings } from "@/components/providers/SettingsProvider";
 import FadeIn from "@/components/ui/FadeIn";
+import NewsletterForm from "@/components/ui/NewsletterForm"; // <-- IMPORT NASZEGO NOWEGO KOMPONENTU
 import {
   copyrightText,
   getSocialIcon,
@@ -19,7 +20,7 @@ export default function Footer() {
   // Pobieramy dane kontaktowe, social media oraz autora prosto z kontekstu zasilanego przez Sanity!
   const { contact, socials, author } = useSiteSettings();
 
-  // DODANE: Rozszerzamy główne linki o zakładkę "Opinie" tylko dla stopki
+  // Rozszerzamy główne linki o zakładkę "Opinie" tylko dla stopki
   const footerLinks = [...mainLinks, { name: "Opinie", path: "/opinie" }];
 
   const scrollToTop = () => {
@@ -89,7 +90,7 @@ export default function Footer() {
             </FadeIn>
           </div>
 
-          {/* KOLUMNA 2: NAWIGACJA (Zaktualizowana o Opinie) */}
+          {/* KOLUMNA 2: NAWIGACJA */}
           <div className="flex flex-col lg:col-span-3 lg:col-start-6">
             <FadeIn delay="200ms">
               <span className="font-montserrat mb-8 block text-[0.65rem] font-bold tracking-[0.4em] text-white/30 uppercase">
@@ -139,39 +140,8 @@ export default function Footer() {
                 zakulisowe.
               </p>
 
-              <form
-                onSubmit={(e) => e.preventDefault()}
-                className="group relative flex w-full items-end"
-              >
-                <div className="group-focus-within:border-arylideYellow relative w-full border-b border-white/20 pb-3 transition-colors duration-500 hover:border-white/50">
-                  <input
-                    type="email"
-                    placeholder="Twój adres e-mail"
-                    required
-                    className="font-montserrat w-full bg-transparent text-sm font-medium text-white outline-none placeholder:font-light placeholder:text-white/30"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  aria-label="Zapisz się"
-                  className="group-hover:text-arylideYellow absolute right-0 bottom-2 text-white/50 transition-colors duration-300"
-                >
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <title>Wpisz swój email</title>
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M14 5l7 7m0 0l-4 4m4-4H3"
-                    />
-                  </svg>
-                </button>
-              </form>
+              {/* UŻYCIE USTANDARYZOWANEGO KOMPONENTU */}
+              <NewsletterForm variant="dark" />
 
               {/* SOCIAL MEDIA (DYNAMICZNIE Z SANITY) */}
               <div className="mt-16">
