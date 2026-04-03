@@ -14,8 +14,10 @@ export default function NewsletterPopup() {
   const blockedPaths = ["/kontakt", "/regulamin", "/polityka-prywatnosci"];
 
   useEffect(() => {
+    // 1. Sprawdzamy czy nie jesteśmy na podstronie wykluczonej
     if (blockedPaths.includes(pathname)) return;
 
+    // 2. Sprawdzamy, czy użytkownik nie zamknął popupu w ciągu ostatnich 30 dni
     const popupClosedAt = localStorage.getItem("maxime_newsletter_closed");
     if (popupClosedAt) {
       const closedDate = new Date(popupClosedAt).getTime();
@@ -25,12 +27,21 @@ export default function NewsletterPopup() {
       if (now - closedDate < thirtyDays) return;
     }
 
+    let timer: NodeJS.Timeout;
+    let hasTriggered = false; // <-- PANCERNA BLOKADA: Upewnia się, że popup uruchomi się tylko raz
+
     const triggerPopup = () => {
+      if (hasTriggered) return; // Jeśli już kiedykolwiek się odpalił, blokujemy
+      if (localStorage.getItem("maxime_newsletter_closed")) return;
+
+      hasTriggered = true; // Zaznaczamy, że popup właśnie się uruchomił
       setIsVisible(true);
       setTimeout(() => setIsAnimating(true), 50);
 
+      // BARDZO WAŻNE: Natychmiast sprzątamy i zabijamy timer 45 sekund, żeby nie wyskoczył drugi raz!
       window.removeEventListener("mouseout", handleMouseOut);
       window.removeEventListener("scroll", handleScroll);
+      clearTimeout(timer);
     };
 
     const handleMouseOut = (e: MouseEvent) => {
@@ -43,14 +54,17 @@ export default function NewsletterPopup() {
       if (scrollDepth > 0.6) triggerPopup();
     };
 
-    const timer = setTimeout(() => {
-      triggerPopup();
-    }, 45000);
-
+    // Włączamy wyzwalacze
     window.addEventListener("mouseout", handleMouseOut);
     window.addEventListener("scroll", handleScroll);
 
+    // Włączamy timer awaryjny (jeśli ktoś siedzi bezczynnie przez 45 sekund)
+    timer = setTimeout(() => {
+      triggerPopup();
+    }, 45000);
+
     return () => {
+      // Sprzątanie po odmontowaniu komponentu
       window.removeEventListener("mouseout", handleMouseOut);
       window.removeEventListener("scroll", handleScroll);
       clearTimeout(timer);
@@ -59,6 +73,7 @@ export default function NewsletterPopup() {
 
   const closePopup = () => {
     setIsAnimating(false);
+    // Zapisujemy w pamięci przeglądarki, że zamknął popup - mamy spokój na 30 dni
     localStorage.setItem("maxime_newsletter_closed", new Date().toISOString());
     setTimeout(() => {
       setIsVisible(false);
@@ -87,10 +102,10 @@ export default function NewsletterPopup() {
             : "translate-y-16 scale-[0.95]"
         }`}
       >
-        {/* MIĘKKA GRANATOWA POŚWIATA (GLASSMORPHISM GLOW) */}
+        {/* MIĘKKA GRANATOWA POŚWIATA */}
         <div className="bg-oxfordBlue/40 pointer-events-none absolute -top-40 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full blur-[80px]" />
 
-        {/* ZNAK WODNY (PRZESUNIĘTY W DÓŁ, BY NIE KŁÓCIŁ SIĘ Z ZAMYKANIEM) */}
+        {/* ZNAK WODNY */}
         <div className="pointer-events-none absolute -bottom-32 -left-32 h-80 w-80 opacity-[0.03]">
           <Image
             src="/Asset-1.svg"
@@ -144,7 +159,6 @@ export default function NewsletterPopup() {
           </p>
 
           <div className="mb-8 w-full max-w-sm">
-            {/* NAPRAWIONE: Używamy wariantu "dark" (dla ciemnego tła) */}
             <NewsletterForm variant="dark" />
           </div>
 
@@ -153,7 +167,6 @@ export default function NewsletterPopup() {
             className="font-montserrat group relative inline-flex items-center gap-2 text-[0.6rem] font-bold tracking-[0.2em] text-white/30 uppercase transition-colors hover:text-white/80"
           >
             <span>Nie, dziękuję. Zamykam powiadomienie.</span>
-            {/* Linia pojawiająca się przy hoverze */}
             <span className="absolute -bottom-1 left-0 h-px w-0 bg-white/30 transition-all duration-300 group-hover:w-full" />
           </button>
         </div>
