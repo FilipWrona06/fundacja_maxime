@@ -1,4 +1,4 @@
-// src/app/opinie/page.tsx
+// src/app/(user)/opinie/page.tsx
 import { defineQuery } from "next-sanity";
 import { sanityFetch } from "@/sanity/lib/live";
 import ReviewsClient from "./ReviewsClient";

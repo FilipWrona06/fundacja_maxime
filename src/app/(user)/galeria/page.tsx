@@ -1,3 +1,4 @@
+// src/app/(user)/galeria/page.tsx
 import { defineQuery } from "next-sanity";
 import { sanityFetch } from "@/sanity/lib/live";
 import GalleryClient, { type AlbumProps } from "./GalleryClient";

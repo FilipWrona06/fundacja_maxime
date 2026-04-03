@@ -1,4 +1,4 @@
-// src/app/wydarzenia/EventsClient.tsx
+// src/app/(user)/wydarzenia/EventsClient.tsx
 "use client";
 
 import Image from "next/image";

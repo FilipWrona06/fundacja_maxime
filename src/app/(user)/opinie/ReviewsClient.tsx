@@ -1,4 +1,4 @@
-// src/app/opinie/ReviewsClient.tsx
+// src/app/(user)/opinie/ReviewsClient.tsx
 "use client";
 
 import Image from "next/image";

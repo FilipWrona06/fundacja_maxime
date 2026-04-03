@@ -1,4 +1,4 @@
-// src/app/kontakt/page.tsx
+// src/app/(user)/kontakt/page.tsx
 "use client";
 
 import Image from "next/image";

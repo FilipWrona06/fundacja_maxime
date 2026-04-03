@@ -1,3 +1,4 @@
+// src/app/(user)/galeria/GalleryClient.tsx
 "use client";
 
 import Image from "next/image";

@@ -1,4 +1,4 @@
-// src/data/navigation.ts
+// src/data/navigation.tsx
 
 export const authorConfig = {
   name: "Filip Wrona",

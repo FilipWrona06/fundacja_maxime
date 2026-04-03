@@ -1,4 +1,4 @@
-// src/app/wydarzenia/page.tsx
+// src/app/(user)/wydarzenia/page.tsx
 import { defineQuery } from "next-sanity";
 import { sanityFetch } from "@/sanity/lib/live";
 import EventsClient, { type EventProps } from "./EventsClient";

@@ -1,3 +1,4 @@
+// src/app/(user)/o-nas/page.tsx
 import Image from "next/image";
 import Link from "next/link";
 import { defineQuery } from "next-sanity";

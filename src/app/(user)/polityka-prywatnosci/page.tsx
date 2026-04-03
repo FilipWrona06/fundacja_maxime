@@ -1,4 +1,4 @@
-// src/app/polityka-prywatnosci/page.tsx
+// src/app/(user)/polityka-prywatnosci/page.tsx
 "use client";
 
 import Link from "next/link";

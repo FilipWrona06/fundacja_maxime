@@ -1,4 +1,4 @@
-// src/app/wydarzenia/[slug]/page.tsx
+// src/app/(user)/wydarzenia/[slug]/page.tsx
 
 import { PortableText } from "@portabletext/react";
 import Image from "next/image";

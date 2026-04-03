@@ -1,3 +1,4 @@
+// src/sanity/schemaTypes/news.ts
 import { defineField, defineType } from "sanity";
 
 export const newsType = defineType({

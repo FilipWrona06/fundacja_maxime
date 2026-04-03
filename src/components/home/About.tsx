@@ -1,3 +1,4 @@
+// src/components/home/About.tsx
 import Image from "next/image";
 import Link from "next/link";
 import FadeIn from "@/components/ui/FadeIn";

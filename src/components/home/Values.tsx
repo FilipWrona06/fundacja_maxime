@@ -1,3 +1,4 @@
+// src/components/home/Values.tsx
 import Image from "next/image";
 import FadeIn from "@/components/ui/FadeIn";
 

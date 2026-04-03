@@ -1,3 +1,4 @@
+// src/app/(user)/aktualnosci/page.tsx
 import { defineQuery } from "next-sanity";
 import { sanityFetch } from "@/sanity/lib/live";
 import NewsClient, { type NewsProps } from "./NewsClient";

@@ -1,3 +1,4 @@
+// src/app/(user)/page.tsx
 import About from "@/components/home/About";
 import CallToAction from "@/components/home/CallToAction";
 import Hero from "@/components/home/Hero";

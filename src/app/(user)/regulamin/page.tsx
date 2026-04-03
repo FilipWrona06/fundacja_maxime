@@ -1,4 +1,4 @@
-// src/app/regulamin/page.tsx
+// src/app/(user)/regulamin/page.tsx
 "use client";
 
 import Link from "next/link";
