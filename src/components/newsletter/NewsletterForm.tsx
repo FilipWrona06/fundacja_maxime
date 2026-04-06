@@ -48,7 +48,6 @@ export default function NewsletterForm({
           className={`animate-fade-in-up flex flex-col items-center justify-center p-4 text-center transition-all ${isDark ? "text-white" : "text-raisinBlack"}`}
         >
           <div className="bg-arylideYellow text-raisinBlack mb-3 flex h-12 w-12 items-center justify-center rounded-full">
-            {/* Zmieniona ikona na kopertę e-mail */}
             <svg
               className="h-6 w-6"
               fill="none"
@@ -63,7 +62,6 @@ export default function NewsletterForm({
               />
             </svg>
           </div>
-          {/* Dodany text-sm, żeby dłuższy komunikat lepiej się układał */}
           <p className="font-montserrat max-w-70 text-sm leading-relaxed font-bold">
             {message}
           </p>
@@ -161,7 +159,11 @@ export default function NewsletterForm({
 
           {/* CHECKBOX ZGODNY Z RODO / UŚUDE / PT */}
           <div className="mt-6 flex items-start gap-3">
-            <div className="relative mt-[0.15rem] flex h-4 w-4 shrink-0 items-center justify-center">
+            {/* ZMIANA 1: Zmieniono div na <label> z htmlFor. Teraz kwadracik reaguje na kliknięcia */}
+            <label
+              htmlFor={`rodo_${variant}`}
+              className="relative mt-[0.15rem] flex h-4 w-4 shrink-0 cursor-pointer items-center justify-center"
+            >
               <input
                 type="checkbox"
                 required
@@ -192,19 +194,24 @@ export default function NewsletterForm({
                   d="M5 13l4 4L19 7"
                 />
               </svg>
-            </div>
+            </label>
 
-            {/* Treść prawna */}
-            <label
-              htmlFor={`rodo_${variant}`}
-              className={`font-montserrat cursor-pointer text-left text-[0.55rem] leading-[1.6] tracking-widest uppercase transition-colors sm:text-[0.6rem] ${
-                isDark
-                  ? "text-white/40 hover:text-white/60"
-                  : "text-raisinBlack/50 hover:text-raisinBlack/70"
+            {/* ZMIANA 2: Treść prawna wydzielona, by kliknięcie w link nie wywoływało checkboxa */}
+            <div
+              className={`font-montserrat text-left text-[0.55rem] leading-[1.6] tracking-widest uppercase transition-colors sm:text-[0.6rem] ${
+                isDark ? "text-white/40" : "text-raisinBlack/50"
               }`}
             >
-              Wyrażam zgodę na otrzymywanie informacji handlowych (Newsletter)
-              drogą elektroniczną od Stowarzyszenia Maxime. Zapoznałem/am się z{" "}
+              <label
+                htmlFor={`rodo_${variant}`}
+                className={`cursor-pointer transition-colors ${
+                  isDark ? "hover:text-white/60" : "hover:text-raisinBlack/70"
+                }`}
+              >
+                Wyrażam zgodę na otrzymywanie informacji handlowych (Newsletter)
+                drogą elektroniczną od Stowarzyszenia Maxime. Zapoznałem/am się
+                z{" "}
+              </label>
               <Link
                 href="/polityka-prywatnosci"
                 className={`font-bold transition-colors ${
@@ -216,7 +223,7 @@ export default function NewsletterForm({
                 Polityką Prywatności
               </Link>
               .
-            </label>
+            </div>
           </div>
         </form>
       )}
