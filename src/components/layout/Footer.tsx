@@ -1,10 +1,11 @@
 // src/components/layout/Footer.tsx
 "use client";
 
+import Cookies from "js-cookie"; // <-- IMPORT BIBLIOTEKI DO CIASTECZEK
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import NewsletterForm from "@/components/newsletter/NewsletterForm"; // <-- IMPORT NASZEGO NOWEGO KOMPONENTU
+import NewsletterForm from "@/components/newsletter/NewsletterForm";
 import { useSiteSettings } from "@/components/providers/SettingsProvider";
 import FadeIn from "@/components/ui/FadeIn";
 import {
@@ -17,7 +18,7 @@ import {
 export default function Footer() {
   const pathname = usePathname();
 
-  // Pobieramy dane kontaktowe, social media oraz autora prosto z kontekstu zasilanego przez Sanity!
+  // Pobieramy dane kontaktowe, social media oraz autora prosto z kontekstu zasilanego przez Sanity
   const { contact, socials, author } = useSiteSettings();
 
   // Rozszerzamy główne linki o zakładkę "Opinie" tylko dla stopki
@@ -25,6 +26,12 @@ export default function Footer() {
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // FUNKCJA DO RESETOWANIA CIASTECZEK I PRZYWRACANIA BANERA
+  const resetCookies = () => {
+    Cookies.remove("maxime_cookie_consent", { path: "/" });
+    window.location.reload(); // Odświeża stronę, aby od nowa zainicjować Google Consent i pokazać baner
   };
 
   return (
@@ -177,7 +184,8 @@ export default function Footer() {
             <span className="font-montserrat text-xs font-light text-white/40">
               {copyrightText}
             </span>
-            <div className="flex gap-4">
+            {/* Zmiana na flex-wrap w razie, gdyby na telefonach zabrakło miejsca na przycisk cookies */}
+            <div className="flex flex-wrap items-center justify-center gap-4 lg:justify-start">
               {legalLinks.map((link) => (
                 <Link
                   key={link.name}
@@ -187,6 +195,15 @@ export default function Footer() {
                   {link.name}
                 </Link>
               ))}
+
+              {/* NOWY PRZYCISK DO ZARZĄDZANIA COOKIES */}
+              <button
+                onClick={resetCookies}
+                type="button"
+                className="font-montserrat text-[0.65rem] font-medium tracking-widest text-white/30 uppercase transition-colors hover:text-white"
+              >
+                Zarządzaj Cookies
+              </button>
             </div>
           </FadeIn>
 
