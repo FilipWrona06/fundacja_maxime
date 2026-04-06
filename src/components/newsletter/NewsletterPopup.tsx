@@ -21,7 +21,7 @@ export default function NewsletterPopup() {
     const popupClosedAt = localStorage.getItem("maxime_newsletter_closed");
     if (popupClosedAt) {
       const closedDate = new Date(popupClosedAt).getTime();
-      const now = new Date().getTime();
+      const now = Date.now();
       const thirtyDays = 30 * 24 * 60 * 60 * 1000;
 
       if (now - closedDate < thirtyDays) return;

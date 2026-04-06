@@ -49,7 +49,7 @@ export async function sendEmail(formData: FormData) {
     }
 
     return { success: true };
-  } catch (error) {
+  } catch (_error) {
     return { error: "Wystąpił nieoczekiwany błąd serwera." };
   }
 }
