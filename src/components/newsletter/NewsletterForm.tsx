@@ -1,6 +1,6 @@
-// src/components/ui/NewsletterForm.tsx
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { subscribeToNewsletter } from "@/actions/subscribe";
 
@@ -31,7 +31,6 @@ export default function NewsletterForm({
     if (response.error) {
       setStatus("error");
       setMessage(response.error);
-      // Reset po błędzie żeby móc spróbować ponownie
       setTimeout(() => setStatus("idle"), 3000);
     } else {
       setStatus("success");
@@ -42,7 +41,6 @@ export default function NewsletterForm({
   return (
     <div className={`w-full ${className}`}>
       {status === "success" ? (
-        // EKRAN SUKCESU
         <div
           className={`animate-fade-in-up flex flex-col items-center justify-center p-4 text-center transition-all ${isDark ? "text-white" : "text-raisinBlack"}`}
         >
@@ -64,11 +62,11 @@ export default function NewsletterForm({
           <p className="font-montserrat font-bold">{message}</p>
         </div>
       ) : (
-        // FORMULARZ
         <form
           onSubmit={handleSubmit}
           className="group relative flex w-full flex-col"
         >
+          {/* POLE INPUT I PRZYCISK */}
           <div className="relative flex w-full items-end">
             <div
               className={`relative w-full transition-colors duration-500 ${
@@ -79,7 +77,7 @@ export default function NewsletterForm({
             >
               <input
                 type="email"
-                name="email" // <-- WAŻNE: To pozwala na pobranie wartości w Action
+                name="email"
                 placeholder="Twój adres e-mail"
                 required
                 disabled={status === "loading"}
@@ -102,9 +100,8 @@ export default function NewsletterForm({
               }`}
             >
               {status === "loading" ? (
-                // IKONA ŁADOWANIA (SPINNER)
                 <svg
-                  className={`animate-spin ${isDark ? "h-5 w-5" : "h-5 w-5"}`}
+                  className="h-5 w-5 animate-spin"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -124,7 +121,6 @@ export default function NewsletterForm({
                   ></path>
                 </svg>
               ) : (
-                // IKONA STRZAŁKI
                 <svg
                   className={`${isDark ? "h-5 w-5 transition-transform duration-300 group-focus-within:translate-x-1" : "h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"}`}
                   fill="none"
@@ -149,12 +145,74 @@ export default function NewsletterForm({
             </button>
           </div>
 
-          {/* KOMUNIKAT BŁĘDU (Pojawia się pod kreską) */}
+          {/* BŁĄD SYSTEMU */}
           {status === "error" && message && (
-            <span className="font-montserrat absolute -bottom-6 left-0 text-[0.65rem] font-bold text-red-400">
+            <span className="font-montserrat mt-3 text-[0.65rem] font-bold text-red-400">
               {message}
             </span>
           )}
+
+          {/* CHECKBOX ZGODNY Z RODO / UŚUDE / PT */}
+          <div className="mt-6 flex items-start gap-3">
+            <div className="relative mt-[0.15rem] flex h-4 w-4 shrink-0 items-center justify-center">
+              <input
+                type="checkbox"
+                required
+                name="rodo_consent"
+                id={`rodo_${variant}`}
+                disabled={status === "loading"}
+                className="peer sr-only" // Ukrywa domyślny checkbox, ale zostawia go w DOM dla HTML walidacji
+              />
+              {/* Nasz customowy, piękny wygląd checkboxa */}
+              <div
+                className={`h-4 w-4 rounded-sm border transition-all duration-300 ${
+                  isDark
+                    ? "peer-checked:border-arylideYellow peer-checked:bg-arylideYellow peer-focus:ring-arylideYellow/50 border-white/30 peer-focus:ring-2"
+                    : "border-raisinBlack/30 peer-checked:border-raisinBlack peer-checked:bg-raisinBlack peer-focus:ring-raisinBlack/50 peer-focus:ring-2"
+                }`}
+              />
+              {/* Ikona V pojawiająca się po zaznaczeniu */}
+              <svg
+                className={`absolute h-3 w-3 opacity-0 transition-opacity duration-300 peer-checked:opacity-100 ${
+                  isDark ? "text-oxfordBlue" : "text-arylideYellow"
+                }`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={3}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+
+            {/* Treść prawna */}
+            <label
+              htmlFor={`rodo_${variant}`}
+              className={`font-montserrat cursor-pointer text-left text-[0.55rem] leading-[1.6] tracking-widest uppercase transition-colors sm:text-[0.6rem] ${
+                isDark
+                  ? "text-white/40 hover:text-white/60"
+                  : "text-raisinBlack/50 hover:text-raisinBlack/70"
+              }`}
+            >
+              Wyrażam zgodę na otrzymywanie informacji handlowych (Newsletter)
+              drogą elektroniczną od Stowarzyszenia Maxime. Zapoznałem/am się z{" "}
+              <Link
+                href="/polityka-prywatnosci"
+                className={`font-bold transition-colors ${
+                  isDark
+                    ? "hover:text-arylideYellow text-white/70"
+                    : "text-raisinBlack hover:text-oxfordBlue"
+                }`}
+              >
+                Polityką Prywatności
+              </Link>
+              .
+            </label>
+          </div>
         </form>
       )}
     </div>

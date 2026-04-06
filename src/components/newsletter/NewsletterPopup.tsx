@@ -3,7 +3,11 @@
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import NewsletterForm from "@/components/newsletter/NewsletterForm";
+// Upewnij się, że ścieżka poniżej odpowiada miejscu Twojego NewsletterForm
+import NewsletterForm from "./NewsletterForm";
+
+// Przeniesienie wykluczonych ścieżek poza komponent zapobiega niepotrzebnym re-renderom
+const BLOCKED_PATHS = ["/kontakt", "/regulamin", "/polityka-prywatnosci"];
 
 export default function NewsletterPopup() {
   const pathname = usePathname();
@@ -11,11 +15,9 @@ export default function NewsletterPopup() {
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  const blockedPaths = ["/kontakt", "/regulamin", "/polityka-prywatnosci"];
-
   useEffect(() => {
     // 1. Sprawdzamy czy nie jesteśmy na podstronie wykluczonej
-    if (blockedPaths.includes(pathname)) return;
+    if (BLOCKED_PATHS.includes(pathname)) return;
 
     // 2. Sprawdzamy, czy użytkownik nie zamknął popupu w ciągu ostatnich 30 dni
     const popupClosedAt = localStorage.getItem("maxime_newsletter_closed");
@@ -36,9 +38,11 @@ export default function NewsletterPopup() {
 
       hasTriggered = true; // Zaznaczamy, że popup właśnie się uruchomił
       setIsVisible(true);
+
+      // Delikatne opóźnienie dla przeglądarki przed nałożeniem opacity-100
       setTimeout(() => setIsAnimating(true), 50);
 
-      // BARDZO WAŻNE: Natychmiast sprzątamy i zabijamy timer 45 sekund, żeby nie wyskoczył drugi raz!
+      // BARDZO WAŻNE: Natychmiast sprzątamy nasłuchiwania i zabijamy timer 45 sekund!
       window.removeEventListener("mouseout", handleMouseOut);
       window.removeEventListener("scroll", handleScroll);
       clearTimeout(timer);
@@ -54,7 +58,7 @@ export default function NewsletterPopup() {
       if (scrollDepth > 0.6) triggerPopup();
     };
 
-    // Włączamy wyzwalacze
+    // Włączamy wyzwalacze (Exit Intent i Scroll)
     window.addEventListener("mouseout", handleMouseOut);
     window.addEventListener("scroll", handleScroll);
 
@@ -64,7 +68,7 @@ export default function NewsletterPopup() {
     }, 45000);
 
     return () => {
-      // Sprzątanie po odmontowaniu komponentu
+      // Sprzątanie po odmontowaniu komponentu (np. przy przejściu na inną stronę)
       window.removeEventListener("mouseout", handleMouseOut);
       window.removeEventListener("scroll", handleScroll);
       clearTimeout(timer);
@@ -75,6 +79,7 @@ export default function NewsletterPopup() {
     setIsAnimating(false);
     // Zapisujemy w pamięci przeglądarki, że zamknął popup - mamy spokój na 30 dni
     localStorage.setItem("maxime_newsletter_closed", new Date().toISOString());
+
     setTimeout(() => {
       setIsVisible(false);
     }, 800);
@@ -90,8 +95,9 @@ export default function NewsletterPopup() {
     >
       {/* TŁO - CIEMNY BACKDROP Z MOCNYM BLUREM */}
       <div
-        className="bg-raisinBlack/80 absolute inset-0 backdrop-blur-md"
+        className="bg-raisinBlack/80 absolute inset-0 cursor-pointer backdrop-blur-md"
         onClick={closePopup}
+        aria-label="Zamknij popup"
       />
 
       {/* GŁÓWNY KONTENER POPUPU */}
@@ -105,7 +111,7 @@ export default function NewsletterPopup() {
         {/* MIĘKKA GRANATOWA POŚWIATA */}
         <div className="bg-oxfordBlue/40 pointer-events-none absolute -top-40 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full blur-[80px]" />
 
-        {/* ZNAK WODNY */}
+        {/* ZNAK WODNY (ASSET BRANDOWY) */}
         <div className="pointer-events-none absolute -bottom-32 -left-32 h-80 w-80 opacity-[0.03]">
           <Image
             src="/Asset-1.svg"
@@ -115,8 +121,9 @@ export default function NewsletterPopup() {
           />
         </div>
 
-        {/* PRZYCISK ZAMKNIJ */}
+        {/* PRZYCISK ZAMKNIJ (X) */}
         <button
+          type="button"
           onClick={closePopup}
           className="group hover:bg-arylideYellow hover:text-raisinBlack absolute top-6 right-6 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-all duration-500"
           aria-label="Zamknij"
@@ -136,7 +143,7 @@ export default function NewsletterPopup() {
           </svg>
         </button>
 
-        {/* TREŚĆ */}
+        {/* TREŚĆ POPUPU */}
         <div className="relative z-10 flex flex-col items-center text-center">
           <div className="mb-8 flex items-center gap-4">
             <div className="bg-arylideYellow h-px w-8" />
@@ -159,10 +166,12 @@ export default function NewsletterPopup() {
           </p>
 
           <div className="mb-8 w-full max-w-sm">
+            {/* Nasz zaktualizowany formularz z checkboxem prawnym */}
             <NewsletterForm variant="dark" />
           </div>
 
           <button
+            type="button"
             onClick={closePopup}
             className="font-montserrat group relative inline-flex items-center gap-2 text-[0.6rem] font-bold tracking-[0.2em] text-white/30 uppercase transition-colors hover:text-white/80"
           >

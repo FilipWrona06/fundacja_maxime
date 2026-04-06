@@ -4,7 +4,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
-import NewsletterForm from "@/components/newsletter/NewsletterForm"; // <-- IMPORT NASZEGO NOWEGO KOMPONENTU
+import NewsletterForm from "@/components/newsletter/NewsletterForm";
 import FadeIn from "@/components/ui/FadeIn";
 
 export interface NewsProps {
@@ -335,10 +335,7 @@ export default function NewsClient({ newsData }: { newsData: NewsProps[] }) {
           >
             {/* UŻYCIE USTANDARYZOWANEGO KOMPONENTU (wersja jasna) */}
             <NewsletterForm variant="light" className="max-w-lg" />
-
-            <span className="font-montserrat text-raisinBlack/40 mt-6 block text-[0.55rem] font-bold tracking-widest uppercase">
-              * Bez spamu. Tylko czysta sztuka prosto na Twoją skrzynkę.
-            </span>
+            {/* Usunięto tekst pod formularzem, ponieważ jest on wbudowany w sam formularz */}
           </FadeIn>
         </div>
       </section>

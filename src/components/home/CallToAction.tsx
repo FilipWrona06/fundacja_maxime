@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import NewsletterForm from "@/components/newsletter/NewsletterForm"; // <-- IMPORT NASZEGO NOWEGO KOMPONENTU
+import NewsletterForm from "@/components/newsletter/NewsletterForm";
 import FadeIn from "@/components/ui/FadeIn";
 
 export default function CallToAction() {
@@ -80,11 +80,8 @@ export default function CallToAction() {
             <FadeIn delay="400ms">
               {/* UŻYCIE USTANDARYZOWANEGO KOMPONENTU (wersja jasna) */}
               <NewsletterForm variant="light" className="max-w-lg" />
-
-              <span className="font-montserrat text-raisinBlack/40 mt-6 block text-[0.55rem] font-bold tracking-widest uppercase">
-                * Zapisując się, akceptujesz politykę prywatności. Żadnego
-                spamu, tylko sztuka.
-              </span>
+              {/* Tutaj usunęliśmy dublujący się span z tekstem o polityce prywatności, 
+                  ponieważ formularz zajmuje się tym sam w sobie. */}
             </FadeIn>
           </div>
 
