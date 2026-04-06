@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { sendEmail } from "@/actions/sendEmail"; // <-- Import Akcji Serwerowej
 import FadeIn from "@/components/ui/FadeIn";
 
-// Tematy wiadomości do interaktywnego wyboru przeniesione z page.tsx
 const subjects = [
   "Współpraca",
   "Bilety i Wydarzenia",
@@ -17,18 +17,34 @@ export default function ContactForm() {
   const [activeSubject, setActiveSubject] = useState(subjects[0]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Symulacja wysyłania formularza
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setErrorMessage(null);
 
-    // TODO: Tutaj w przyszłości podepniesz prawdziwe API
-    setTimeout(() => {
-      setIsSubmitting(false);
+    // Pobieramy dane prosto z obiektu zdarzenia
+    const formData = new FormData(e.currentTarget);
+    // Ręcznie dołączamy temat wybrany z naszych customowych "przycisków"
+    formData.append("subjectCategory", activeSubject);
+
+    // Wywołanie akcji serwerowej
+    const response = await sendEmail(formData);
+
+    setIsSubmitting(false);
+
+    if (response.error) {
+      setErrorMessage(response.error);
+    } else {
       setIsSubmitted(true);
-      setTimeout(() => setIsSubmitted(false), 5000); // Wróć do formularza po 5s
-    }, 1500);
+      // Reset po 5 sekundach (jeśli chcesz umożliwić ponowne wysłanie)
+      setTimeout(() => {
+        setIsSubmitted(false);
+        setErrorMessage(null);
+        // Opcjonalnie reset stanów jeśli trzeba
+      }, 5000);
+    }
   };
 
   return (
@@ -65,7 +81,6 @@ export default function ContactForm() {
                   stroke="currentColor"
                   strokeWidth={3}
                 >
-                  <title>Ikona sukcesu</title>
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -114,8 +129,10 @@ export default function ContactForm() {
                 >
                   <div className="overflow-hidden">
                     <div className="group relative">
+                      {/* DODANO: name="customSubject" */}
                       <input
                         type="text"
+                        name="customSubject"
                         placeholder="Wpisz krótko swój temat..."
                         className="font-montserrat focus:border-arylideYellow w-full border-b border-white/20 bg-transparent py-3 text-lg font-light text-white transition-colors outline-none placeholder:text-white/20 md:text-xl"
                         required={activeSubject === "Inne"}
@@ -131,8 +148,10 @@ export default function ContactForm() {
                   <span className="font-montserrat group-focus-within:text-arylideYellow mb-2 block text-xs font-bold tracking-[0.2em] text-white/50 uppercase transition-colors">
                     02. Twoje Imię i Nazwisko
                   </span>
+                  {/* DODANO: name="name" */}
                   <input
                     type="text"
+                    name="name"
                     required
                     placeholder="Jan Kowalski"
                     className="font-montserrat focus:border-arylideYellow w-full border-b border-white/20 bg-transparent py-4 text-xl font-light text-white transition-colors outline-none placeholder:text-white/20 md:text-2xl"
@@ -144,8 +163,10 @@ export default function ContactForm() {
                   <span className="font-montserrat group-focus-within:text-arylideYellow mb-2 block text-xs font-bold tracking-[0.2em] text-white/50 uppercase transition-colors">
                     03. Twój e-mail
                   </span>
+                  {/* DODANO: name="email" */}
                   <input
                     type="email"
+                    name="email"
                     required
                     placeholder="jan@domena.pl"
                     className="font-montserrat focus:border-arylideYellow w-full border-b border-white/20 bg-transparent py-4 text-xl font-light text-white transition-colors outline-none placeholder:text-white/20 md:text-2xl"
@@ -158,7 +179,9 @@ export default function ContactForm() {
                 <span className="font-montserrat group-focus-within:text-arylideYellow mb-4 block text-xs font-bold tracking-[0.2em] text-white/50 uppercase transition-colors">
                   04. Treść wiadomości
                 </span>
+                {/* DODANO: name="message" */}
                 <textarea
+                  name="message"
                   required
                   rows={4}
                   placeholder="Opisz nam szczegóły..."
@@ -166,6 +189,15 @@ export default function ContactForm() {
                 />
                 <div className="bg-arylideYellow absolute bottom-0 left-0 h-0.5 w-0 transition-all duration-500 ease-out group-focus-within:w-full" />
               </FadeIn>
+
+              {/* OBSŁUGA BŁĘDU */}
+              {errorMessage && (
+                <FadeIn className="text-center">
+                  <span className="text-sm font-bold text-red-400">
+                    {errorMessage}
+                  </span>
+                </FadeIn>
+              )}
 
               <FadeIn
                 delay="500ms"
@@ -191,7 +223,6 @@ export default function ContactForm() {
                         stroke="currentColor"
                         strokeWidth={2.5}
                       >
-                        <title>Ikona wyślij</title>
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"

@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import ContactForm from "@/components/contact/ContactForm"; // <-- Nasz nowy import!
 import { useSiteSettings } from "@/components/providers/SettingsProvider";
 import FadeIn from "@/components/ui/FadeIn";
-import ContactForm from "@/components/contact/ContactForm"; // <-- Nasz nowy import!
 import { getSocialIcon } from "@/data/navigation";
 
 export default function ContactPage() {

@@ -2,8 +2,8 @@
 "use client";
 
 import Link from "next/link";
-import FadeIn from "@/components/ui/FadeIn";
 import NewsletterForm from "@/components/newsletter/NewsletterForm"; // <-- IMPORT NASZEGO NOWEGO KOMPONENTU
+import FadeIn from "@/components/ui/FadeIn";
 
 export default function CallToAction() {
   return (
