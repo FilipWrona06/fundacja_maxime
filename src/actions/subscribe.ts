@@ -1,11 +1,6 @@
 "use server";
 
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function subscribeToNewsletter(formData: FormData) {
-  // Pobieramy adres wpisany na stronie w inpucie
   const email = formData.get("email") as string;
 
   if (!email) {
@@ -13,20 +8,38 @@ export async function subscribeToNewsletter(formData: FormData) {
   }
 
   try {
-    // Dokładnie to, co widzisz u siebie w dokumentacji (Create Contact)
-    const { error } = await resend.contacts.create({
-      email: email,
-      unsubscribed: false,
-    });
+    // Wysyłamy zapytanie POST prosto do API MailerLite
+    const response = await fetch(
+      "https://connect.mailerlite.com/api/subscribers",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${process.env.MAILERLITE_API_KEY}`,
+        },
+        body: JSON.stringify({
+          email: email,
+          // Status "unconfirmed" sprawia, że MailerLite natychmiast
+          // wyśle maila Double Opt-In (jeśli włączyłeś to w Kroku 2).
+          status: "unconfirmed",
+        }),
+      },
+    );
 
-    if (error) {
-      console.error("Błąd zapisu kontaktu:", error);
-      return { error: "Ten adres e-mail jest już zapisany lub wystąpił błąd." };
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Błąd API MailerLite:", errorData);
+
+      return {
+        error: "Wystąpił błąd podczas zapisu. Być może jesteś już na liście.",
+      };
     }
 
+    // Sukces! Użytkownik właśnie otrzymał maila weryfikacyjnego.
     return { success: true };
   } catch (error) {
-    console.error("Błąd serwera:", error);
+    console.error("Błąd serwera (Next.js):", error);
     return { error: "Wystąpił nieoczekiwany błąd serwera." };
   }
 }

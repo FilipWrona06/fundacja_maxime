@@ -34,7 +34,10 @@ export default function NewsletterForm({
       setTimeout(() => setStatus("idle"), 3000);
     } else {
       setStatus("success");
-      setMessage("Witamy na pokładzie! Jesteś zapisany.");
+      // Zmieniony komunikat - Double Opt-in
+      setMessage(
+        "Prawie gotowe! Sprawdź swoją skrzynkę e-mail i kliknij w link, aby potwierdzić zapis.",
+      );
     }
   };
 
@@ -45,21 +48,25 @@ export default function NewsletterForm({
           className={`animate-fade-in-up flex flex-col items-center justify-center p-4 text-center transition-all ${isDark ? "text-white" : "text-raisinBlack"}`}
         >
           <div className="bg-arylideYellow text-raisinBlack mb-3 flex h-12 w-12 items-center justify-center rounded-full">
+            {/* Zmieniona ikona na kopertę e-mail */}
             <svg
               className="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              strokeWidth={3}
+              strokeWidth={2}
             >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                d="M4.5 12.75l6 6 9-13.5"
+                d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
               />
             </svg>
           </div>
-          <p className="font-montserrat font-bold">{message}</p>
+          {/* Dodany text-sm, żeby dłuższy komunikat lepiej się układał */}
+          <p className="font-montserrat max-w-70 text-sm leading-relaxed font-bold">
+            {message}
+          </p>
         </div>
       ) : (
         <form
@@ -161,9 +168,8 @@ export default function NewsletterForm({
                 name="rodo_consent"
                 id={`rodo_${variant}`}
                 disabled={status === "loading"}
-                className="peer sr-only" // Ukrywa domyślny checkbox, ale zostawia go w DOM dla HTML walidacji
+                className="peer sr-only"
               />
-              {/* Nasz customowy, piękny wygląd checkboxa */}
               <div
                 className={`h-4 w-4 rounded-sm border transition-all duration-300 ${
                   isDark
@@ -171,7 +177,6 @@ export default function NewsletterForm({
                     : "border-raisinBlack/30 peer-checked:border-raisinBlack peer-checked:bg-raisinBlack peer-focus:ring-raisinBlack/50 peer-focus:ring-2"
                 }`}
               />
-              {/* Ikona V pojawiająca się po zaznaczeniu */}
               <svg
                 className={`absolute h-3 w-3 opacity-0 transition-opacity duration-300 peer-checked:opacity-100 ${
                   isDark ? "text-oxfordBlue" : "text-arylideYellow"
