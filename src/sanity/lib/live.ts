@@ -9,10 +9,4 @@ export const { sanityFetch, SanityLive } = defineLive({
   client,
   serverToken: false,
   browserToken: false,
-  // KRYTYCZNA ZMIANA: Wymuszamy cache (ISR).
-  // Dane z Sanity będą buforowane i odświeżane maksymalnie raz na 60 sekund.
-  // To wyeliminuje 5-sekundowe oczekiwanie na API przy każdym załadowaniu strony.
-  fetchOptions: {
-    revalidate: 60,
-  },
 });
