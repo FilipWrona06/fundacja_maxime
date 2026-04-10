@@ -21,7 +21,7 @@ const HOME_DATA_QUERY = defineQuery(`{
   }
 }`);
 
-// Funkcja pomocnicza do poprawnej polskiej odmiany słowa "zdjęcie" (np. 1 zdjęcie, 2 zdjęcia, 5 zdjęć)
+// Funkcja pomocnicza do poprawnej polskiej odmiany słowa "zdjęcie"
 function formatPhotosCount(count: number) {
   if (count === 1) return "1 zdjęcie";
   const remainder10 = count % 10;
@@ -38,10 +38,9 @@ function formatPhotosCount(count: number) {
 
 // 2. KOMPONENT SERWEROWY
 export default async function LatestUpdates() {
-  // Pobieramy dane z Sanity
+  // Pobieramy dane z Sanity - teraz to potrwa ułamek sekundy dzięki opcjom w live.ts
   const { data } = await sanityFetch({ query: HOME_DATA_QUERY });
 
-  // Jeśli jest nadchodzące wydarzenie, bierzemy je. Jeśli nie - bierzemy ostatnie historyczne.
   const eventRaw = data.upcomingEvent || data.pastEvent;
   const newsRaw = data.news;
   const galleryRaw = data.gallery;
@@ -112,7 +111,7 @@ export default async function LatestUpdates() {
     link: galleryRaw ? `/galeria/${galleryRaw.id}` : "/galeria",
   };
 
-  // 3. RENDEROWANIE UI Z UŻYCIEM DANYCH Z SANITY
+  // 3. RENDEROWANIE UI
   return (
     <section className="relative z-30 w-full overflow-hidden bg-[#F4F4F5] py-24 lg:py-32 xl:py-48">
       {/* --- TŁO: DOSŁOWNA PIĘCIOLINIA --- */}
@@ -171,6 +170,7 @@ export default async function LatestUpdates() {
                     src={eventData.image}
                     alt={eventData.title}
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 40vw"
                     className="object-cover opacity-90 transition-transform duration-1500 group-hover:scale-105 group-hover:opacity-100"
                   />
                 </div>
@@ -211,33 +211,29 @@ export default async function LatestUpdates() {
                   </h3>
                 </div>
 
-                {/* Zmiana na <Link> dla całej karty "Aktualności" */}
                 <Link
                   href={newsData.link}
                   className="group relative block w-full"
                 >
                   <div className="bg-raisinBlack relative ml-auto aspect-4/3 w-[90%] overflow-hidden sm:w-[85%]">
-                    {/* Zamieniono hover:scale-105 na group-hover:scale-105 żeby zdjęcie reagowało na najechanie na tekst */}
                     <Image
                       src={newsData.image}
                       alt={newsData.title}
                       fill
+                      sizes="(max-width: 768px) 90vw, (max-width: 1280px) 45vw, 35vw"
                       className="object-cover transition-transform duration-1500 group-hover:scale-105"
                     />
                   </div>
-                  {/* Dodano lekki efekt uniesienia karty (-translate-y-2) po najechaniu, aby zachować spójność z Wydarzeniami */}
                   <div className="border-oxfordBlue relative z-10 -mt-16 w-[95%] border-t-4 bg-white p-6 shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-transform duration-700 group-hover:-translate-y-2 sm:-mt-24 sm:w-[90%] sm:p-8 xl:-mt-32 xl:p-10">
                     <span className="font-montserrat mb-3 block text-[0.6rem] font-bold tracking-widest text-gray-400 uppercase xl:mb-4 xl:text-[0.65rem]">
                       {newsData.date}
                     </span>
-                    {/* Dodano zmianę koloru nagłówka przy hoverze na cały blok */}
                     <h4 className="font-montserrat text-raisinBlack group-hover:text-oxfordBlue mb-4 text-xl leading-tight font-bold transition-colors sm:text-2xl xl:mb-6 xl:text-3xl">
                       {newsData.title}
                     </h4>
                     <p className="font-montserrat mb-6 line-clamp-3 text-xs leading-relaxed font-light text-gray-600 sm:text-sm xl:mb-8">
                       {newsData.excerpt}
                     </p>
-                    {/* Wewnętrzny Link zmieniony na <span> by uniknąć błędów w HTMLu */}
                     <span className="font-montserrat text-oxfordBlue group-hover:text-arylideYellow inline-flex items-center gap-4 text-[0.65rem] font-bold tracking-widest uppercase transition-colors xl:text-[0.7rem]">
                       Czytaj wpis
                       <svg
@@ -280,6 +276,7 @@ export default async function LatestUpdates() {
                       src={galleryData.image}
                       alt={galleryData.title}
                       fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 40vw"
                       className="object-cover opacity-60 transition-transform duration-2000 group-hover:scale-105 group-hover:opacity-40"
                     />
                     <div className="bg-oxfordBlue/40 group-hover:bg-oxfordBlue/70 absolute inset-0 transition-colors duration-500" />
