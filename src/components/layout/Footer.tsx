@@ -53,17 +53,9 @@ export default async function Footer() {
 
               <div className="flex flex-col gap-6">
                 <div className="group flex flex-col">
-                  <span className="font-montserrat mb-1 text-[0.6rem] font-bold tracking-[0.3em] text-white/40 uppercase">
-                    Adres
-                  </span>
-                  <a
-                    href="https://maps.google.com"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="font-montserrat group-hover:text-arylideYellow text-sm leading-relaxed font-light whitespace-pre-line text-white/80 transition-colors"
-                  >
-                    {contact.address}
-                  </a>
+                  <p>
+                    Odkryj z nami maksymalną jakość, maksymalne zaangażowanie oraz maksymalną radość z muzyki.
+                  </p>
                 </div>
 
                 <div className="group flex flex-col">

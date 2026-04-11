@@ -114,7 +114,7 @@ export default async function NewsArticlePage({
   const formattedDate = `${d.getDate()} ${monthsPl[d.getMonth()]} ${d.getFullYear()}`;
 
   return (
-    <main className="bg-raisinBlack selection:bg-arylideYellow selection:text-raisinBlack relative min-h-screen w-full overflow-x-hidden">
+    <main className="bg-raisinBlack selection:bg-arylideYellow selection:text-raisinBlack relative min-h-screen w-full">
       <div className="fixed top-0 left-0 z-120 h-1 w-full bg-white/5">
         <div
           className="bg-arylideYellow h-full w-0 animate-[scroll-progress_linear_both]"

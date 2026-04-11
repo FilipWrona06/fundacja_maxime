@@ -216,7 +216,7 @@ export default async function EventDetailPage({
                 <span className="font-youngest text-arylideYellow block text-4xl xl:text-5xl">
                   {month}
                 </span>
-                <span className="font-montserrat mt-1 block text-xs font-bold tracking-[0.3em] text-white/40 uppercase xl:text-sm">
+                <span className="font-montserrat mt-3 block text-xs font-bold tracking-[0.3em] text-white/40 uppercase xl:text-sm">
                   {year}
                 </span>
               </FadeIn>

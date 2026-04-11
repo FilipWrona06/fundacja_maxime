@@ -125,42 +125,6 @@ export default async function ContactPage() {
 
                 <div className="bg-arylideYellow absolute bottom-0 left-0 h-px w-0 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-full" />
               </FadeIn>
-
-              {/* ADRES KORESPONDENCYJNY (zwykły link, więc zostaje jako HTML) */}
-              <FadeIn
-                delay="400ms"
-                className="group relative border-b border-white/10 pb-8"
-              >
-                <span className="font-montserrat mb-4 block text-[0.6rem] font-bold tracking-[0.4em] text-white/30 uppercase">
-                  Adres Korespondencyjny / Studio
-                </span>
-                <a
-                  href="https://maps.google.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="hover:text-arylideYellow relative flex w-full items-center justify-between gap-4 transition-colors duration-500"
-                >
-                  <span className="font-montserrat group-hover:text-arylideYellow text-[5vw] font-light tracking-wide whitespace-pre-line text-white transition-colors duration-500 min-[450px]:text-xl sm:text-2xl md:text-3xl lg:text-4xl">
-                    {contact.address}
-                  </span>
-                  <div className="group-hover:border-arylideYellow group-hover:bg-arylideYellow group-hover:text-raisinBlack flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/20 transition-all duration-500 md:h-12 md:w-12">
-                    <svg
-                      className="h-4 w-4 transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1 md:h-5 md:w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={1.5}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
-                      />
-                    </svg>
-                  </div>
-                </a>
-                <div className="bg-arylideYellow absolute bottom-0 left-0 h-px w-0 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-full" />
-              </FadeIn>
             </div>
           </div>
         </div>

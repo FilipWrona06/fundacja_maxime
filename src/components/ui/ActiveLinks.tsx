@@ -62,10 +62,18 @@ export default function ActiveLinks({
               <Link
                 href={link.path}
                 onClick={onMobileClick}
-                className={`text-3xl leading-tight font-light tracking-wide ${
-                  isActive ? "text-arylideYellow" : "text-white"
+                className={`group flex items-center gap-4 text-3xl leading-tight tracking-wide transition-all duration-300 ${
+                  isActive 
+                    ? "text-arylideYellow font-medium translate-x-2" // Wyróżnienie aktywnej strony
+                    : "text-white font-light hover:translate-x-2 hover:text-white/80"
                 }`}
               >
+                {/* Optyczny wskaźnik dla aktywnej strony (kropka) */}
+                <span
+                  className={`bg-arylideYellow block rounded-full transition-all duration-300 ${
+                    isActive ? "h-2.5 w-2.5 opacity-100" : "h-0 w-0 opacity-0"
+                  }`}
+                />
                 {link.name}
               </Link>
             </li>
