@@ -1,46 +1,63 @@
-// src/components/home/Hero.tsx
+"use client"; // Wymagane w Next.js (App Router), aby używać hooków useEffect i useState
+
+import Image from "next/image";
 import Link from "next/link";
-import Image from "next/image"; // DODANO: Import komponentu Image
+import { useEffect, useState } from "react";
 
 export default function Hero() {
+  // Stan przechowujący ścieżkę do wideo. Domyślnie null, żeby nie pobierać niczego
+  // podczas pierwszego renderowania na serwerze (SSR) i oszczędzić transfer.
+  const [videoSrc, setVideoSrc] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Sprawdzamy szerokość okna zaraz po załadowaniu strony
+    if (window.innerWidth < 768) {
+      setVideoSrc("/bg-video-mobile.mp4"); // Lekki plik dla smartfonów (< 1MB)
+    } else {
+      setVideoSrc("/bg-video.mp4"); // Zwykły plik dla desktopa (~3MB)
+    }
+  }, []);
+
   return (
     <section className="bg-raisinBlack relative flex min-h-screen w-full items-center justify-center overflow-hidden">
       {/* TŁO WIDEO I NAKŁADKI */}
       <div className="absolute inset-0 h-full w-full">
-        {/* NOWOŚĆ: Błyskawiczne tło statyczne (Rozwiązuje problem LCP na mobile) */}
+        {/* STATYCZNE TŁO - Ładuje się natychmiast, kluczowe dla zielonego LCP */}
         <Image
-          src="/video-poster.webp" // Upewnij się, że masz ten plik w folderze public
+          src="/video-poster.webp"
           alt="Muzycy na scenie"
           fill
-          priority // BARDZO WAŻNE: Wymusza natychmiastowe załadowanie, omijając lazy-loading
+          priority // Wymusza natychmiastowe załadowanie (omija lazy-loading)
           sizes="100vw"
-          quality={60} // Zmniejszona jakość, bo i tak przykrywamy to gradientami i wideo
+          quality={60} // Mniejsza jakość, by przyspieszyć pobieranie (filtry to i tak maskują)
           className="object-cover"
         />
 
-        {/* ZMODYFIKOWANE WIDEO: Dodano atrybut poster */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          poster="/video-poster.webp" // Wyświetla obrazek zanim pierwsza klatka wideo będzie gotowa
-          className="animate-cinematic-zoom absolute inset-0 h-full w-full object-cover opacity-0"
-          src="/bg-video.mp4"
-        />
+        {/* WIDEO - Pojawia się dopiero, gdy JS zdecyduje który plik pobrać */}
+        {videoSrc && (
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline // Niezbędne dla iOS, by wideo nie odpalało się w trybie pełnoekranowym
+            className="animate-cinematic-zoom absolute inset-0 h-full w-full object-cover"
+            src={videoSrc}
+          />
+        )}
 
-        {/* NAKŁADKI (Gradienty) - Bez zmian */}
+        {/* NAKŁADKI (Gradienty) */}
         <div className="bg-raisinBlack/30 absolute inset-0 mix-blend-multiply" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(38,38,38,0.85)_100%)]" />
         <div className="from-raisinBlack absolute inset-0 bg-linear-to-t via-transparent to-transparent opacity-95" />
       </div>
 
-      {/* GŁÓWNA TREŚĆ - Bez zmian */}
+      {/* GŁÓWNA TREŚĆ */}
       <div className="relative z-10 flex w-full max-w-6xl flex-col items-center justify-center px-4 pt-12 pb-28 text-center sm:py-0">
+        {/* NAGŁÓWEK - Usunięto 'opacity-0' i 'animationDelay', aby przeglądarka 
+            nie czekała z renderowaniem LCP na urządzeniach mobilnych */}
         <h1
-          className="animate-fade-in-up font-youngest mb-2 py-4 text-[4.2rem] leading-[0.85] text-white opacity-0 sm:text-[5.5rem] sm:leading-tight md:text-[8rem] lg:mb-4 lg:text-[11.5rem]"
+          className="animate-fade-in-up font-youngest mb-2 py-4 text-[4.2rem] leading-[0.85] text-white sm:text-[5.5rem] sm:leading-tight md:text-[8rem] lg:mb-4 lg:text-[11.5rem]"
           style={{
-            animationDelay: "200ms",
             textShadow:
               "0 10px 40px rgba(0,0,0,0.8), 0 0 120px rgba(255,255,255,0.15)",
           }}
@@ -50,7 +67,7 @@ export default function Hero() {
 
         <p
           className="animate-fade-in-up font-montserrat mb-8 max-w-3xl text-sm leading-relaxed font-light tracking-widest whitespace-pre-line text-white/80 opacity-0 sm:text-base md:mb-10 md:text-xl lg:text-2xl"
-          style={{ animationDelay: "500ms" }}
+          style={{ animationDelay: "150ms" }} // Zmniejszono z 500ms dla lepszego wrażenia
         >
           Odkryj z nami piękno dźwięków. Talent, ambicja i profesjonalizm, które
           tworzą niezapomniane emocje.
@@ -58,7 +75,7 @@ export default function Hero() {
 
         <div
           className="animate-fade-in-up flex w-full max-w-[20rem] flex-col items-center justify-center gap-4 opacity-0 sm:w-auto sm:max-w-none sm:flex-row sm:gap-8"
-          style={{ animationDelay: "800ms" }}
+          style={{ animationDelay: "300ms" }} // Zmniejszono z 800ms
         >
           <Link
             href="/wydarzenia"
@@ -93,9 +110,10 @@ export default function Hero() {
         </div>
       </div>
 
+      {/* PASEK SCROLLOWANIA NA DOLE */}
       <div
         className="animate-fade-in-up absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-2 opacity-0 md:bottom-8 md:gap-3 [@media(max-height:600px)]:hidden md:[@media(max-height:800px)]:hidden lg:[@media(max-height:900px)]:hidden"
-        style={{ animationDelay: "1200ms" }}
+        style={{ animationDelay: "600ms" }} // Zmniejszono z 1200ms
       >
         <span className="font-montserrat text-[0.55rem] font-semibold tracking-[0.4em] text-white/50 uppercase">
           Odkryj
