@@ -81,7 +81,7 @@ export default async function GalleryPage() {
             <p className="font-montserrat text-lg leading-relaxed font-light tracking-wide text-white/70">
               Muzyka to emocje, które znikają wraz z wyciszeniem ostatniego
               akordu. Fotografia pozwala nam uwiecznić pot, łzy i euforię, które
-              towarzyszą nam na scenie i poza nią. Odkryj naszą wizualną podróż.
+              towarzyszą nam na scenie. Odkryj naszą wizualną podróż.
             </p>
           </FadeIn>
         </div>
@@ -180,13 +180,13 @@ export default async function GalleryPage() {
         <div className="relative z-10 mx-auto max-w-4xl px-6">
           <FadeIn>
             <span className="font-youngest text-arylideYellow text-4xl md:text-5xl">
-              Dla prasy i mediów
+              Twój udział
             </span>
           </FadeIn>
           <FadeIn delay="200ms" className="mt-6">
             <h2 className="font-montserrat text-3xl leading-tight font-bold text-white md:text-5xl">
-              Potrzebujesz naszych zdjęć <br className="hidden md:block" />w
-              wysokiej rozdzielczości?
+              Chcesz dołączyć do Maxime <br className="hidden md:block" />
+              aby tworzyć emocje?
             </h2>
           </FadeIn>
           <FadeIn
@@ -194,8 +194,7 @@ export default async function GalleryPage() {
             className="mx-auto mt-8 max-w-2xl font-light text-white/60"
           >
             <p>
-              Udostępniamy oficjalny Press Pack dla dziennikarzy, krytyków
-              muzycznych oraz partnerów biznesowych.
+              Szukamy ludzi chętnych do współpracy, napisz do nas co potrafisz, a może uda Ci się u nas zagościć.
             </p>
           </FadeIn>
           <FadeIn delay="600ms" className="mt-12 flex justify-center">
@@ -203,7 +202,7 @@ export default async function GalleryPage() {
               href="/kontakt"
               className="group font-montserrat hover:border-arylideYellow hover:text-arylideYellow relative inline-flex items-center justify-center gap-4 rounded-full border border-white/20 bg-transparent px-10 py-5 text-[0.7rem] font-bold tracking-[0.2em] text-white uppercase transition-all duration-500"
             >
-              Poproś o materiały
+              Napisz do Nas
               <svg
                 className="h-4 w-4 transition-transform duration-500 group-hover:translate-x-1"
                 fill="none"

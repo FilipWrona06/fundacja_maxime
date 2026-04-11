@@ -108,7 +108,7 @@ export default async function NewsPage() {
           </FadeIn>
           <FadeIn delay="500ms" className="mt-12 max-w-xl lg:mt-24">
             <p className="font-montserrat text-lg leading-relaxed font-light tracking-wide text-white/70">
-              Historie zza kulis, zapowiedzi projektów i dźwięki, które
+              Zapowiedzi projektów i dźwięki, które
               zmieniają zasady gry. Zanurz się w świecie Maxime i bądź na
               bieżąco z każdym naszym ruchem.
             </p>
@@ -217,9 +217,7 @@ export default async function NewsPage() {
           </FadeIn>
           <FadeIn delay="300ms" className="mx-auto mt-6 max-w-xl">
             <p className="font-montserrat text-raisinBlack/70 text-sm leading-relaxed font-medium md:text-base">
-              Zapisz się, aby jako pierwszy otrzymywać informacje o tajnych
-              próbach, zakulisowych relacjach i specjalnych zniżkach na
-              premiery.
+              Zapisz się, aby jako pierwszy otrzymywać informacje o nadchodzących koncertach.
             </p>
           </FadeIn>
           <FadeIn

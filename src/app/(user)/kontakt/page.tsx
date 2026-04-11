@@ -50,7 +50,7 @@ export default async function ContactPage() {
                 <div className="mb-6 flex items-center gap-4">
                   <div className="bg-arylideYellow h-px w-12" />
                   <span className="font-montserrat text-arylideYellow text-[0.65rem] font-bold tracking-[0.4em] uppercase">
-                    Rozmowa
+                    Relacja
                   </span>
                 </div>
               </FadeIn>

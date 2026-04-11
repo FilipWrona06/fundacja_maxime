@@ -96,7 +96,7 @@ export default async function AboutUsPage() {
           </FadeIn>
           <FadeIn delay="500ms" className="mt-12 max-w-2xl lg:mt-24">
             <p className="font-montserrat text-lg leading-relaxed font-light tracking-wide text-white/70">
-              Stowarzyszenie Maxime powstało z buntu przeciwko przeciętności.
+              Fundacja Maxime powstała z pasji do muzyki.
               Jesteśmy kolektywem artystów, wizjonerów i rzemieślników sceny,
               których łączy jeden cel: dostarczyć publiczności przeżyć, które
               zostają w pamięci na zawsze.
@@ -123,7 +123,7 @@ export default async function AboutUsPage() {
                   />
                   <div className="absolute top-6 left-6 border border-white/20 px-4 py-2 backdrop-blur-md">
                     <span className="font-montserrat text-[0.55rem] tracking-[0.3em] text-white uppercase">
-                      Est. 2013
+                      Est. 2025
                     </span>
                   </div>
                 </div>
@@ -142,8 +142,8 @@ export default async function AboutUsPage() {
               </FadeIn>
               <FadeIn delay="400ms">
                 <p className="font-montserrat mb-6 text-base leading-[1.8] font-light text-white/60">
-                  Wierzymy, że muzyka to najpotężniejszy nośnik emocji. Nie
-                  idziemy na kompromisy. Od doboru repertuaru, przez
+                  Wierzymy, że muzyka to najpotężniejszy nośnik emocji.
+                   Od doboru repertuaru, przez
                   wielogodzinne próby, aż po reżyserię światła na scenie – każdy
                   detal jest projektowany tak, by wywołać dreszcz emocji.
                 </p>

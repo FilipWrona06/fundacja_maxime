@@ -133,7 +133,7 @@ export default function ContactForm() {
                       <input
                         type="text"
                         name="customSubject"
-                        placeholder="Wpisz krótko swój temat..."
+                        placeholder="Temat..."
                         className="font-montserrat focus:border-arylideYellow w-full border-b border-white/20 bg-transparent py-3 text-lg font-light text-white transition-colors outline-none placeholder:text-white/20 md:text-xl"
                         required={activeSubject === "Inne"}
                       />
