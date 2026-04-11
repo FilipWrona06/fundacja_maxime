@@ -1,15 +1,29 @@
 // src/app/(user)/polityka-prywatnosci/page.tsx
-"use client";
-
 import Link from "next/link";
-import { useSiteSettings } from "@/components/providers/SettingsProvider";
+import { defineQuery } from "next-sanity";
 import FadeIn from "@/components/ui/FadeIn";
+import { sanityFetch } from "@/sanity/lib/live";
 
-export default function PrivacyPolicyPage() {
-  // Pobieramy dane kontaktowe ze zintegrowanego kontekstu Sanity
-  const { contact } = useSiteSettings();
+// 1. Definiujemy zapytanie do Sanity – pobieramy adres, email ORAZ telefon
+const SETTINGS_QUERY = defineQuery(`
+  *[_type == "siteSettings"][0] {
+    contact { address, email, phone }
+  }
+`);
 
-  // Tablica sekcji wewnątrz komponentu, aby miała dostęp do `contact`
+// 2. Zmieniamy na async Server Component
+export default async function PrivacyPolicyPage() {
+  // 3. Pobieramy dane z Sanity po stronie serwera
+  const { data } = await sanityFetch({ query: SETTINGS_QUERY });
+
+  // 4. Zabezpieczenie na wypadek braku danych w CMS
+  const contact = data?.contact || {
+    email: "kontakt@maxime.pl",
+    phone: "+48 000 000 000",
+    address: "Adres do uzupełnienia w CMS",
+  };
+
+  // Tablica sekcji zostaje wewnątrz, aby mieć dostęp do obiektu `contact`
   const sections = [
     {
       id: "01",
@@ -21,7 +35,8 @@ export default function PrivacyPolicyPage() {
             <strong>Stowarzyszenie Maxime</strong> z siedzibą pod adresem:{" "}
             <br />
             <span className="text-arylideYellow">
-              {contact.address.replace("\n", ", ")}
+              {/* Bezpieczny replace */}
+              {(contact.address || "").replace("\n", ", ")}
             </span>
             .
           </p>

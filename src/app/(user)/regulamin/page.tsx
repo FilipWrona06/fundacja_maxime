@@ -1,15 +1,28 @@
 // src/app/(user)/regulamin/page.tsx
-"use client";
-
 import Link from "next/link";
-import { useSiteSettings } from "@/components/providers/SettingsProvider";
+import { defineQuery } from "next-sanity";
 import FadeIn from "@/components/ui/FadeIn";
+import { sanityFetch } from "@/sanity/lib/live";
 
-export default function TermsPage() {
-  // Pobieramy dane kontaktowe z Sanity
-  const { contact } = useSiteSettings();
+// 1. Definiujemy query – pobieramy tylko dane kontaktowe potrzebne w regulaminie
+const SETTINGS_QUERY = defineQuery(`
+  *[_type == "siteSettings"][0] {
+    contact { address, email }
+  }
+`);
 
-  // Tablica przeniesiona do wewnątrz komponentu
+// 2. Zamieniamy na async Server Component
+export default async function TermsPage() {
+  // 3. Pobieramy dane z Sanity
+  const { data } = await sanityFetch({ query: SETTINGS_QUERY });
+
+  // Zabezpieczenie danych na wypadek ich braku w CMS
+  const contact = data?.contact || {
+    email: "kontakt@maxime.pl",
+    address: "Adres do uzupełnienia w CMS",
+  };
+
+  // Tablica sekcji zostaje wewnątrz, żeby miała dostęp do zmiennej "contact"
   const sections = [
     {
       id: "01",
@@ -25,7 +38,8 @@ export default function TermsPage() {
             Dane Stowarzyszenia: <br />
             Siedziba:{" "}
             <span className="font-medium text-white">
-              {contact.address.replace("\n", ", ")}
+              {/* Bezpieczne użycie replace w razie gdyby address był pusty */}
+              {(contact.address || "").replace("\n", ", ")}
             </span>
             <br />
             Kontakt e-mail:{" "}
