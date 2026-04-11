@@ -12,7 +12,6 @@ export default function GoogleConsent() {
           window.dataLayer = window.dataLayer ||[];
           function gtag(){dataLayer.push(arguments);}
           
-          // Domyślne ustawienie Consent Mode v2 - WSZYSTKO ODRZUCONE
           gtag('consent', 'default', {
             'analytics_storage': 'denied',
             'ad_storage': 'denied',
@@ -24,7 +23,6 @@ export default function GoogleConsent() {
             'wait_for_update': 500
           });
 
-          // Ustawienie ułatwiające debugowanie (opcjonalnie)
           dataLayer.push({'js': new Date()});
         `,
       }}

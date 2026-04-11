@@ -1,6 +1,4 @@
-// src/components/home/CallToAction.tsx
-"use client";
-
+// BRAK "use client"! To jest teraz w 100% Server Component.
 import Link from "next/link";
 import NewsletterForm from "@/components/newsletter/NewsletterForm";
 import FadeIn from "@/components/ui/FadeIn";
@@ -76,12 +74,9 @@ export default function CallToAction() {
               </p>
             </FadeIn>
 
-            {/* HIGH-END NEWSLETTER INPUT */}
+            {/* HIGH-END NEWSLETTER INPUT (Został wyrenderowany w komponencie serwerowym!) */}
             <FadeIn delay="400ms">
-              {/* UŻYCIE USTANDARYZOWANEGO KOMPONENTU (wersja jasna) */}
               <NewsletterForm variant="light" className="max-w-lg" />
-              {/* Tutaj usunęliśmy dublujący się span z tekstem o polityce prywatności, 
-                  ponieważ formularz zajmuje się tym sam w sobie. */}
             </FadeIn>
           </div>
 
