@@ -1,12 +1,10 @@
-// src/components/layout/Footer.tsx
-"use client";
-
-import Cookies from "js-cookie"; // <-- IMPORT BIBLIOTEKI DO CIASTECZEK
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { groq } from "next-sanity";
+import CookieManagerButton from "@/components/footer/CookieManagerButton";
+import ScrollToTopButton from "@/components/footer/ScrollToTopButton";
 import NewsletterForm from "@/components/newsletter/NewsletterForm";
-import { useSiteSettings } from "@/components/providers/SettingsProvider";
+import ActiveLinks from "@/components/ui/ActiveLinks";
 import FadeIn from "@/components/ui/FadeIn";
 import {
   copyrightText,
@@ -14,29 +12,22 @@ import {
   legalLinks,
   mainLinks,
 } from "@/data/navigation";
+import { client } from "@/sanity/lib/client"; // Upewnij się, że ta ścieżka jest poprawna
 
-export default function Footer() {
-  const pathname = usePathname();
+export default async function Footer() {
+  // Pobieramy cały dokument 'siteSettings' prosto z Sanity
+  const query = groq`*[_type == "siteSettings"][0]`;
+  const settings = await client.fetch(query);
 
-  // Pobieramy dane kontaktowe, social media oraz autora prosto z kontekstu zasilanego przez Sanity
-  const { contact, socials, author } = useSiteSettings();
+  // Brak fallbacków!
+  // Destrukturyzujemy bezpośrednio to, co przyszło. Jeśli 'settings' będzie nullem (bo zapytanie nic nie zwróci),
+  // ta linijka natychmiast zgłosi błąd, a Ty będziesz wiedział, że coś jest nie tak.
+  const { contact, socials, author } = settings;
 
-  // Rozszerzamy główne linki o zakładkę "Opinie" tylko dla stopki
   const footerLinks = [...mainLinks, { name: "Opinie", path: "/opinie" }];
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  // FUNKCJA DO RESETOWANIA CIASTECZEK I PRZYWRACANIA BANERA
-  const resetCookies = () => {
-    Cookies.remove("maxime_cookie_consent", { path: "/" });
-    window.location.reload(); // Odświeża stronę, aby od nowa zainicjować Google Consent i pokazać baner
-  };
 
   return (
     <footer className="bg-raisinBlack relative z-50 w-full overflow-hidden pt-24 lg:pt-32">
-      {/* --- GIGANTYCZNY ZNAK WODNY NA SAMYM DOLE --- */}
       <div className="pointer-events-none absolute -bottom-2 left-1/2 z-0 w-full -translate-x-1/2 text-center opacity-[0.03] select-none sm:-bottom-4 lg:-bottom-10">
         <span className="font-montserrat block w-full text-[20vw] leading-none font-black text-white md:text-[22vw] lg:text-[22vw]">
           MAXIME
@@ -45,7 +36,6 @@ export default function Footer() {
 
       <div className="relative z-10 mx-auto w-full max-w-7xl px-6 lg:px-12">
         <div className="grid grid-cols-1 gap-16 border-b border-white/10 pb-16 lg:grid-cols-12 lg:gap-12 lg:pb-24">
-          {/* KOLUMNA 1: LOGO, MOTTO I KONTAKT */}
           <div className="flex flex-col items-start lg:col-span-4">
             <FadeIn>
               <Link href="/" className="mb-8 block">
@@ -97,46 +87,17 @@ export default function Footer() {
             </FadeIn>
           </div>
 
-          {/* KOLUMNA 2: NAWIGACJA */}
           <div className="flex flex-col lg:col-span-3 lg:col-start-6">
             <FadeIn delay="200ms">
               <span className="font-montserrat mb-8 block text-[0.65rem] font-bold tracking-[0.4em] text-white/30 uppercase">
                 Eksploruj
               </span>
               <ul className="flex flex-col gap-4">
-                {footerLinks.map((link) => {
-                  const isActive = pathname === link.path;
-                  return (
-                    <li key={link.name}>
-                      <Link
-                        href={link.path}
-                        className="group flex items-center gap-3"
-                      >
-                        <div
-                          className={`bg-arylideYellow h-1.5 w-1.5 rounded-full transition-all duration-300 ${
-                            isActive
-                              ? "scale-100 opacity-100"
-                              : "scale-0 opacity-0 group-hover:scale-50 group-hover:opacity-50"
-                          }`}
-                        />
-                        <span
-                          className={`font-montserrat text-sm tracking-widest uppercase transition-all duration-300 ${
-                            isActive
-                              ? "text-arylideYellow translate-x-1 font-bold"
-                              : "font-medium text-white/70 group-hover:translate-x-2 group-hover:text-white"
-                          }`}
-                        >
-                          {link.name}
-                        </span>
-                      </Link>
-                    </li>
-                  );
-                })}
+                <ActiveLinks links={footerLinks} variant="footer" />
               </ul>
             </FadeIn>
           </div>
 
-          {/* KOLUMNA 3: NEWSLETTER I SOCIAL MEDIA */}
           <div className="flex flex-col lg:col-span-4">
             <FadeIn delay="400ms">
               <span className="font-montserrat mb-8 block text-[0.65rem] font-bold tracking-[0.4em] text-white/30 uppercase">
@@ -147,16 +108,14 @@ export default function Footer() {
                 zakulisowe.
               </p>
 
-              {/* UŻYCIE USTANDARYZOWANEGO KOMPONENTU */}
               <NewsletterForm variant="dark" />
 
-              {/* SOCIAL MEDIA (DYNAMICZNIE Z SANITY) */}
               <div className="mt-16">
                 <span className="font-montserrat mb-6 block text-[0.65rem] font-bold tracking-[0.4em] text-white/30 uppercase">
                   Społeczność
                 </span>
                 <ul className="flex flex-wrap gap-4">
-                  {socials.map((social) => (
+                  {socials.map((social: { platform: string; url: string }) => (
                     <li key={social.platform}>
                       <a
                         href={social.url}
@@ -175,7 +134,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* SUB-FOOTER */}
         <div className="flex flex-col items-center justify-between gap-8 py-8 lg:flex-row lg:gap-0">
           <FadeIn
             delay="600ms"
@@ -184,7 +142,6 @@ export default function Footer() {
             <span className="font-montserrat text-xs font-light text-white/40">
               {copyrightText}
             </span>
-            {/* Zmiana na flex-wrap w razie, gdyby na telefonach zabrakło miejsca na przycisk cookies */}
             <div className="flex flex-wrap items-center justify-center gap-4 lg:justify-start">
               {legalLinks.map((link) => (
                 <Link
@@ -195,21 +152,13 @@ export default function Footer() {
                   {link.name}
                 </Link>
               ))}
-
-              {/* NOWY PRZYCISK DO ZARZĄDZANIA COOKIES */}
-              <button
-                onClick={resetCookies}
-                type="button"
-                className="font-montserrat text-[0.65rem] font-medium tracking-widest text-white/30 uppercase transition-colors hover:text-white"
-              >
-                Zarządzaj Cookies
-              </button>
+              <CookieManagerButton />
             </div>
           </FadeIn>
 
           <FadeIn delay="800ms" className="flex items-center gap-8">
             <span className="font-montserrat text-xs font-light text-white/40">
-              Wykonanie: {/* DANE AUTORA POBIERANE Z SANITY */}
+              Wykonanie:{" "}
               <a
                 href={author.url}
                 target="_blank"
@@ -220,27 +169,7 @@ export default function Footer() {
               </a>
             </span>
 
-            <button
-              type="button"
-              onClick={scrollToTop}
-              className="group hover:border-arylideYellow hover:bg-arylideYellow flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5 transition-all duration-500"
-              aria-label="Wróć na górę"
-            >
-              <svg
-                className="group-hover:text-raisinBlack h-5 w-5 text-white transition-transform duration-500 group-hover:-translate-y-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <title>Strzałka powrotu w górę</title>
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M4.5 15.75l7.5-7.5 7.5 7.5"
-                />
-              </svg>
-            </button>
+            <ScrollToTopButton />
           </FadeIn>
         </div>
       </div>
