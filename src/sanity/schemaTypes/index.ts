@@ -1,4 +1,4 @@
-// src/sanity/schemaTypes/index.ts
+
 import type { SchemaTypeDefinition } from "sanity";
 import { eventType } from "./event";
 import { galleryType } from "./gallery";

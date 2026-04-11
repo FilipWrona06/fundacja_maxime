@@ -1,4 +1,3 @@
-// src/sanity/schemaTypes/gallery.ts
 import { defineField, defineType } from "sanity";
 
 export const galleryType = defineType({

@@ -1,4 +1,3 @@
-// src/sanity/schemaTypes/siteSettings.ts
 import { defineField, defineType } from "sanity";
 
 export const siteSettingsType = defineType({

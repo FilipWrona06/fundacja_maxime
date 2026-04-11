@@ -1,4 +1,3 @@
-// src/sanity/schemaTypes/milestone.ts
 import { defineField, defineType } from "sanity";
 
 export const milestoneType = defineType({

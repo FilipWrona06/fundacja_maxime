@@ -1,4 +1,3 @@
-// src/sanity/schemaTypes/review.ts
 import { defineField, defineType } from "sanity";
 
 export const reviewType = defineType({

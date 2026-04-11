@@ -1,4 +1,3 @@
-// src/sanity/schemaTypes/event.ts
 import { defineField, defineType } from "sanity";
 
 export const eventType = defineType({
