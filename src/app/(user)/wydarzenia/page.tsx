@@ -60,6 +60,7 @@ export default async function EventsPage() {
             src="/Asset-1.svg"
             alt=""
             fill
+            priority
             className="object-contain brightness-0 invert"
           />
         </div>
