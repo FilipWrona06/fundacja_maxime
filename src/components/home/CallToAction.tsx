@@ -68,8 +68,7 @@ export default function CallToAction() {
 
             <FadeIn delay="200ms">
               <p className="font-montserrat text-raisinBlack/70 mt-8 mb-16 max-w-md text-base leading-relaxed font-medium lg:text-lg">
-                Dołącz do naszego zamkniętego grona. Informacje o tajnych
-                próbach, zniżki na premiery i zakulisowe historie prosto na
+                Dołącz do naszego zamkniętego grona. Informacje o zbliżających się wydarzeniach, trafią na
                 Twoją skrzynkę.
               </p>
             </FadeIn>
@@ -126,7 +125,7 @@ export default function CallToAction() {
               >
                 <div className="flex flex-col items-start gap-1 sm:gap-2">
                   <span className="font-youngest text-oxfordBlue group-hover:text-arylideYellow text-3xl transition-colors duration-500 md:text-2xl lg:text-4xl">
-                    Rozmowa
+                    Kontakt
                   </span>
                   <h3 className="font-montserrat text-raisinBlack text-xl font-bold transition-colors duration-500 group-hover:text-white sm:text-2xl md:text-xl lg:text-3xl">
                     Skontaktuj się z nami

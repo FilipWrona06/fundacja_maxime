@@ -167,7 +167,7 @@ export default async function Testimonials() {
               href="/opinie"
               className="group border-raisinBlack font-montserrat text-raisinBlack hover:bg-raisinBlack relative inline-flex items-center justify-center gap-4 rounded-full border bg-transparent px-10 py-5 text-[0.65rem] font-bold tracking-[0.2em] uppercase transition-all duration-500 hover:text-white"
             >
-              Przeczytaj więcej lub dodaj swoją
+              Dodaj swoją opinię lub przeczytaj więcej
             </Link>
           </FadeIn>
         </div>

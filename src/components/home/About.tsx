@@ -57,7 +57,7 @@ export default function About() {
             >
               <div className="flex flex-col items-start border-r border-white/5 pr-6 lg:pr-8 xl:pr-10">
                 <span className="font-montserrat text-3xl font-light tracking-tight text-white lg:text-4xl">
-                  10
+                  4
                   <span className="text-arylideYellow relative -top-2 ml-0.5 text-2xl font-light lg:text-3xl">
                     +
                   </span>
@@ -68,13 +68,13 @@ export default function About() {
               </div>
               <div className="flex flex-col items-start pl-6 lg:pl-8 xl:pl-10">
                 <span className="font-montserrat text-3xl font-light tracking-tight text-white lg:text-4xl">
-                  40
+                  50
                   <span className="text-arylideYellow relative -top-2 ml-0.5 text-2xl font-light lg:text-3xl">
                     +
                   </span>
                 </span>
                 <span className="font-montserrat mt-2 text-[0.55rem] font-medium tracking-[0.3em] text-white/40 uppercase">
-                  Projektów
+                  Wydarzeń
                 </span>
               </div>
             </FadeIn>
@@ -108,7 +108,7 @@ export default function About() {
 
             <FadeIn delay="700ms">
               <p className="font-montserrat mb-14 max-w-xl text-base leading-[1.8] font-light tracking-wide text-white/60">
-                Stowarzyszenie Maxime to coś więcej niż dźwięki. Tworzymy
+                Fundacja Maxime to coś więcej niż dźwięki. Tworzymy
                 przestrzeń, w której bezkompromisowa ambicja spotyka się z
                 czystym talentem. Budujemy fundamenty dla artystów poszukujących
                 doskonałości.

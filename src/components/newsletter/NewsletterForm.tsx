@@ -209,7 +209,7 @@ export default function NewsletterForm({
                 }`}
               >
                 Wyrażam zgodę na otrzymywanie informacji handlowych (Newsletter)
-                drogą elektroniczną od Stowarzyszenia Maxime. Zapoznałem/am się
+                drogą elektroniczną od Fundacji Maxime. Zapoznałem/am się
                 z{" "}
               </label>
               <Link

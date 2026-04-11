@@ -104,15 +104,14 @@ export default async function Footer() {
                 Newsletter
               </span>
               <p className="font-montserrat mb-6 text-sm leading-relaxed font-light text-white/60">
-                Odbieraj zaproszenia na koncerty i ekskluzywne materiały
-                zakulisowe.
+              Bądź na bieżąco z nadchodzącymi wydarzeniami.
               </p>
 
               <NewsletterForm variant="dark" />
 
               <div className="mt-16">
                 <span className="font-montserrat mb-6 block text-[0.65rem] font-bold tracking-[0.4em] text-white/30 uppercase">
-                  Społeczność
+                  Media społecznościowe
                 </span>
                 <ul className="flex flex-wrap gap-4">
                   {socials.map((social: { platform: string; url: string }) => (

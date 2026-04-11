@@ -44,8 +44,7 @@ export default function Hero() {
           className="animate-fade-in-up font-montserrat mb-8 max-w-3xl text-sm leading-relaxed font-light tracking-widest whitespace-pre-line text-white/80 opacity-0 sm:text-base md:mb-10 md:text-xl lg:text-2xl"
           style={{ animationDelay: "150ms" }}
         >
-          Odkryj z nami piękno dźwięków. Talent, ambicja i profesjonalizm, które
-          tworzą niezapomniane emocje.
+          Odkryj z nami maksymalną jakość, maksymalne zaangażowanie oraz maksymalną radość z muzyki.
         </p>
 
         <div
