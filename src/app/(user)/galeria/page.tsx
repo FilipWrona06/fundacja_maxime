@@ -50,6 +50,7 @@ export default async function GalleryPage() {
             src="/Asset-2.svg"
             alt=""
             fill
+            priority
             className="object-contain brightness-0 invert"
           />
         </div>
