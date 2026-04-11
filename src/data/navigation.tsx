@@ -1,9 +1,10 @@
 // src/data/navigation.tsx
 
-export const authorConfig = {
-  name: "Filip Wrona",
-  url: "https://www.instagram.com/filip_wrona/",
-};
+// ---------------------------------------------------------
+// PONIŻSZE DANE SĄ TWARDO ZAKODOWANE.
+// Jeśli masz zamiar pobierać linki nawigacji oraz stopkę
+// z Sanity (np. z `siteSettings`), możesz je stąd całkowicie usunąć!
+// ---------------------------------------------------------
 
 export const copyrightText = `© ${new Date().getFullYear()} Stowarzyszenie Maxime. Wszelkie prawa zastrzeżone.`;
 
@@ -21,10 +22,17 @@ export const legalLinks = [
   { name: "Polityka prywatności", path: "/polityka-prywatnosci" },
 ];
 
-// Funkcja, która dobiera ikonę na podstawie nazwy platformy z Sanity
+// ---------------------------------------------------------
+// MAPER IKON (Bez fallbacków!)
+// ---------------------------------------------------------
 export const getSocialIcon = (platform: string) => {
+  // Zabezpieczenie na wypadek, gdyby z Sanity przyszło undefined / null
+  if (!platform) return null;
+
   const iconClass = "h-[1.15rem] w-[1.15rem]";
 
+  // .toLowerCase() sprawia, że wpis w Sanity ignoruje wielkość liter
+  // (np. "Facebook", "facebook", "FACEBOOK" zadziałają tak samo)
   switch (platform.toLowerCase()) {
     case "facebook":
       return (
@@ -86,21 +94,9 @@ export const getSocialIcon = (platform: string) => {
         </svg>
       );
     default:
-      return (
-        <svg
-          className="h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2}
-        >
-          <title>Link</title>
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
-          />
-        </svg>
-      );
+      // BRAK FALLBACKU!
+      // Zwracamy null. Jeśli widzisz puste miejsce zamiast ikony na stronie,
+      // oznacza to, że nazwa platformy w Sanity ma literówkę lub nie ma jej na liście.
+      return null;
   }
 };
