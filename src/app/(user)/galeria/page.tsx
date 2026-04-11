@@ -56,7 +56,7 @@ export default async function GalleryPage() {
         </div>
         <div className="pointer-events-none absolute top-1/2 right-0 z-0 translate-x-[10%] -translate-y-1/2 opacity-[0.02] mix-blend-overlay select-none">
           <span className="font-montserrat text-[22vw] leading-none font-black whitespace-nowrap text-white">
-            GALLERY
+            GALERIA
           </span>
         </div>
 
@@ -186,7 +186,7 @@ export default async function GalleryPage() {
           <FadeIn delay="200ms" className="mt-6">
             <h2 className="font-montserrat text-3xl leading-tight font-bold text-white md:text-5xl">
               Chcesz dołączyć do Maxime <br className="hidden md:block" />
-              aby tworzyć emocje?
+              by tworzyć emocje?
             </h2>
           </FadeIn>
           <FadeIn
@@ -194,7 +194,7 @@ export default async function GalleryPage() {
             className="mx-auto mt-8 max-w-2xl font-light text-white/60"
           >
             <p>
-              Szukamy ludzi chętnych do współpracy, napisz do nas co potrafisz, a może uda Ci się u nas zagościć.
+              Szukamy kreatywnych osób chętnych do współpracy. Napisz nam, w czym jesteś najlepszy, i zostań z nami na dłużej.
             </p>
           </FadeIn>
           <FadeIn delay="600ms" className="mt-12 flex justify-center">
