@@ -15,7 +15,12 @@ export const galleryType = defineType({
       name: "slug",
       title: "Slug (adres URL)",
       type: "slug",
-      options: { source: "title" },
+      // ZMIENIONO: Lepsze zabezpieczenie slug (unikalność)
+      options: {
+        source: "title",
+        maxLength: 96,
+        isUnique: (value, context) => context.defaultIsUnique(value, context),
+      },
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -30,7 +35,6 @@ export const galleryType = defineType({
       type: "string",
       validation: (rule) => rule.required(),
     }),
-    // ZOSTAWIONY FOTOGRAF
     defineField({
       name: "photographer",
       title: "Fotograf / Autor zdjęć",

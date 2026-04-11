@@ -15,7 +15,12 @@ export const eventType = defineType({
       name: "slug",
       title: "Slug (adres URL)",
       type: "slug",
-      options: { source: "title" },
+      // ZMIENIONO: Lepsze zabezpieczenie przed powtarzającymi się adresami URL
+      options: {
+        source: "title",
+        maxLength: 96,
+        isUnique: (value, context) => context.defaultIsUnique(value, context),
+      },
       validation: (rule) => rule.required(),
     }),
     defineField({ name: "subtitle", title: "Podtytuł", type: "string" }),
@@ -32,8 +37,6 @@ export const eventType = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({ name: "address", title: "Dokładny adres", type: "string" }),
-
-    // USUNIĘTO KATEGORIE!
 
     defineField({
       name: "image",
@@ -66,7 +69,6 @@ export const eventType = defineType({
       name: "ticketPrice",
       title: "Cena biletu (np. 'od 50 PLN', '120 PLN')",
       type: "string",
-      // WARUNEK: Pokaż tylko jeśli typ to "płatne"
       hidden: ({ document }) => document?.ticketType !== "platne",
     }),
     defineField({
@@ -79,7 +81,8 @@ export const eventType = defineType({
       name: "ticketLink",
       title: "Link do biletów / formularza",
       type: "url",
-      // WARUNEK: Pokaż tylko jeśli zaznaczono powyższy checkbox
+      // ZMIENIONO: Dodano sprawdzanie poprawności linku
+      validation: (rule) => rule.uri({ scheme: ["http", "https"] }),
       hidden: ({ document }) => !document?.hasTicketLink,
     }),
     // -----------------------
@@ -88,7 +91,32 @@ export const eventType = defineType({
       name: "description",
       title: "Opis",
       type: "array",
-      of: [{ type: "block" }],
+      of: [
+        {
+          type: "block",
+          // ZMIENIONO: Dodano wsparcie dla linków w edytorze opisu
+          marks: {
+            annotations: [
+              {
+                name: "link",
+                type: "object",
+                title: "Link URL",
+                fields: [
+                  {
+                    name: "href",
+                    type: "url",
+                    title: "Adres URL",
+                    validation: (rule) =>
+                      rule
+                        .required()
+                        .uri({ scheme: ["http", "https", "mailto"] }),
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      ],
     }),
     defineField({
       name: "program",

@@ -45,7 +45,14 @@ export const siteSettingsType = defineType({
                 ],
               },
             }),
-            defineField({ name: "url", title: "Link URL", type: "url" }),
+            defineField({
+              name: "url",
+              title: "Link URL",
+              type: "url",
+              // ZMIENIONO: Walidacja wymagająca poprawnego linku (http/https)
+              validation: (rule) =>
+                rule.required().uri({ scheme: ["http", "https"] }),
+            }),
           ],
           preview: {
             select: { title: "platform", subtitle: "url" },
@@ -53,7 +60,6 @@ export const siteSettingsType = defineType({
         },
       ],
     }),
-    // DODANE: Pole autora
     defineField({
       name: "author",
       title: "Wykonanie strony",
@@ -68,6 +74,8 @@ export const siteSettingsType = defineType({
           name: "url",
           title: "Link do portfolio / social mediów",
           type: "url",
+          // ZMIENIONO: Walidacja wymagająca poprawnego linku (http/https)
+          validation: (rule) => rule.uri({ scheme: ["http", "https"] }),
         }),
       ],
     }),

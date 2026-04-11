@@ -15,7 +15,12 @@ export const newsType = defineType({
       name: "slug",
       title: "Slug (adres URL)",
       type: "slug",
-      options: { source: "title" },
+      // ZMIENIONO: Zabezpieczenie unikalności sluga i limit długości
+      options: {
+        source: "title",
+        maxLength: 96,
+        isUnique: (value, context) => context.defaultIsUnique(value, context),
+      },
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -23,14 +28,12 @@ export const newsType = defineType({
       title: "Podtytuł",
       type: "string",
     }),
-    // USUNIĘTO: category
     defineField({
       name: "publishedAt",
       title: "Data publikacji",
       type: "datetime",
       validation: (rule) => rule.required(),
     }),
-    // USUNIĘTO: author
     defineField({
       name: "readTime",
       title: "Czas czytania (w minutach)",
@@ -42,7 +45,12 @@ export const newsType = defineType({
       title: "Zajawka (krótki opis na liście)",
       type: "text",
       rows: 4,
-      validation: (rule) => rule.required(),
+      // ZMIENIONO: Dodano ostrzeżenie przed wpisaniem zbyt długiego tekstu psującego design kart
+      validation: (rule) =>
+        rule
+          .required()
+          .max(250)
+          .warning("Zajawka powinna być krótka (do 250 znaków)"),
     }),
     defineField({
       name: "image",
@@ -56,7 +64,30 @@ export const newsType = defineType({
       title: "Treść artykułu",
       type: "array",
       of: [
-        { type: "block" },
+        {
+          type: "block",
+          // ZMIENIONO: Dodano wsparcie dla linków w głównym tekście aktualności
+          marks: {
+            annotations: [
+              {
+                name: "link",
+                type: "object",
+                title: "Link",
+                fields: [
+                  {
+                    name: "href",
+                    type: "url",
+                    title: "Adres URL",
+                    validation: (rule) =>
+                      rule
+                        .required()
+                        .uri({ scheme: ["http", "https", "mailto"] }),
+                  },
+                ],
+              },
+            ],
+          },
+        },
         {
           type: "image",
           options: { hotspot: true },
