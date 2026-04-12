@@ -15,8 +15,8 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.twojadomena.pl"), // ⚠️ ZMIEŃ NA SWOJĄ DOCELOWĄ DOMENĘ
   title: {
-    default: "Stowarzyszenie Maxime | Z pasji do muzyki",
-    template: "%s | Stowarzyszenie Maxime", // Generuje np. "O nas | Stowarzyszenie Maxime" na podstronach
+    default: "Fundacja Maxime | Z pasji do muzyki",
+    template: "%s | Fundacja Maxime", // Generuje np. "O nas | Stowarzyszenie Maxime" na podstronach
   },
   description:
     "Odkryj z nami piękno dźwięków. Talent, ambicja i profesjonalizm, które tworzą niezapomniane emocje. Jesteśmy orkiestrą i Fundacją Maxime.",
