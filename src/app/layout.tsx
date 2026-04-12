@@ -13,7 +13,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.twojadomena.pl"), // ⚠️ ZMIEŃ NA SWOJĄ DOCELOWĄ DOMENĘ
+  metadataBase: new URL("https://fundacja-maxime.vercel.app/"), // ⚠️ ZMIEŃ NA SWOJĄ DOCELOWĄ DOMENĘ
   title: {
     default: "Fundacja Maxime | Z pasji do muzyki",
     template: "%s | Fundacja Maxime", // Generuje np. "O nas | Stowarzyszenie Maxime" na podstronach
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "pl_PL",
-    url: "https://www.twojadomena.pl", // ⚠️ ZMIEŃ NA SWOJĄ DOMENĘ
+    url: "https://fundacja-maxime.vercel.app/", // ⚠️ ZMIEŃ NA SWOJĄ DOMENĘ
     siteName: "Stowarzyszenie Maxime",
     title: "Stowarzyszenie Maxime | Z pasji do muzyki",
     description:

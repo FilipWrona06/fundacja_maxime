@@ -14,34 +14,11 @@ const REVIEWS_QUERY = defineQuery(`
   }
 `);
 
-// Jeśli w systemie nie ma wystarczająco dużo zatwierdzonych + wyróżnionych opinii,
-// użyjemy placeholderów, aby utrzymać asymetryczny kinowy design na stronie głównej.
-const DEFAULT_REVIEWS = [
-  {
-    _id: "1",
-    text: "Stowarzyszenie Maxime to zjawisko. Dawno nie widziałem na scenie tak potężnej mieszanki młodzieńczej energii i absolutnego, rygorystycznego profesjonalizmu.",
-    name: "Michał K.",
-    role: "Krytyk Muzyczny",
-  },
-  {
-    _id: "2",
-    text: "Każdy detal, od doboru repertuaru po reżyserię światła, trzymał w napięciu. Oni nie po prostu grają muzykę klasyczną – oni ją na nowo wymyślają.",
-    name: "Anna S.",
-    role: "Dyrektor Festiwalu",
-  },
-  {
-    _id: "3",
-    text: "Sztuka, która autentycznie łączy pokolenia. Wzruszenie, zachwyt i owacje na stojąco, które wydawały się nie mieć końca. Absolutnie światowy poziom.",
-    name: "Piotr W.",
-    role: "Uczestnik koncertu",
-  },
-];
-
 export default async function Testimonials() {
   const { data: fetchedReviews } = await sanityFetch({ query: REVIEWS_QUERY });
 
   // Łączymy to co przyszło z bazy z defaultowymi, bierzemy równe 3
-  const displayReviews = [...fetchedReviews, ...DEFAULT_REVIEWS].slice(0, 3);
+  const displayReviews = [...fetchedReviews,].slice(0, 3);
 
   // Konfiguracja stylów asymetrycznego widoku dla dokładnie 3 kart
   const cardConfigs = [

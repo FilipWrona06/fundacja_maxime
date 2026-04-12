@@ -86,7 +86,7 @@ export default async function NewsPage() {
         </div>
         <div className="pointer-events-none absolute top-1/2 left-0 z-0 -translate-y-1/2 opacity-[0.02] mix-blend-overlay select-none">
           <span className="font-montserrat text-[25vw] leading-none font-black whitespace-nowrap text-white">
-            NEWS
+            AKTUALNOŚCI
           </span>
         </div>
         <div className="relative z-10 mx-auto w-full max-w-7xl">

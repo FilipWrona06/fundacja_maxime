@@ -7,8 +7,9 @@ import EventsList, { type EventProps } from "@/components/events/EventsList";
 import FadeIn from "@/components/ui/FadeIn";
 import { sanityFetch } from "@/sanity/lib/live";
 
+// DODANO: Warunek && date >= $today
 const EVENTS_QUERY = defineQuery(`
-  *[_type == "event"] | order(date asc) {
+  *[_type == "event" && date >= $today] | order(date asc) {
     "id": slug.current,
     title,
     date,
@@ -48,7 +49,16 @@ function formatEventData(rawEvent: any): EventProps {
 }
 
 export default async function EventsPage() {
-  const { data } = await sanityFetch({ query: EVENTS_QUERY });
+  // Pobieramy aktualną datę obciętą do "YYYY-MM-DD"
+  // Dzięki temu dzisiejsze koncerty będą widoczne na liście do końca dnia
+  const today = new Date().toISOString().split("T")[0];
+
+  // Przekazujemy parametr `today` do zapytania GROQ
+  const { data } = await sanityFetch({
+    query: EVENTS_QUERY,
+    params: { today },
+  });
+
   const formattedEvents = data.map(formatEventData);
 
   return (
@@ -91,7 +101,6 @@ export default async function EventsPage() {
       {/* --- LISTA WYDARZEŃ --- */}
       <section className="relative z-20 w-full rounded-t-[3rem] bg-[#F4F4F5] py-24 lg:rounded-t-[5rem] lg:py-40">
         <div className="mx-auto w-full max-w-7xl px-6 lg:px-12">
-          {/* TO JEST KOMPONENT KLIENCKI */}
           <EventsList eventsData={formattedEvents} />
         </div>
       </section>
